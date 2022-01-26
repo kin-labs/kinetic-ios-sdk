@@ -13,6 +13,7 @@
 		7EEB254927A08F2200FDBF58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EEB254727A08F2200FDBF58 /* Main.storyboard */; };
 		7EEB254B27A08F2300FDBF58 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EEB254A27A08F2300FDBF58 /* Assets.xcassets */; };
 		7EEB254E27A08F2300FDBF58 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EEB254C27A08F2300FDBF58 /* LaunchScreen.storyboard */; };
+		7EEB255727A092B800FDBF58 /* Solana in Frameworks */ = {isa = PBXBuildFile; productRef = 7EEB255627A092B800FDBF58 /* Solana */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EEB255727A092B800FDBF58 /* Solana in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = "Mogami iOS";
+			packageProductDependencies = (
+				7EEB255627A092B800FDBF58 /* Solana */,
+			);
 			productName = "Mogami iOS";
 			productReference = 7EEB253E27A08F2200FDBF58 /* Mogami iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +116,9 @@
 				Base,
 			);
 			mainGroup = 7EEB253527A08F2100FDBF58;
+			packageReferences = (
+				7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */,
+			);
 			productRefGroup = 7EEB253F27A08F2200FDBF58 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -300,8 +308,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kinlabs.mogamiios.Mogami-iOS";
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamiios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -327,8 +335,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.kinlabs.mogamiios.Mogami-iOS";
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamiios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -358,6 +366,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ajamaica/Solana.Swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7EEB255627A092B800FDBF58 /* Solana */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */;
+			productName = Solana;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7EEB253627A08F2100FDBF58 /* Project object */;
 }
