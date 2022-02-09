@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E24C90C27B45F8C004A71AD /* mogami in Frameworks */ = {isa = PBXBuildFile; productRef = 7E24C90B27B45F8C004A71AD /* mogami */; };
 		7EEB254227A08F2200FDBF58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEB254127A08F2200FDBF58 /* AppDelegate.swift */; };
 		7EEB254427A08F2200FDBF58 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEB254327A08F2200FDBF58 /* SceneDelegate.swift */; };
 		7EEB254627A08F2200FDBF58 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEB254527A08F2200FDBF58 /* ViewController.swift */; };
@@ -32,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E24C90C27B45F8C004A71AD /* mogami in Frameworks */,
 				7EEB255727A092B800FDBF58 /* Solana in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,11 +41,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E24C90A27B45F8C004A71AD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7EEB253527A08F2100FDBF58 = {
 			isa = PBXGroup;
 			children = (
 				7EEB254027A08F2200FDBF58 /* Mogami iOS */,
 				7EEB253F27A08F2200FDBF58 /* Products */,
+				7E24C90A27B45F8C004A71AD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,6 +97,7 @@
 			name = "Mogami iOS";
 			packageProductDependencies = (
 				7EEB255627A092B800FDBF58 /* Solana */,
+				7E24C90B27B45F8C004A71AD /* mogami */,
 			);
 			productName = "Mogami iOS";
 			productReference = 7EEB253E27A08F2200FDBF58 /* Mogami iOS.app */;
@@ -299,6 +310,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mogami iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = MogamiDemo;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -309,7 +321,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamiios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamidemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -326,6 +338,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mogami iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = MogamiDemo;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -336,7 +349,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamiios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamidemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -379,6 +392,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7E24C90B27B45F8C004A71AD /* mogami */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = mogami;
+		};
 		7EEB255627A092B800FDBF58 /* Solana */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */;

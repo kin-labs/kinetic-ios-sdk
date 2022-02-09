@@ -27,6 +27,8 @@ class ViewController: UIViewController {
             print(account.phrase.joined(separator: " "))
             addressText.text = account.publicKey.base58EncodedString
         }
+        let fixtureAccount = Account(phrase: ["pill", "tomorrow", "foster", "begin", "walnut", "borrow", "virtual", "kick", "shift", "mutual", "shoe", "scatter"], network: .mainnetBeta, derivablePath: .default)
+        print(fixtureAccount?.publicKey.base58EncodedString)
     }
 
     @IBAction func airdropButtonPressed(_ sender: Any) {
