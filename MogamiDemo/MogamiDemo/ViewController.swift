@@ -7,6 +7,7 @@
 
 import UIKit
 import Solana
+import mogami
 
 class ViewController: UIViewController {
 
