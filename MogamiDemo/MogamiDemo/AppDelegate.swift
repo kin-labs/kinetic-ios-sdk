@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  Mogami iOS
+//  MogamiDemo
 //
-//  Created by Samuel Dowd on 1/25/22.
+//  Created by Samuel Dowd on 2/10/22.
 //
 
 import UIKit

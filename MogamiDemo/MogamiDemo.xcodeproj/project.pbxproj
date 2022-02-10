@@ -7,118 +7,107 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7E24C90C27B45F8C004A71AD /* mogami in Frameworks */ = {isa = PBXBuildFile; productRef = 7E24C90B27B45F8C004A71AD /* mogami */; };
-		7EEB254227A08F2200FDBF58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEB254127A08F2200FDBF58 /* AppDelegate.swift */; };
-		7EEB254427A08F2200FDBF58 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEB254327A08F2200FDBF58 /* SceneDelegate.swift */; };
-		7EEB254627A08F2200FDBF58 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEB254527A08F2200FDBF58 /* ViewController.swift */; };
-		7EEB254927A08F2200FDBF58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EEB254727A08F2200FDBF58 /* Main.storyboard */; };
-		7EEB254B27A08F2300FDBF58 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EEB254A27A08F2300FDBF58 /* Assets.xcassets */; };
-		7EEB254E27A08F2300FDBF58 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EEB254C27A08F2300FDBF58 /* LaunchScreen.storyboard */; };
-		7EEB255727A092B800FDBF58 /* Solana in Frameworks */ = {isa = PBXBuildFile; productRef = 7EEB255627A092B800FDBF58 /* Solana */; };
+		7E7077A627B57B2800E1EA35 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E7077A527B57B2800E1EA35 /* Main.storyboard */; };
+		7EE05CBE27B577A0004AD0DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CBD27B577A0004AD0DD /* AppDelegate.swift */; };
+		7EE05CC027B577A0004AD0DD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CBF27B577A0004AD0DD /* SceneDelegate.swift */; };
+		7EE05CC227B577A0004AD0DD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CC127B577A0004AD0DD /* ViewController.swift */; };
+		7EE05CC727B577A1004AD0DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EE05CC627B577A1004AD0DD /* Assets.xcassets */; };
+		7EE05CCA27B577A1004AD0DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE05CC827B577A1004AD0DD /* LaunchScreen.storyboard */; };
+		7EE05CD527B57828004AD0DD /* Solana in Frameworks */ = {isa = PBXBuildFile; productRef = 7EE05CD427B57828004AD0DD /* Solana */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7EEB253E27A08F2200FDBF58 /* Mogami iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mogami iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7EEB254127A08F2200FDBF58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7EEB254327A08F2200FDBF58 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7EEB254527A08F2200FDBF58 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		7EEB254827A08F2200FDBF58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		7EEB254A27A08F2300FDBF58 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		7EEB254D27A08F2300FDBF58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		7EEB254F27A08F2300FDBF58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7E7077A527B57B2800E1EA35 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MogamiDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE05CBD27B577A0004AD0DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MogamiDemo/AppDelegate.swift; sourceTree = "<group>"; };
+		7EE05CBF27B577A0004AD0DD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = MogamiDemo/SceneDelegate.swift; sourceTree = "<group>"; };
+		7EE05CC127B577A0004AD0DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MogamiDemo/ViewController.swift; sourceTree = "<group>"; };
+		7EE05CC627B577A1004AD0DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = MogamiDemo/Assets.xcassets; sourceTree = "<group>"; };
+		7EE05CC927B577A1004AD0DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7EE05CCB27B577A1004AD0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = MogamiDemo/Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		7EEB253B27A08F2200FDBF58 /* Frameworks */ = {
+		7EE05CB727B577A0004AD0DD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E24C90C27B45F8C004A71AD /* mogami in Frameworks */,
-				7EEB255727A092B800FDBF58 /* Solana in Frameworks */,
+				7EE05CD527B57828004AD0DD /* Solana in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7E24C90A27B45F8C004A71AD /* Frameworks */ = {
+		7EE05CB127B577A0004AD0DD = {
 			isa = PBXGroup;
 			children = (
+				7E7077A527B57B2800E1EA35 /* Main.storyboard */,
+				7EE05CBD27B577A0004AD0DD /* AppDelegate.swift */,
+				7EE05CBF27B577A0004AD0DD /* SceneDelegate.swift */,
+				7EE05CC127B577A0004AD0DD /* ViewController.swift */,
+				7EE05CC627B577A1004AD0DD /* Assets.xcassets */,
+				7EE05CC827B577A1004AD0DD /* LaunchScreen.storyboard */,
+				7EE05CCB27B577A1004AD0DD /* Info.plist */,
+				7EE05CBC27B577A0004AD0DD /* MogamiDemo */,
+				7EE05CBB27B577A0004AD0DD /* Products */,
 			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7EEB253527A08F2100FDBF58 = {
+		7EE05CBB27B577A0004AD0DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7EEB254027A08F2200FDBF58 /* Mogami iOS */,
-				7EEB253F27A08F2200FDBF58 /* Products */,
-				7E24C90A27B45F8C004A71AD /* Frameworks */,
-			);
-			sourceTree = "<group>";
-		};
-		7EEB253F27A08F2200FDBF58 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7EEB253E27A08F2200FDBF58 /* Mogami iOS.app */,
+				7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7EEB254027A08F2200FDBF58 /* Mogami iOS */ = {
+		7EE05CBC27B577A0004AD0DD /* MogamiDemo */ = {
 			isa = PBXGroup;
 			children = (
-				7EEB254127A08F2200FDBF58 /* AppDelegate.swift */,
-				7EEB254327A08F2200FDBF58 /* SceneDelegate.swift */,
-				7EEB254527A08F2200FDBF58 /* ViewController.swift */,
-				7EEB254727A08F2200FDBF58 /* Main.storyboard */,
-				7EEB254A27A08F2300FDBF58 /* Assets.xcassets */,
-				7EEB254C27A08F2300FDBF58 /* LaunchScreen.storyboard */,
-				7EEB254F27A08F2300FDBF58 /* Info.plist */,
 			);
-			path = "Mogami iOS";
+			path = MogamiDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7EEB253D27A08F2200FDBF58 /* Mogami iOS */ = {
+		7EE05CB927B577A0004AD0DD /* MogamiDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7EEB255227A08F2300FDBF58 /* Build configuration list for PBXNativeTarget "Mogami iOS" */;
+			buildConfigurationList = 7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "MogamiDemo" */;
 			buildPhases = (
-				7EEB253A27A08F2200FDBF58 /* Sources */,
-				7EEB253B27A08F2200FDBF58 /* Frameworks */,
-				7EEB253C27A08F2200FDBF58 /* Resources */,
+				7EE05CB627B577A0004AD0DD /* Sources */,
+				7EE05CB727B577A0004AD0DD /* Frameworks */,
+				7EE05CB827B577A0004AD0DD /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Mogami iOS";
+			name = MogamiDemo;
 			packageProductDependencies = (
-				7EEB255627A092B800FDBF58 /* Solana */,
-				7E24C90B27B45F8C004A71AD /* mogami */,
+				7EE05CD427B57828004AD0DD /* Solana */,
 			);
-			productName = "Mogami iOS";
-			productReference = 7EEB253E27A08F2200FDBF58 /* Mogami iOS.app */;
+			productName = MogamiDemo;
+			productReference = 7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		7EEB253627A08F2100FDBF58 /* Project object */ = {
+		7EE05CB227B577A0004AD0DD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
-					7EEB253D27A08F2200FDBF58 = {
+					7EE05CB927B577A0004AD0DD = {
 						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
-			buildConfigurationList = 7EEB253927A08F2100FDBF58 /* Build configuration list for PBXProject "Mogami iOS" */;
+			buildConfigurationList = 7EE05CB527B577A0004AD0DD /* Build configuration list for PBXProject "MogamiDemo" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -126,66 +115,59 @@
 				en,
 				Base,
 			);
-			mainGroup = 7EEB253527A08F2100FDBF58;
+			mainGroup = 7EE05CB127B577A0004AD0DD;
 			packageReferences = (
-				7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */,
+				7EE05CD327B57828004AD0DD /* XCRemoteSwiftPackageReference "Solana" */,
 			);
-			productRefGroup = 7EEB253F27A08F2200FDBF58 /* Products */;
+			productRefGroup = 7EE05CBB27B577A0004AD0DD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7EEB253D27A08F2200FDBF58 /* Mogami iOS */,
+				7EE05CB927B577A0004AD0DD /* MogamiDemo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7EEB253C27A08F2200FDBF58 /* Resources */ = {
+		7EE05CB827B577A0004AD0DD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EEB254E27A08F2300FDBF58 /* LaunchScreen.storyboard in Resources */,
-				7EEB254B27A08F2300FDBF58 /* Assets.xcassets in Resources */,
-				7EEB254927A08F2200FDBF58 /* Main.storyboard in Resources */,
+				7E7077A627B57B2800E1EA35 /* Main.storyboard in Resources */,
+				7EE05CCA27B577A1004AD0DD /* LaunchScreen.storyboard in Resources */,
+				7EE05CC727B577A1004AD0DD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7EEB253A27A08F2200FDBF58 /* Sources */ = {
+		7EE05CB627B577A0004AD0DD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EEB254627A08F2200FDBF58 /* ViewController.swift in Sources */,
-				7EEB254227A08F2200FDBF58 /* AppDelegate.swift in Sources */,
-				7EEB254427A08F2200FDBF58 /* SceneDelegate.swift in Sources */,
+				7EE05CC227B577A0004AD0DD /* ViewController.swift in Sources */,
+				7EE05CBE27B577A0004AD0DD /* AppDelegate.swift in Sources */,
+				7EE05CC027B577A0004AD0DD /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		7EEB254727A08F2200FDBF58 /* Main.storyboard */ = {
+		7EE05CC827B577A1004AD0DD /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7EEB254827A08F2200FDBF58 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		7EEB254C27A08F2300FDBF58 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7EEB254D27A08F2300FDBF58 /* Base */,
+				7EE05CC927B577A1004AD0DD /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = MogamiDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		7EEB255027A08F2300FDBF58 /* Debug */ = {
+		7EE05CCC27B577A1004AD0DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -246,7 +228,7 @@
 			};
 			name = Debug;
 		};
-		7EEB255127A08F2300FDBF58 /* Release */ = {
+		7EE05CCD27B577A1004AD0DD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -301,7 +283,7 @@
 			};
 			name = Release;
 		};
-		7EEB255327A08F2300FDBF58 /* Debug */ = {
+		7EE05CCF27B577A1004AD0DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -309,8 +291,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mogami iOS/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = MogamiDemo;
+				INFOPLIST_FILE = MogamiDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -320,8 +301,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamidemo;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.MogamiDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -329,7 +310,7 @@
 			};
 			name = Debug;
 		};
-		7EEB255427A08F2300FDBF58 /* Release */ = {
+		7EE05CD027B577A1004AD0DD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -337,8 +318,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mogami iOS/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = MogamiDemo;
+				INFOPLIST_FILE = MogamiDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -348,8 +328,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.mogamidemo;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.MogamiDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -360,20 +340,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7EEB253927A08F2100FDBF58 /* Build configuration list for PBXProject "Mogami iOS" */ = {
+		7EE05CB527B577A0004AD0DD /* Build configuration list for PBXProject "MogamiDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7EEB255027A08F2300FDBF58 /* Debug */,
-				7EEB255127A08F2300FDBF58 /* Release */,
+				7EE05CCC27B577A1004AD0DD /* Debug */,
+				7EE05CCD27B577A1004AD0DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7EEB255227A08F2300FDBF58 /* Build configuration list for PBXNativeTarget "Mogami iOS" */ = {
+		7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "MogamiDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7EEB255327A08F2300FDBF58 /* Debug */,
-				7EEB255427A08F2300FDBF58 /* Release */,
+				7EE05CCF27B577A1004AD0DD /* Debug */,
+				7EE05CD027B577A1004AD0DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -381,7 +361,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */ = {
+		7EE05CD327B57828004AD0DD /* XCRemoteSwiftPackageReference "Solana" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ajamaica/Solana.Swift";
 			requirement = {
@@ -392,16 +372,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7E24C90B27B45F8C004A71AD /* mogami */ = {
+		7EE05CD427B57828004AD0DD /* Solana */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = mogami;
-		};
-		7EEB255627A092B800FDBF58 /* Solana */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7EEB255527A092B800FDBF58 /* XCRemoteSwiftPackageReference "Solana" */;
+			package = 7EE05CD327B57828004AD0DD /* XCRemoteSwiftPackageReference "Solana" */;
 			productName = Solana;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 7EEB253627A08F2100FDBF58 /* Project object */;
+	rootObject = 7EE05CB227B577A0004AD0DD /* Project object */;
 }

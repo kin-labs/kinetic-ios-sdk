@@ -5,6 +5,6 @@
       location = "group:mogami">
    </FileRef>
    <FileRef
-      location = "container:Mogami iOS.xcodeproj">
+      location = "group:MogamiDemo/MogamiDemo.xcodeproj">
    </FileRef>
 </Workspace>

@@ -33,7 +33,7 @@ class ViewController: UIViewController {
 
     @IBAction func airdropButtonPressed(_ sender: Any) {
     }
-    
+
     @IBAction func getBalancePressed(_ sender: Any) {
         solana!.api.getBalance(account: SAMPLE_WALLET!.base58EncodedString) { res in
             res.onSuccess { balance in
