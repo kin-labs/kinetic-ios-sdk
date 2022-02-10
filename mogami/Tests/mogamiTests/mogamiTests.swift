@@ -1,7 +1,7 @@
 import XCTest
-@testable import mogami
+@testable import Mogami
 
-final class mogamiTests: XCTestCase {
+final class MogamiTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct

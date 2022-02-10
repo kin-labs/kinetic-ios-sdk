@@ -7,14 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7E270EE627B59BE500C170F8 /* mogami in Frameworks */ = {isa = PBXBuildFile; productRef = 7E270EE527B59BE500C170F8 /* mogami */; };
 		7E7077A627B57B2800E1EA35 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E7077A527B57B2800E1EA35 /* Main.storyboard */; };
 		7EE05CBE27B577A0004AD0DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CBD27B577A0004AD0DD /* AppDelegate.swift */; };
 		7EE05CC027B577A0004AD0DD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CBF27B577A0004AD0DD /* SceneDelegate.swift */; };
 		7EE05CC227B577A0004AD0DD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CC127B577A0004AD0DD /* ViewController.swift */; };
 		7EE05CC727B577A1004AD0DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EE05CC627B577A1004AD0DD /* Assets.xcassets */; };
 		7EE05CCA27B577A1004AD0DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE05CC827B577A1004AD0DD /* LaunchScreen.storyboard */; };
-		7EE05CD527B57828004AD0DD /* Solana in Frameworks */ = {isa = PBXBuildFile; productRef = 7EE05CD427B57828004AD0DD /* Solana */; };
+		7EE1B69E27B5A04F0056F727 /* Mogami in Frameworks */ = {isa = PBXBuildFile; productRef = 7EE1B69D27B5A04F0056F727 /* Mogami */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E270EE627B59BE500C170F8 /* mogami in Frameworks */,
-				7EE05CD527B57828004AD0DD /* Solana in Frameworks */,
+				7EE1B69E27B5A04F0056F727 /* Mogami in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,8 +104,7 @@
 			);
 			name = MogamiDemo;
 			packageProductDependencies = (
-				7EE05CD427B57828004AD0DD /* Solana */,
-				7E270EE527B59BE500C170F8 /* mogami */,
+				7EE1B69D27B5A04F0056F727 /* Mogami */,
 			);
 			productName = MogamiDemo;
 			productReference = 7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */;
@@ -138,7 +135,6 @@
 			);
 			mainGroup = 7EE05CB127B577A0004AD0DD;
 			packageReferences = (
-				7EE05CD327B57828004AD0DD /* XCRemoteSwiftPackageReference "Solana" */,
 			);
 			productRefGroup = 7EE05CBB27B577A0004AD0DD /* Products */;
 			projectDirPath = "";
@@ -381,26 +377,10 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		7EE05CD327B57828004AD0DD /* XCRemoteSwiftPackageReference "Solana" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ajamaica/Solana.Swift";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		7E270EE527B59BE500C170F8 /* mogami */ = {
+		7EE1B69D27B5A04F0056F727 /* Mogami */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = mogami;
-		};
-		7EE05CD427B57828004AD0DD /* Solana */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7EE05CD327B57828004AD0DD /* XCRemoteSwiftPackageReference "Solana" */;
-			productName = Solana;
+			productName = Mogami;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

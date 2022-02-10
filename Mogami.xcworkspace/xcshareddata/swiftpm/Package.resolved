@@ -2,21 +2,21 @@
   "object": {
     "pins": [
       {
-        "package": "secp256k1",
-        "repositoryURL": "https://github.com/Boilertalk/secp256k1.swift.git",
+        "package": "RxSwift",
+        "repositoryURL": "https://github.com/ReactiveX/RxSwift.git",
         "state": {
           "branch": null,
-          "revision": "823281fe9def21b384099b72a9a53ca988317b20",
-          "version": "0.1.4"
+          "revision": "b4307ba0b6425c0ba4178e138799946c3da594f8",
+          "version": "6.5.0"
         }
       },
       {
         "package": "Solana",
-        "repositoryURL": "https://github.com/ajamaica/Solana.Swift",
+        "repositoryURL": "https://github.com/ajamaica/Solana.swift",
         "state": {
-          "branch": "master",
-          "revision": "289282466b61e2b885f73e08f6eae4643392bd8e",
-          "version": null
+          "branch": null,
+          "revision": "58aed5c6cccc7fa98ba08dd073ab16df750ee0b2",
+          "version": "1.1.0"
         }
       },
       {
