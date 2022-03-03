@@ -61,6 +61,11 @@ public struct Mogami {
         }
     }
 
+    public func makeAMemo() {
+        let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: 124)
+        print(memo)
+    }
+
     private func fixtureTest() {
         let fixtureAccount = Account(phrase: ["pill", "tomorrow", "foster", "begin", "walnut", "borrow", "virtual", "kick", "shift", "mutual", "shoe", "scatter"], network: .mainnetBeta, derivablePath: .default)
         print(fixtureAccount?.publicKey.base58EncodedString)

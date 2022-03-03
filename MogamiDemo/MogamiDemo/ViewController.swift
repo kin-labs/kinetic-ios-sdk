@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func airdropButtonPressed(_ sender: Any) {
+        mogami.makeAMemo()
     }
 
     @IBAction func getBalancePressed(_ sender: Any) {
