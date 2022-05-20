@@ -16,12 +16,14 @@ let package = Package(
     ],
     dependencies: [
          .package(url: "https://github.com/ajamaica/Solana.swift", from: "1.1.0"),
+         .package(name: "OpenAPIClient", path: "../OpenAPIClient"),
     ],
     targets: [
         .target(
             name: "Mogami",
             dependencies: [
-                .product(name: "Solana", package: "Solana.swift")
+                .product(name: "Solana", package: "Solana.swift"),
+                .product(name: "OpenAPIClient", package: "OpenAPIClient")
             ]),
         .testTarget(
             name: "MogamiTests",

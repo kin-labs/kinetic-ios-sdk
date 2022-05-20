@@ -1,4 +1,5 @@
 import Solana
+import OpenAPIClient
 
 public struct Mogami {
     public private(set) var text = "Hello, World!"
@@ -62,6 +63,10 @@ public struct Mogami {
     }
 
     public func makeAMemo() {
+        AppAPI.getAppConfig(index: "1") { res, e in
+            print(res)
+            print(e)
+        }
         let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: 124)
         print(memo)
     }
