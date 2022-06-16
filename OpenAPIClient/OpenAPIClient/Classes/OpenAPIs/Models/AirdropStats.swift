@@ -13,9 +13,9 @@ import AnyCodable
 public struct AirdropStats: Codable, JSONEncodable, Hashable {
 
     public var counts: AirdropStatsCounts
-    public var dates: [String]
+    public var dates: [AirdropStatsDate]
 
-    public init(counts: AirdropStatsCounts, dates: [String]) {
+    public init(counts: AirdropStatsCounts, dates: [AirdropStatsDate]) {
         self.counts = counts
         self.dates = dates
     }

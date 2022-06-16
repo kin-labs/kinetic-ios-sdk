@@ -14,12 +14,14 @@ open class TransactionAPI {
 
     /**
 
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getLatestBlockhash(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: LatestBlockhashResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getLatestBlockhashWithRequestBuilder().execute(apiResponseQueue) { result in
+    open class func getLatestBlockhash(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: LatestBlockhashResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getLatestBlockhashWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -30,11 +32,19 @@ open class TransactionAPI {
     }
 
     /**
-     - GET /api/transaction/latest-blockhash
+     - GET /api/transaction/latest-blockhash/{environment}/{index}
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - returns: RequestBuilder<LatestBlockhashResponse> 
      */
-    open class func getLatestBlockhashWithRequestBuilder() -> RequestBuilder<LatestBlockhashResponse> {
-        let localVariablePath = "/api/transaction/latest-blockhash"
+    open class func getLatestBlockhashWithRequestBuilder(environment: String, index: Double) -> RequestBuilder<LatestBlockhashResponse> {
+        var localVariablePath = "/api/transaction/latest-blockhash/{environment}/{index}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
@@ -53,13 +63,15 @@ open class TransactionAPI {
 
     /**
 
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter dataLength: (query)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getMinimumRentExemptionBalance(dataLength: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: MinimumRentExemptionBalanceResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getMinimumRentExemptionBalanceWithRequestBuilder(dataLength: dataLength).execute(apiResponseQueue) { result in
+    open class func getMinimumRentExemptionBalance(environment: String, index: Double, dataLength: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: MinimumRentExemptionBalanceResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getMinimumRentExemptionBalanceWithRequestBuilder(environment: environment, index: index, dataLength: dataLength).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -70,12 +82,20 @@ open class TransactionAPI {
     }
 
     /**
-     - GET /api/transaction/minimum-rent-exemption-balance
+     - GET /api/transaction/minimum-rent-exemption-balance/{environment}/{index}
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter dataLength: (query)  
      - returns: RequestBuilder<MinimumRentExemptionBalanceResponse> 
      */
-    open class func getMinimumRentExemptionBalanceWithRequestBuilder(dataLength: Double) -> RequestBuilder<MinimumRentExemptionBalanceResponse> {
-        let localVariablePath = "/api/transaction/minimum-rent-exemption-balance"
+    open class func getMinimumRentExemptionBalanceWithRequestBuilder(environment: String, index: Double, dataLength: Double) -> RequestBuilder<MinimumRentExemptionBalanceResponse> {
+        var localVariablePath = "/api/transaction/minimum-rent-exemption-balance/{environment}/{index}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
@@ -102,7 +122,7 @@ open class TransactionAPI {
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func makeTransfer(makeTransferRequest: MakeTransferRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: MakeTransferResponse?, _ error: Error?) -> Void)) -> RequestTask {
+    open class func makeTransfer(makeTransferRequest: MakeTransferRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppTransaction?, _ error: Error?) -> Void)) -> RequestTask {
         return makeTransferWithRequestBuilder(makeTransferRequest: makeTransferRequest).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
@@ -116,9 +136,9 @@ open class TransactionAPI {
     /**
      - POST /api/transaction/make-transfer
      - parameter makeTransferRequest: (body)  
-     - returns: RequestBuilder<MakeTransferResponse> 
+     - returns: RequestBuilder<AppTransaction> 
      */
-    open class func makeTransferWithRequestBuilder(makeTransferRequest: MakeTransferRequest) -> RequestBuilder<MakeTransferResponse> {
+    open class func makeTransferWithRequestBuilder(makeTransferRequest: MakeTransferRequest) -> RequestBuilder<AppTransaction> {
         let localVariablePath = "/api/transaction/make-transfer"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: makeTransferRequest)
@@ -131,7 +151,7 @@ open class TransactionAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<MakeTransferResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<AppTransaction>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
     }

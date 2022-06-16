@@ -14,14 +14,15 @@ open class AppAPI {
 
     /**
 
+     - parameter environment: (path)  
      - parameter index: (path)  
      - parameter type: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func apiAppFeatureControllerAppWebhook(index: Double, type: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
-        return apiAppFeatureControllerAppWebhookWithRequestBuilder(index: index, type: type).execute(apiResponseQueue) { result in
+    open class func apiAppFeatureControllerAppWebhook(environment: String, index: Double, type: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
+        return apiAppFeatureControllerAppWebhookWithRequestBuilder(environment: environment, index: index, type: type).execute(apiResponseQueue) { result in
             switch result {
             case .success:
                 completion((), nil)
@@ -32,13 +33,17 @@ open class AppAPI {
     }
 
     /**
-     - POST /api/app/{index}/webhook/{type}
+     - POST /api/app/{environment}/{index}/webhook/{type}
+     - parameter environment: (path)  
      - parameter index: (path)  
      - parameter type: (path)  
      - returns: RequestBuilder<Void> 
      */
-    open class func apiAppFeatureControllerAppWebhookWithRequestBuilder(index: Double, type: String) -> RequestBuilder<Void> {
-        var localVariablePath = "/api/app/{index}/webhook/{type}"
+    open class func apiAppFeatureControllerAppWebhookWithRequestBuilder(environment: String, index: Double, type: String) -> RequestBuilder<Void> {
+        var localVariablePath = "/api/app/{environment}/{index}/webhook/{type}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
         let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
         let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
@@ -63,13 +68,14 @@ open class AppAPI {
 
     /**
 
+     - parameter environment: (path)  
      - parameter index: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getAppConfig(index: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppConfig?, _ error: Error?) -> Void)) -> RequestTask {
-        return getAppConfigWithRequestBuilder(index: index).execute(apiResponseQueue) { result in
+    open class func getAppConfig(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppConfig?, _ error: Error?) -> Void)) -> RequestTask {
+        return getAppConfigWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -80,12 +86,16 @@ open class AppAPI {
     }
 
     /**
-     - GET /api/app/config/{index}
+     - GET /api/app/{environment}/{index}/config
+     - parameter environment: (path)  
      - parameter index: (path)  
      - returns: RequestBuilder<AppConfig> 
      */
-    open class func getAppConfigWithRequestBuilder(index: String) -> RequestBuilder<AppConfig> {
-        var localVariablePath = "/api/app/config/{index}"
+    open class func getAppConfigWithRequestBuilder(environment: String, index: Double) -> RequestBuilder<AppConfig> {
+        var localVariablePath = "/api/app/{environment}/{index}/config"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
         let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
         let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
@@ -101,6 +111,55 @@ open class AppAPI {
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
         let localVariableRequestBuilder: RequestBuilder<AppConfig>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+    }
+
+    /**
+
+     - parameter environment: (path)  
+     - parameter index: (path)  
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    @discardableResult
+    open class func getAppHealth(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppHealth?, _ error: Error?) -> Void)) -> RequestTask {
+        return getAppHealthWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     - GET /api/app/{environment}/{index}/health
+     - parameter environment: (path)  
+     - parameter index: (path)  
+     - returns: RequestBuilder<AppHealth> 
+     */
+    open class func getAppHealthWithRequestBuilder(environment: String, index: Double) -> RequestBuilder<AppHealth> {
+        var localVariablePath = "/api/app/{environment}/{index}/health"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
+        let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<AppHealth>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
     }

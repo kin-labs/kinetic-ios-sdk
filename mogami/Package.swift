@@ -15,8 +15,10 @@ let package = Package(
             targets: ["Mogami"]),
     ],
     dependencies: [
-         .package(url: "https://github.com/ajamaica/Solana.swift", from: "1.1.0"),
-         .package(name: "OpenAPIClient", path: "../OpenAPIClient"),
+//        .package(url: "https://github.com/ajamaica/Solana.swift", from: "1.1.0"),
+//        .package(url: "https://github.com/samdowd/Solana.swift", .revision("a0baafa38cdd12275647bffd76638cea5f11fc30")),
+        .package(name: "Solana.swift", path: "../../Solana.swift"),
+        .package(name: "OpenAPIClient", path: "../OpenAPIClient"),
     ],
     targets: [
         .target(

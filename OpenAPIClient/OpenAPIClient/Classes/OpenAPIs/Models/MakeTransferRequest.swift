@@ -12,16 +12,39 @@ import AnyCodable
 
 public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
 
+    public enum Commitment: String, Codable, CaseIterable {
+        case confirmed = "Confirmed"
+        case finalized = "Finalized"
+        case processed = "Processed"
+    }
+    public var commitment: Commitment
+    public var environment: String
     public var index: Double
+    public var mint: String
+    public var lastValidBlockHeight: Double
+    public var referenceId: String?
+    public var referenceType: String?
     public var tx: AnyCodable
 
-    public init(index: Double, tx: AnyCodable) {
+    public init(commitment: Commitment, environment: String, index: Double, mint: String, lastValidBlockHeight: Double, referenceId: String?, referenceType: String?, tx: AnyCodable) {
+        self.commitment = commitment
+        self.environment = environment
         self.index = index
+        self.mint = mint
+        self.lastValidBlockHeight = lastValidBlockHeight
+        self.referenceId = referenceId
+        self.referenceType = referenceType
         self.tx = tx
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case commitment
+        case environment
         case index
+        case mint
+        case lastValidBlockHeight
+        case referenceId
+        case referenceType
         case tx
     }
 
@@ -29,7 +52,13 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(commitment, forKey: .commitment)
+        try container.encode(environment, forKey: .environment)
         try container.encode(index, forKey: .index)
+        try container.encode(mint, forKey: .mint)
+        try container.encode(lastValidBlockHeight, forKey: .lastValidBlockHeight)
+        try container.encode(referenceId, forKey: .referenceId)
+        try container.encode(referenceType, forKey: .referenceType)
         try container.encode(tx, forKey: .tx)
     }
 }

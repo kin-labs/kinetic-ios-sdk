@@ -13,13 +13,16 @@ import AnyCodable
 public struct LatestBlockhashResponse: Codable, JSONEncodable, Hashable {
 
     public var blockhash: String
+    public var lastValidBlockHeight: Double
 
-    public init(blockhash: String) {
+    public init(blockhash: String, lastValidBlockHeight: Double) {
         self.blockhash = blockhash
+        self.lastValidBlockHeight = lastValidBlockHeight
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case blockhash
+        case lastValidBlockHeight
     }
 
     // Encodable protocol methods
@@ -27,6 +30,7 @@ public struct LatestBlockhashResponse: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(blockhash, forKey: .blockhash)
+        try container.encode(lastValidBlockHeight, forKey: .lastValidBlockHeight)
     }
 }
 

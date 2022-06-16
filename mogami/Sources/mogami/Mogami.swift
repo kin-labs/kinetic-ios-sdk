@@ -1,21 +1,257 @@
 import Solana
 import OpenAPIClient
+import AnyCodable
 
 public struct Mogami {
-    public private(set) var text = "Hello, World!"
     var networkingRouter: NetworkingRouter?
     var accountStorage: KeychainAccountStorage?
     var solana: Solana?
-    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
+    let KIN_MINT = PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
+//    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
     let SAMPLE_WALLET = PublicKey(string: "3rad7aFPdJS3CkYPSphtDAWCNB8BYpV2yc7o5ZjFQbDb")
+    let MEMO_V1_PROGRAM_ID = PublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
 
     public init() {
         networkingRouter = NetworkingRouter(endpoint: .mainnetBetaSolana)
         accountStorage = KeychainAccountStorage()
-        solana = Solana(router: networkingRouter!, accountStorage: accountStorage!)
+        solana = Solana(router: networkingRouter!)
     }
 
-    public func createAccount() -> Account? {
+    public func createAccount(account: Account, _ callback: @escaping ((String) -> Void)) {
+        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfig, e in
+            guard let appConfig = appConfig else {
+                if let e = e {
+                    callback(String(describing: e))
+                    return
+                }
+                callback("failed to get app config")
+                return
+            }
+            let tokenProgramId = PublicKey(string: appConfig.mint.programId)!
+            let mintKey = PublicKey(string: appConfig.mint.publicKey)!
+            let feePayer = PublicKey(string: appConfig.mint.feePayer)!
+            TransactionAPI.getLatestBlockhash(environment: "devnet", index: 1) { latestBlockhashResponse, e in
+                guard let latestBlockhashResponse = latestBlockhashResponse
+                else {
+                    if let e = e {
+                        callback(String(describing: e))
+                        return
+                    }
+                    callback("failed to get blockhash")
+                    return
+                }
+
+                // Get token account
+                guard case let .success(associatedTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: account.publicKey, tokenMintAddress: mintKey)
+                else {
+                    callback("could not get token account")
+                    return
+                }
+
+                let memo = try! KinBinaryMemo(typeId: KinBinaryMemo.TransferType.none.rawValue, appIdx: 1)
+                let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: [UInt8](memo.encode()))
+
+                // Create Account Instructions
+                solana!.api.getMinimumBalanceForRentExemption(dataLength: AccountInfo.BUFFER_LENGTH) { res in
+                    res.onSuccess { minimumBalance in
+                        let createAccountInstruction = SystemProgram.createAccountInstruction(from: account.publicKey, toNewPubkey: associatedTokenAccount, lamports: minimumBalance)
+                        let initializeAccountInstruction = TokenProgram.initializeAccountInstruction(account: associatedTokenAccount, mint: mintKey, owner: account.publicKey)
+
+                        var transaction = Transaction(signatures: [
+                            Transaction.Signature(signature: nil, publicKey: account.publicKey)
+                        ], feePayer: feePayer, instructions: [
+                            memoInstruction,
+                            createAccountInstruction,
+                            initializeAccountInstruction
+                        ], recentBlockhash: latestBlockhashResponse.blockhash)
+                        print(transaction)
+                        transaction.partialSign(signers: [account])
+                        print(transaction)
+                        let serializeRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
+                        print(transaction)
+                        switch serializeRes {
+                        case .success(let serialized):
+                            let createAccountRequest = CreateAccountRequest(environment: "devnet", index: 1, mint: KIN_MINT!.base58EncodedString, tx: "serialized.bytes")
+//                            let createAccountRequest = CreateAccountRequest(index: 1, tx: serialized.bytes)
+                            AccountAPI.createAccount(createAccountRequest: createAccountRequest) { appTransaction, e in
+                                guard let appTransaction = appTransaction else {
+                                    if let e = e {
+                                        print(e)
+                                        callback(String(describing: e))
+                                        return
+                                    }
+                                    callback("create account failed")
+                                    return
+                                }
+                                print("success")
+                                print(transaction)
+                                callback(String(describing: appTransaction))
+                            }
+                        case .failure(let e):
+                            callback(String(describing: e))
+                        }
+                    }
+                    res.onFailure { e in
+                        callback(String(describing: e))
+                        return
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+    public func getAirdrop(publicKey: String, _ callback: @escaping ((String) -> Void)) {
+        AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: "devnet", index: 1, mint: KIN_MINT!.base58EncodedString)) { airdropResponse, e in
+            if let e = e {
+                callback(e.localizedDescription)
+            } else {
+                callback(String(describing: airdropResponse!))
+            }
+        }
+    }
+
+    public func getAccountBalance(publicKey: String, _ callback: @escaping ((String) -> Void)) {
+        AccountAPI.getBalance(environment: "devnet", index: 1, accountId: publicKey) { balanceResponse, e in
+            if let e = e {
+                callback(e.localizedDescription)
+            } else {
+                callback(balanceResponse!.balance.description)
+            }
+        }
+    }
+
+    public func getAccountInfo(publicKey: String, _ callback: @escaping ((String) -> Void)) {
+        AccountAPI.apiAccountFeatureControllerGetAccountInfo(environment: "devnet", index: 1, accountId: publicKey) { accountInfoResponse, e in
+            if let e = e {
+                callback(e.localizedDescription)
+            } else {
+                callback(String(describing: accountInfoResponse!))
+            }
+        }
+    }
+
+    public func getAccountHistory(publicKey: String, _ callback: @escaping ((String) -> Void)) {
+        AccountAPI.getHistory(environment: "devnet", index: 1, accountId: publicKey) { historyResponses, e in
+            if let e = e {
+                callback(e.localizedDescription)
+            } else {
+                callback(String(describing: historyResponses!))
+            }
+        }
+    }
+
+    public func getTokenAccounts(publicKey: String, _ callback: @escaping ((String) -> Void)) {
+        AccountAPI.tokenAccounts(environment: "devnet", index: 1, accountId: publicKey) { tokenAccountsResponse, e in
+            if let e = e {
+                callback(e.localizedDescription)
+            } else {
+                callback(String(describing: tokenAccountsResponse!))
+            }
+        }
+    }
+
+    public func getAppConfig(_ callback: @escaping ((String) -> Void)) {
+        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfigResponse, e in
+            if let e = e {
+                callback(e.localizedDescription)
+            } else {
+                print(appConfigResponse!)
+                callback(String(describing: appConfigResponse!))
+            }
+        }
+    }
+
+    public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int, _ callback: @escaping ((String) -> Void)) {
+        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfig, e in
+            guard let appConfig = appConfig else {
+                if let e = e {
+                    callback(String(describing: e))
+                    return
+                }
+                callback("failed to get app config")
+                return
+            }
+            let tokenProgramId = PublicKey(string: appConfig.mint.programId)!
+            let mintKey = PublicKey(string: appConfig.mint.publicKey)!
+            let feePayer = PublicKey(string: appConfig.mint.feePayer)!
+            TransactionAPI.getLatestBlockhash(environment: "devnet", index: 1) { latestBlockhashResponse, e in
+                guard let latestBlockhashResponse = latestBlockhashResponse
+                else {
+                    if let e = e {
+                        callback(String(describing: e))
+                        return
+                    }
+                    callback("failed to get blockhash")
+                    return
+                }
+
+                // Get token accounts
+                guard
+                    case let .success(fromTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: fromAccount.publicKey, tokenMintAddress: PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")!),
+                    case let .success(toTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: toPublicKey, tokenMintAddress: PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")!)
+                else {
+                    callback("could not get token accounts")
+                    return
+                }
+
+                let memo = try! KinBinaryMemo(version: 1, typeId: KinBinaryMemo.TransferType.spend.rawValue, appIdx: 1)
+                let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: [UInt8](memo.encode()))
+                let sendInstruction = TokenProgram.transferInstruction(
+                    tokenProgramId: tokenProgramId,
+                    source: fromTokenAccount,
+                    destination: toTokenAccount,
+                    owner: fromAccount.publicKey,
+                    amount: UInt64(amount)
+                )
+                print("---")
+                print(appConfig)
+                print(mintKey)
+                print(tokenProgramId)
+                print(fromTokenAccount)
+                print(fromAccount.publicKey)
+                print(toTokenAccount)
+                print("---")
+                print(memoInstruction)
+                print(sendInstruction)
+                var transaction = Transaction(
+                    signatures: [Transaction.Signature(signature: nil, publicKey: fromAccount.publicKey)],
+                    feePayer: feePayer,
+                    instructions: [memoInstruction, sendInstruction],
+                    recentBlockhash: latestBlockhashResponse.blockhash
+                )
+//                print(transaction)
+                transaction.partialSign(signers: [fromAccount])
+//                print(transaction)
+                let serializeRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
+                switch serializeRes {
+                case .success(let serialized):
+                    let makeTransferRequest = MakeTransferRequest(commitment: .confirmed, environment: "devnet", index: 1, mint: appConfig.mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: nil, referenceType: nil, tx: serialized.bytes)
+//                    let makeTransferRequest = MakeTransferRequest(index: 1, tx: serialized.bytes)
+                    TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest) { makeTransferResponse, e in
+                        guard let makeTransferResponse = makeTransferResponse else {
+                            if let e = e {
+                                print(e)
+                                callback(String(describing: e))
+                                return
+                            }
+                            callback("make transfer failed")
+                            return
+                        }
+                        print("success")
+                        callback(String(describing: makeTransferResponse))
+                    }
+                case .failure(let e):
+                    callback(String(describing: e))
+                }
+            }
+        }
+    }
+
+    // START: Pre-backend local functions
+    public func createAccountLocal() -> Account? {
         let res = accountStorage!.account
         switch res {
             case .success(let account):
@@ -63,10 +299,6 @@ public struct Mogami {
     }
 
     public func makeAMemo() {
-        AppAPI.getAppConfig(index: "1") { res, e in
-            print(res)
-            print(e)
-        }
         let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: 124)
         print(memo)
     }

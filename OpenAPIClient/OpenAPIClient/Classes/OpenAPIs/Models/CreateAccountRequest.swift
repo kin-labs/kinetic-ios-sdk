@@ -12,16 +12,22 @@ import AnyCodable
 
 public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
 
+    public var environment: String
     public var index: Double
+    public var mint: String
     public var tx: AnyCodable
 
-    public init(index: Double, tx: AnyCodable) {
+    public init(environment: String, index: Double, mint: String, tx: AnyCodable) {
+        self.environment = environment
         self.index = index
+        self.mint = mint
         self.tx = tx
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case environment
         case index
+        case mint
         case tx
     }
 
@@ -29,7 +35,9 @@ public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(environment, forKey: .environment)
         try container.encode(index, forKey: .index)
+        try container.encode(mint, forKey: .mint)
         try container.encode(tx, forKey: .tx)
     }
 }

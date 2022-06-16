@@ -1,17 +1,17 @@
 # TransactionAPI
 
-All URIs are relative to *https://devnet.mogami.io*
+All URIs are relative to *https://devnet.kinetic.kin.org*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getLatestBlockhash**](TransactionAPI.md#getlatestblockhash) | **GET** /api/transaction/latest-blockhash | 
-[**getMinimumRentExemptionBalance**](TransactionAPI.md#getminimumrentexemptionbalance) | **GET** /api/transaction/minimum-rent-exemption-balance | 
+[**getLatestBlockhash**](TransactionAPI.md#getlatestblockhash) | **GET** /api/transaction/latest-blockhash/{environment}/{index} | 
+[**getMinimumRentExemptionBalance**](TransactionAPI.md#getminimumrentexemptionbalance) | **GET** /api/transaction/minimum-rent-exemption-balance/{environment}/{index} | 
 [**makeTransfer**](TransactionAPI.md#maketransfer) | **POST** /api/transaction/make-transfer | 
 
 
 # **getLatestBlockhash**
 ```swift
-    open class func getLatestBlockhash(completion: @escaping (_ data: LatestBlockhashResponse?, _ error: Error?) -> Void)
+    open class func getLatestBlockhash(environment: String, index: Double, completion: @escaping (_ data: LatestBlockhashResponse?, _ error: Error?) -> Void)
 ```
 
 
@@ -21,8 +21,10 @@ Method | HTTP request | Description
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let environment = "environment_example" // String | 
+let index = 987 // Double | 
 
-TransactionAPI.getLatestBlockhash() { (response, error) in
+TransactionAPI.getLatestBlockhash(environment: environment, index: index) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -35,7 +37,11 @@ TransactionAPI.getLatestBlockhash() { (response, error) in
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **environment** | **String** |  | 
+ **index** | **Double** |  | 
 
 ### Return type
 
@@ -54,7 +60,7 @@ No authorization required
 
 # **getMinimumRentExemptionBalance**
 ```swift
-    open class func getMinimumRentExemptionBalance(dataLength: Double, completion: @escaping (_ data: MinimumRentExemptionBalanceResponse?, _ error: Error?) -> Void)
+    open class func getMinimumRentExemptionBalance(environment: String, index: Double, dataLength: Double, completion: @escaping (_ data: MinimumRentExemptionBalanceResponse?, _ error: Error?) -> Void)
 ```
 
 
@@ -64,9 +70,11 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let environment = "environment_example" // String | 
+let index = 987 // Double | 
 let dataLength = 987 // Double | 
 
-TransactionAPI.getMinimumRentExemptionBalance(dataLength: dataLength) { (response, error) in
+TransactionAPI.getMinimumRentExemptionBalance(environment: environment, index: index, dataLength: dataLength) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -82,6 +90,8 @@ TransactionAPI.getMinimumRentExemptionBalance(dataLength: dataLength) { (respons
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **environment** | **String** |  | 
+ **index** | **Double** |  | 
  **dataLength** | **Double** |  | 
 
 ### Return type
@@ -101,7 +111,7 @@ No authorization required
 
 # **makeTransfer**
 ```swift
-    open class func makeTransfer(makeTransferRequest: MakeTransferRequest, completion: @escaping (_ data: MakeTransferResponse?, _ error: Error?) -> Void)
+    open class func makeTransfer(makeTransferRequest: MakeTransferRequest, completion: @escaping (_ data: AppTransaction?, _ error: Error?) -> Void)
 ```
 
 
@@ -111,7 +121,7 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let makeTransferRequest = MakeTransferRequest(index: 123, tx: "TODO") // MakeTransferRequest | 
+let makeTransferRequest = MakeTransferRequest(commitment: "commitment_example", environment: "environment_example", index: 123, mint: "mint_example", lastValidBlockHeight: 123, referenceId: "referenceId_example", referenceType: "referenceType_example", tx: "TODO") // MakeTransferRequest | 
 
 TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest) { (response, error) in
     guard error == nil else {
@@ -133,7 +143,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**MakeTransferResponse**](MakeTransferResponse.md)
+[**AppTransaction**](AppTransaction.md)
 
 ### Authorization
 

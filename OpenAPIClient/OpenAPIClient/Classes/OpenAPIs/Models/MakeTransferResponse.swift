@@ -12,12 +12,12 @@ import AnyCodable
 
 public struct MakeTransferResponse: Codable, JSONEncodable, Hashable {
 
-    public var amount: Double
-    public var destination: String
-    public var errors: AnyCodable
-    public var feePayer: String
-    public var mint: String
-    public var signature: String
+    public var amount: Double?
+    public var destination: String?
+    public var errors: AnyCodable?
+    public var feePayer: String?
+    public var mint: String?
+    public var signature: String?
     public var solanaStart: Date
     public var solanaEnd: Date
     public var source: String

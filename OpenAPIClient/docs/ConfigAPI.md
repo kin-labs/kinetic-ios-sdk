@@ -1,6 +1,6 @@
 # ConfigAPI
 
-All URIs are relative to *https://devnet.mogami.io*
+All URIs are relative to *https://devnet.kinetic.kin.org*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

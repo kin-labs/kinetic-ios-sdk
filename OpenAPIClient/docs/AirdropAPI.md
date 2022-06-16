@@ -1,6 +1,6 @@
 # AirdropAPI
 
-All URIs are relative to *https://devnet.mogami.io*
+All URIs are relative to *https://devnet.kinetic.kin.org*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -63,7 +63,7 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let requestAirdropRequest = RequestAirdropRequest(account: "account_example", amount: "amount_example") // RequestAirdropRequest | 
+let requestAirdropRequest = RequestAirdropRequest(account: "account_example", amount: "amount_example", environment: "environment_example", index: 123, mint: "mint_example") // RequestAirdropRequest | 
 
 AirdropAPI.requestAirdrop(requestAirdropRequest: requestAirdropRequest) { (response, error) in
     guard error == nil else {

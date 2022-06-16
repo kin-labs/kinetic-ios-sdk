@@ -14,13 +14,15 @@ open class AccountAPI {
 
     /**
 
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func apiAccountFeatureControllerGetAccountInfo(accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
-        return apiAccountFeatureControllerGetAccountInfoWithRequestBuilder(accountId: accountId).execute(apiResponseQueue) { result in
+    open class func apiAccountFeatureControllerGetAccountInfo(environment: String, index: Double, accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
+        return apiAccountFeatureControllerGetAccountInfoWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute(apiResponseQueue) { result in
             switch result {
             case .success:
                 completion((), nil)
@@ -31,12 +33,20 @@ open class AccountAPI {
     }
 
     /**
-     - GET /api/account/info/{accountId}
+     - GET /api/account/info/{environment}/{index}/{accountId}
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - returns: RequestBuilder<Void> 
      */
-    open class func apiAccountFeatureControllerGetAccountInfoWithRequestBuilder(accountId: String) -> RequestBuilder<Void> {
-        var localVariablePath = "/api/account/info/{accountId}"
+    open class func apiAccountFeatureControllerGetAccountInfoWithRequestBuilder(environment: String, index: Double, accountId: String) -> RequestBuilder<Void> {
+        var localVariablePath = "/api/account/info/{environment}/{index}/{accountId}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
         let accountIdPreEscape = "\(APIHelper.mapValueToPathItem(accountId))"
         let accountIdPostEscape = accountIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{accountId}", with: accountIdPostEscape, options: .literal, range: nil)
@@ -99,13 +109,15 @@ open class AccountAPI {
 
     /**
 
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getBalance(accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: BalanceResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getBalanceWithRequestBuilder(accountId: accountId).execute(apiResponseQueue) { result in
+    open class func getBalance(environment: String, index: Double, accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: BalanceResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getBalanceWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -116,12 +128,20 @@ open class AccountAPI {
     }
 
     /**
-     - GET /api/account/balance/{accountId}
+     - GET /api/account/balance/{environment}/{index}/{accountId}
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - returns: RequestBuilder<BalanceResponse> 
      */
-    open class func getBalanceWithRequestBuilder(accountId: String) -> RequestBuilder<BalanceResponse> {
-        var localVariablePath = "/api/account/balance/{accountId}"
+    open class func getBalanceWithRequestBuilder(environment: String, index: Double, accountId: String) -> RequestBuilder<BalanceResponse> {
+        var localVariablePath = "/api/account/balance/{environment}/{index}/{accountId}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
         let accountIdPreEscape = "\(APIHelper.mapValueToPathItem(accountId))"
         let accountIdPostEscape = accountIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{accountId}", with: accountIdPostEscape, options: .literal, range: nil)
@@ -143,13 +163,15 @@ open class AccountAPI {
 
     /**
 
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func getHistory(accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [HistoryResponse]?, _ error: Error?) -> Void)) -> RequestTask {
-        return getHistoryWithRequestBuilder(accountId: accountId).execute(apiResponseQueue) { result in
+    open class func getHistory(environment: String, index: Double, accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [HistoryResponse]?, _ error: Error?) -> Void)) -> RequestTask {
+        return getHistoryWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -160,12 +182,20 @@ open class AccountAPI {
     }
 
     /**
-     - GET /api/account/history/{accountId}
+     - GET /api/account/history/{environment}/{index}/{accountId}
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - returns: RequestBuilder<[HistoryResponse]> 
      */
-    open class func getHistoryWithRequestBuilder(accountId: String) -> RequestBuilder<[HistoryResponse]> {
-        var localVariablePath = "/api/account/history/{accountId}"
+    open class func getHistoryWithRequestBuilder(environment: String, index: Double, accountId: String) -> RequestBuilder<[HistoryResponse]> {
+        var localVariablePath = "/api/account/history/{environment}/{index}/{accountId}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
         let accountIdPreEscape = "\(APIHelper.mapValueToPathItem(accountId))"
         let accountIdPostEscape = accountIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{accountId}", with: accountIdPostEscape, options: .literal, range: nil)
@@ -187,13 +217,15 @@ open class AccountAPI {
 
     /**
 
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func tokenAccounts(accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [String]?, _ error: Error?) -> Void)) -> RequestTask {
-        return tokenAccountsWithRequestBuilder(accountId: accountId).execute(apiResponseQueue) { result in
+    open class func tokenAccounts(environment: String, index: Double, accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: [String]?, _ error: Error?) -> Void)) -> RequestTask {
+        return tokenAccountsWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
                 completion(response.body, nil)
@@ -204,12 +236,20 @@ open class AccountAPI {
     }
 
     /**
-     - GET /api/account/token-accounts/{accountId}
+     - GET /api/account/token-accounts/{environment}/{index}/{accountId}
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - parameter accountId: (path)  
      - returns: RequestBuilder<[String]> 
      */
-    open class func tokenAccountsWithRequestBuilder(accountId: String) -> RequestBuilder<[String]> {
-        var localVariablePath = "/api/account/token-accounts/{accountId}"
+    open class func tokenAccountsWithRequestBuilder(environment: String, index: Double, accountId: String) -> RequestBuilder<[String]> {
+        var localVariablePath = "/api/account/token-accounts/{environment}/{index}/{accountId}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
         let accountIdPreEscape = "\(APIHelper.mapValueToPathItem(accountId))"
         let accountIdPostEscape = accountIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{accountId}", with: accountIdPostEscape, options: .literal, range: nil)

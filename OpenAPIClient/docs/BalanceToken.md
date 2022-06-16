@@ -1,16 +1,11 @@
-# MakeTransferRequest
+# BalanceToken
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**commitment** | **String** |  | 
-**environment** | **String** |  | 
-**index** | **Double** |  | 
+**account** | **String** |  | 
+**balance** | [**AnyCodable**](.md) |  | 
 **mint** | **String** |  | 
-**lastValidBlockHeight** | **Double** |  | 
-**referenceId** | **String** |  | 
-**referenceType** | **String** |  | 
-**tx** | [**AnyCodable**](.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

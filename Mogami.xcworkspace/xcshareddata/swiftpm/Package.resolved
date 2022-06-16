@@ -11,21 +11,12 @@
         }
       },
       {
-        "package": "RxSwift",
-        "repositoryURL": "https://github.com/ReactiveX/RxSwift.git",
+        "package": "secp256k1",
+        "repositoryURL": "https://github.com/Boilertalk/secp256k1.swift.git",
         "state": {
           "branch": null,
-          "revision": "b4307ba0b6425c0ba4178e138799946c3da594f8",
-          "version": "6.5.0"
-        }
-      },
-      {
-        "package": "Solana",
-        "repositoryURL": "https://github.com/ajamaica/Solana.swift",
-        "state": {
-          "branch": null,
-          "revision": "58aed5c6cccc7fa98ba08dd073ab16df750ee0b2",
-          "version": "1.1.0"
+          "revision": "45e458ec3be46cf0a6eb68bc947f797852dc65d8",
+          "version": "0.1.6"
         }
       },
       {

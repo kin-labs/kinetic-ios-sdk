@@ -1,19 +1,19 @@
 # AccountAPI
 
-All URIs are relative to *https://devnet.mogami.io*
+All URIs are relative to *https://devnet.kinetic.kin.org*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**apiAccountFeatureControllerGetAccountInfo**](AccountAPI.md#apiaccountfeaturecontrollergetaccountinfo) | **GET** /api/account/info/{accountId} | 
+[**apiAccountFeatureControllerGetAccountInfo**](AccountAPI.md#apiaccountfeaturecontrollergetaccountinfo) | **GET** /api/account/info/{environment}/{index}/{accountId} | 
 [**createAccount**](AccountAPI.md#createaccount) | **POST** /api/account/create | 
-[**getBalance**](AccountAPI.md#getbalance) | **GET** /api/account/balance/{accountId} | 
-[**getHistory**](AccountAPI.md#gethistory) | **GET** /api/account/history/{accountId} | 
-[**tokenAccounts**](AccountAPI.md#tokenaccounts) | **GET** /api/account/token-accounts/{accountId} | 
+[**getBalance**](AccountAPI.md#getbalance) | **GET** /api/account/balance/{environment}/{index}/{accountId} | 
+[**getHistory**](AccountAPI.md#gethistory) | **GET** /api/account/history/{environment}/{index}/{accountId} | 
+[**tokenAccounts**](AccountAPI.md#tokenaccounts) | **GET** /api/account/token-accounts/{environment}/{index}/{accountId} | 
 
 
 # **apiAccountFeatureControllerGetAccountInfo**
 ```swift
-    open class func apiAccountFeatureControllerGetAccountInfo(accountId: String, completion: @escaping (_ data: Void?, _ error: Error?) -> Void)
+    open class func apiAccountFeatureControllerGetAccountInfo(environment: String, index: Double, accountId: String, completion: @escaping (_ data: Void?, _ error: Error?) -> Void)
 ```
 
 
@@ -23,9 +23,11 @@ Method | HTTP request | Description
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let environment = "environment_example" // String | 
+let index = 987 // Double | 
 let accountId = "accountId_example" // String | 
 
-AccountAPI.apiAccountFeatureControllerGetAccountInfo(accountId: accountId) { (response, error) in
+AccountAPI.apiAccountFeatureControllerGetAccountInfo(environment: environment, index: index, accountId: accountId) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -41,6 +43,8 @@ AccountAPI.apiAccountFeatureControllerGetAccountInfo(accountId: accountId) { (re
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **environment** | **String** |  | 
+ **index** | **Double** |  | 
  **accountId** | **String** |  | 
 
 ### Return type
@@ -70,7 +74,7 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let createAccountRequest = CreateAccountRequest(index: 123, tx: "TODO") // CreateAccountRequest | 
+let createAccountRequest = CreateAccountRequest(environment: "environment_example", index: 123, mint: "mint_example", tx: "TODO") // CreateAccountRequest | 
 
 AccountAPI.createAccount(createAccountRequest: createAccountRequest) { (response, error) in
     guard error == nil else {
@@ -107,7 +111,7 @@ No authorization required
 
 # **getBalance**
 ```swift
-    open class func getBalance(accountId: String, completion: @escaping (_ data: BalanceResponse?, _ error: Error?) -> Void)
+    open class func getBalance(environment: String, index: Double, accountId: String, completion: @escaping (_ data: BalanceResponse?, _ error: Error?) -> Void)
 ```
 
 
@@ -117,9 +121,11 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let environment = "environment_example" // String | 
+let index = 987 // Double | 
 let accountId = "accountId_example" // String | 
 
-AccountAPI.getBalance(accountId: accountId) { (response, error) in
+AccountAPI.getBalance(environment: environment, index: index, accountId: accountId) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -135,6 +141,8 @@ AccountAPI.getBalance(accountId: accountId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **environment** | **String** |  | 
+ **index** | **Double** |  | 
  **accountId** | **String** |  | 
 
 ### Return type
@@ -154,7 +162,7 @@ No authorization required
 
 # **getHistory**
 ```swift
-    open class func getHistory(accountId: String, completion: @escaping (_ data: [HistoryResponse]?, _ error: Error?) -> Void)
+    open class func getHistory(environment: String, index: Double, accountId: String, completion: @escaping (_ data: [HistoryResponse]?, _ error: Error?) -> Void)
 ```
 
 
@@ -164,9 +172,11 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let environment = "environment_example" // String | 
+let index = 987 // Double | 
 let accountId = "accountId_example" // String | 
 
-AccountAPI.getHistory(accountId: accountId) { (response, error) in
+AccountAPI.getHistory(environment: environment, index: index, accountId: accountId) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -182,6 +192,8 @@ AccountAPI.getHistory(accountId: accountId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **environment** | **String** |  | 
+ **index** | **Double** |  | 
  **accountId** | **String** |  | 
 
 ### Return type
@@ -201,7 +213,7 @@ No authorization required
 
 # **tokenAccounts**
 ```swift
-    open class func tokenAccounts(accountId: String, completion: @escaping (_ data: [String]?, _ error: Error?) -> Void)
+    open class func tokenAccounts(environment: String, index: Double, accountId: String, completion: @escaping (_ data: [String]?, _ error: Error?) -> Void)
 ```
 
 
@@ -211,9 +223,11 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
+let environment = "environment_example" // String | 
+let index = 987 // Double | 
 let accountId = "accountId_example" // String | 
 
-AccountAPI.tokenAccounts(accountId: accountId) { (response, error) in
+AccountAPI.tokenAccounts(environment: environment, index: index, accountId: accountId) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -229,6 +243,8 @@ AccountAPI.tokenAccounts(accountId: accountId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **environment** | **String** |  | 
+ **index** | **Double** |  | 
  **accountId** | **String** |  | 
 
 ### Return type

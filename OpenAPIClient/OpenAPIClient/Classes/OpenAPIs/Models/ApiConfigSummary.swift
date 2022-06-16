@@ -14,18 +14,15 @@ public struct ApiConfigSummary: Codable, JSONEncodable, Hashable {
 
     public var port: Double
     public var environment: String
-    public var solanaRpcEndpoint: String
 
-    public init(port: Double, environment: String, solanaRpcEndpoint: String) {
+    public init(port: Double, environment: String) {
         self.port = port
         self.environment = environment
-        self.solanaRpcEndpoint = solanaRpcEndpoint
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case port
         case environment
-        case solanaRpcEndpoint
     }
 
     // Encodable protocol methods
@@ -34,7 +31,6 @@ public struct ApiConfigSummary: Codable, JSONEncodable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(port, forKey: .port)
         try container.encode(environment, forKey: .environment)
-        try container.encode(solanaRpcEndpoint, forKey: .solanaRpcEndpoint)
     }
 }
 

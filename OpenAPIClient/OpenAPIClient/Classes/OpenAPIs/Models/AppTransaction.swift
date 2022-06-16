@@ -12,36 +12,46 @@ import AnyCodable
 
 public struct AppTransaction: Codable, JSONEncodable, Hashable {
 
-    public var id: String
-    public var createdAt: Date
-    public var updatedAt: Date
-    public var amount: Double
-    public var destination: String
-    public var errors: [String]
-    public var feePayer: String
-    public var mint: String
-    public var signature: String
-    public var solanaStart: Date
-    public var solanaEnd: Date
-    public var source: String
-    public var status: AnyCodable
-    public var webhookEventStart: Date
-    public var webhookEventEnd: Date
-    public var webhookVerifyStart: Date
-    public var webhookVerifyEnd: Date
+    public var id: String?
+    public var createdAt: Date?
+    public var updatedAt: Date?
+    public var amount: Double?
+    public var destination: String?
+    public var errors: [AppTransactionError]?
+    public var explorerUrl: String?
+    public var feePayer: String?
+    public var mint: String?
+    public var referenceId: String?
+    public var referenceType: String?
+    public var signature: String?
+    public var solanaFinalized: Date?
+    public var solanaCommitted: Date?
+    public var solanaStart: Date?
+    public var solanaTransaction: AnyCodable?
+    public var source: String?
+    public var status: AnyCodable?
+    public var webhookEventStart: Date?
+    public var webhookEventEnd: Date?
+    public var webhookVerifyStart: Date?
+    public var webhookVerifyEnd: Date?
 
-    public init(id: String, createdAt: Date, updatedAt: Date, amount: Double, destination: String, errors: [String], feePayer: String, mint: String, signature: String, solanaStart: Date, solanaEnd: Date, source: String, status: AnyCodable, webhookEventStart: Date, webhookEventEnd: Date, webhookVerifyStart: Date, webhookVerifyEnd: Date) {
+    public init(id: String?, createdAt: Date?, updatedAt: Date?, amount: Double?, destination: String?, errors: [AppTransactionError]?, explorerUrl: String?, feePayer: String?, mint: String?, referenceId: String?, referenceType: String?, signature: String?, solanaFinalized: Date?, solanaCommitted: Date?, solanaStart: Date?, solanaTransaction: AnyCodable?, source: String?, status: AnyCodable?, webhookEventStart: Date?, webhookEventEnd: Date?, webhookVerifyStart: Date?, webhookVerifyEnd: Date?) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.amount = amount
         self.destination = destination
         self.errors = errors
+        self.explorerUrl = explorerUrl
         self.feePayer = feePayer
         self.mint = mint
+        self.referenceId = referenceId
+        self.referenceType = referenceType
         self.signature = signature
+        self.solanaFinalized = solanaFinalized
+        self.solanaCommitted = solanaCommitted
         self.solanaStart = solanaStart
-        self.solanaEnd = solanaEnd
+        self.solanaTransaction = solanaTransaction
         self.source = source
         self.status = status
         self.webhookEventStart = webhookEventStart
@@ -57,11 +67,16 @@ public struct AppTransaction: Codable, JSONEncodable, Hashable {
         case amount
         case destination
         case errors
+        case explorerUrl
         case feePayer
         case mint
+        case referenceId
+        case referenceType
         case signature
+        case solanaFinalized
+        case solanaCommitted
         case solanaStart
-        case solanaEnd
+        case solanaTransaction
         case source
         case status
         case webhookEventStart
@@ -80,11 +95,16 @@ public struct AppTransaction: Codable, JSONEncodable, Hashable {
         try container.encode(amount, forKey: .amount)
         try container.encode(destination, forKey: .destination)
         try container.encode(errors, forKey: .errors)
+        try container.encode(explorerUrl, forKey: .explorerUrl)
         try container.encode(feePayer, forKey: .feePayer)
         try container.encode(mint, forKey: .mint)
+        try container.encode(referenceId, forKey: .referenceId)
+        try container.encode(referenceType, forKey: .referenceType)
         try container.encode(signature, forKey: .signature)
+        try container.encode(solanaFinalized, forKey: .solanaFinalized)
+        try container.encode(solanaCommitted, forKey: .solanaCommitted)
         try container.encode(solanaStart, forKey: .solanaStart)
-        try container.encode(solanaEnd, forKey: .solanaEnd)
+        try container.encode(solanaTransaction, forKey: .solanaTransaction)
         try container.encode(source, forKey: .source)
         try container.encode(status, forKey: .status)
         try container.encode(webhookEventStart, forKey: .webhookEventStart)
