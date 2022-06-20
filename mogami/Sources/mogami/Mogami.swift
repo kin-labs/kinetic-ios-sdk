@@ -10,6 +10,7 @@ public struct Mogami {
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
     let SAMPLE_WALLET = PublicKey(string: "3rad7aFPdJS3CkYPSphtDAWCNB8BYpV2yc7o5ZjFQbDb")
     let MEMO_V1_PROGRAM_ID = PublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
+    let ASSOCIATED_TOKEN_PROGRAM_ID = PublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
     public init() {
         networkingRouter = NetworkingRouter(endpoint: .mainnetBetaSolana)
@@ -27,7 +28,6 @@ public struct Mogami {
                 callback("failed to get app config")
                 return
             }
-            let tokenProgramId = PublicKey(string: appConfig.mint.programId)!
             let mintKey = PublicKey(string: appConfig.mint.publicKey)!
             let feePayer = PublicKey(string: appConfig.mint.feePayer)!
             TransactionAPI.getLatestBlockhash(environment: "devnet", index: 1) { latestBlockhashResponse, e in
@@ -49,30 +49,37 @@ public struct Mogami {
                 }
 
                 let memo = try! KinBinaryMemo(typeId: KinBinaryMemo.TransferType.none.rawValue, appIdx: 1)
-                let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: [UInt8](memo.encode()))
+                let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
+                let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
 
                 // Create Account Instructions
                 solana!.api.getMinimumBalanceForRentExemption(dataLength: AccountInfo.BUFFER_LENGTH) { res in
                     res.onSuccess { minimumBalance in
-                        let createAccountInstruction = SystemProgram.createAccountInstruction(from: account.publicKey, toNewPubkey: associatedTokenAccount, lamports: minimumBalance)
-                        let initializeAccountInstruction = TokenProgram.initializeAccountInstruction(account: associatedTokenAccount, mint: mintKey, owner: account.publicKey)
+                        let createAccountInstruction = TransactionInstruction(
+                            keys: [
+                                Account.Meta(publicKey: feePayer, isSigner: true, isWritable: true),
+                                Account.Meta(publicKey: associatedTokenAccount, isSigner: false, isWritable: true),
+                                Account.Meta(publicKey: account.publicKey, isSigner: true, isWritable: false),
+                                Account.Meta(publicKey: mintKey, isSigner: false, isWritable: false),
+                                Account.Meta(publicKey: PublicKey.systemProgramId, isSigner: false, isWritable: false),
+                                Account.Meta(publicKey: PublicKey.tokenProgramId, isSigner: false, isWritable: false),
+                                Account.Meta(publicKey: PublicKey.sysvarRent, isSigner: false, isWritable: false)
+                            ],
+                            programId: ASSOCIATED_TOKEN_PROGRAM_ID,
+                            data: []
+                        )
 
                         var transaction = Transaction(signatures: [
                             Transaction.Signature(signature: nil, publicKey: account.publicKey)
                         ], feePayer: feePayer, instructions: [
                             memoInstruction,
-                            createAccountInstruction,
-                            initializeAccountInstruction
+                            createAccountInstruction
                         ], recentBlockhash: latestBlockhashResponse.blockhash)
-                        print(transaction)
                         transaction.partialSign(signers: [account])
-                        print(transaction)
                         let serializeRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
-                        print(transaction)
                         switch serializeRes {
                         case .success(let serialized):
-                            let createAccountRequest = CreateAccountRequest(environment: "devnet", index: 1, mint: KIN_MINT!.base58EncodedString, tx: "serialized.bytes")
-//                            let createAccountRequest = CreateAccountRequest(index: 1, tx: serialized.bytes)
+                            let createAccountRequest = CreateAccountRequest(environment: "devnet", index: 1, mint: appConfig.mint.symbol, tx: serialized.bytes)
                             AccountAPI.createAccount(createAccountRequest: createAccountRequest) { appTransaction, e in
                                 guard let appTransaction = appTransaction else {
                                     if let e = e {
@@ -84,10 +91,12 @@ public struct Mogami {
                                     return
                                 }
                                 print("success")
-                                print(transaction)
+                                print(appTransaction)
+                                print(appTransaction.signature)
                                 callback(String(describing: appTransaction))
                             }
                         case .failure(let e):
+                            print("here")
                             callback(String(describing: e))
                         }
                     }
@@ -104,7 +113,7 @@ public struct Mogami {
     }
 
     public func getAirdrop(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: "devnet", index: 1, mint: KIN_MINT!.base58EncodedString)) { airdropResponse, e in
+        AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: "devnet", index: 1, mint: KIN_MINT!.base58EncodedString)) { airdropResponse, e in // TODO: GET MINT FIRST
             if let e = e {
                 callback(e.localizedDescription)
             } else {
@@ -190,15 +199,16 @@ public struct Mogami {
 
                 // Get token accounts
                 guard
-                    case let .success(fromTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: fromAccount.publicKey, tokenMintAddress: PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")!),
-                    case let .success(toTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: toPublicKey, tokenMintAddress: PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")!)
+                    case let .success(fromTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: fromAccount.publicKey, tokenMintAddress: mintKey),
+                    case let .success(toTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: toPublicKey, tokenMintAddress: mintKey)
                 else {
                     callback("could not get token accounts")
                     return
                 }
 
                 let memo = try! KinBinaryMemo(version: 1, typeId: KinBinaryMemo.TransferType.spend.rawValue, appIdx: 1)
-                let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: [UInt8](memo.encode()))
+                let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
+                let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
                 let sendInstruction = TokenProgram.transferInstruction(
                     tokenProgramId: tokenProgramId,
                     source: fromTokenAccount,
@@ -206,30 +216,17 @@ public struct Mogami {
                     owner: fromAccount.publicKey,
                     amount: UInt64(amount)
                 )
-                print("---")
-                print(appConfig)
-                print(mintKey)
-                print(tokenProgramId)
-                print(fromTokenAccount)
-                print(fromAccount.publicKey)
-                print(toTokenAccount)
-                print("---")
-                print(memoInstruction)
-                print(sendInstruction)
                 var transaction = Transaction(
                     signatures: [Transaction.Signature(signature: nil, publicKey: fromAccount.publicKey)],
                     feePayer: feePayer,
                     instructions: [memoInstruction, sendInstruction],
                     recentBlockhash: latestBlockhashResponse.blockhash
                 )
-//                print(transaction)
                 transaction.partialSign(signers: [fromAccount])
-//                print(transaction)
                 let serializeRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
                 switch serializeRes {
                 case .success(let serialized):
-                    let makeTransferRequest = MakeTransferRequest(commitment: .confirmed, environment: "devnet", index: 1, mint: appConfig.mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: nil, referenceType: nil, tx: serialized.bytes)
-//                    let makeTransferRequest = MakeTransferRequest(index: 1, tx: serialized.bytes)
+                    let makeTransferRequest = MakeTransferRequest(commitment: .confirmed, environment: "devnet", index: 1, mint: appConfig.mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: nil, referenceType: nil, tx: serialized)
                     TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest) { makeTransferResponse, e in
                         guard let makeTransferResponse = makeTransferResponse else {
                             if let e = e {

@@ -29,9 +29,11 @@ class ViewController: UIViewController {
             print(account.publicKey)
             print(account.secretKey)
             print(account.phrase.joined(separator: " "))
-//            mogami.createAccount(account: localAccount!) { res in
-//                self.createAccountResultLabel.text = res
-//            }
+            mogami.createAccount(account: localAccount!) { res in
+                DispatchQueue.main.async {
+                    self.createAccountResultLabel.text = res
+                }
+            }
         }
     }
 

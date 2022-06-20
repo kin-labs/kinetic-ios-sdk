@@ -121,7 +121,7 @@ No authorization required
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import OpenAPIClient
 
-let makeTransferRequest = MakeTransferRequest(commitment: "commitment_example", environment: "environment_example", index: 123, mint: "mint_example", lastValidBlockHeight: 123, referenceId: "referenceId_example", referenceType: "referenceType_example", tx: "TODO") // MakeTransferRequest | 
+let makeTransferRequest = MakeTransferRequest(commitment: "commitment_example", environment: "environment_example", index: 123, mint: "mint_example", lastValidBlockHeight: 123, referenceId: "referenceId_example", referenceType: "referenceType_example", tx: 123) // MakeTransferRequest | 
 
 TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest) { (response, error) in
     guard error == nil else {

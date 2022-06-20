@@ -15,9 +15,9 @@ public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
     public var environment: String
     public var index: Double
     public var mint: String
-    public var tx: AnyCodable
+    public var tx: [UInt8]
 
-    public init(environment: String, index: Double, mint: String, tx: AnyCodable) {
+    public init(environment: String, index: Double, mint: String, tx: [UInt8]) {
         self.environment = environment
         self.index = index
         self.mint = mint
