@@ -113,11 +113,21 @@ public struct Mogami {
     }
 
     public func getAirdrop(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: "devnet", index: 1, mint: KIN_MINT!.base58EncodedString)) { airdropResponse, e in // TODO: GET MINT FIRST
-            if let e = e {
-                callback(e.localizedDescription)
-            } else {
-                callback(String(describing: airdropResponse!))
+        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfig, e in
+            guard let appConfig = appConfig else {
+                if let e = e {
+                    callback(String(describing: e))
+                    return
+                }
+                callback("failed to get app config")
+                return
+            }
+            AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: "devnet", index: 1, mint: appConfig.mint.symbol)) { airdropResponse, e in
+                if let e = e {
+                    callback(e.localizedDescription)
+                } else {
+                    callback(String(describing: airdropResponse!))
+                }
             }
         }
     }
