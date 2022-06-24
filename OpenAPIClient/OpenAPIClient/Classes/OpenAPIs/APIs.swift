@@ -14,7 +14,7 @@ import Foundation
 public typealias OpenAPIClient = OpenAPIClientAPI
 
 open class OpenAPIClientAPI {
-    public static var basePath = "http://localhost:3000"
+    public static var basePath = "http://localhost:3400"
     public static var customHeaders: [String: String] = [:]
     public static var credential: URLCredential?
     public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory()

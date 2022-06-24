@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var getAppConfigResultLabel: UILabel!
     @IBOutlet weak var makeTransferResultLabel: UILabel!
 
-    var kinetic = Kinetic()
+    var kinetic = Kinetic(environment: "devnet", index: 1, endpoint: "http://localhost:3000")
     var localAccount: Account?
 
     @IBAction func createAccountButtonPressed(_ sender: Any) {

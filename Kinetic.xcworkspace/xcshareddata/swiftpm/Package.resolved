@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "Solana",
+        "repositoryURL": "https://github.com/ajamaica/Solana.swift",
+        "state": {
+          "branch": "f487b25",
+          "revision": "f487b256658634d7bdc178c6e6e7abf7fd905580",
+          "version": null
+        }
+      },
+      {
         "package": "Starscream",
         "repositoryURL": "https://github.com/daltoniam/Starscream.git",
         "state": {

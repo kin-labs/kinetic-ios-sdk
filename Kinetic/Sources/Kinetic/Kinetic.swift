@@ -6,20 +6,33 @@ public struct Kinetic {
     var networkingRouter: NetworkingRouter?
     var accountStorage: KeychainAccountStorage?
     var solana: Solana?
+    var environment: String
+    var index: Double
     let KIN_MINT = PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
     let SAMPLE_WALLET = PublicKey(string: "3rad7aFPdJS3CkYPSphtDAWCNB8BYpV2yc7o5ZjFQbDb")
     let MEMO_V1_PROGRAM_ID = PublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
     let ASSOCIATED_TOKEN_PROGRAM_ID = PublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
-    public init() {
-        networkingRouter = NetworkingRouter(endpoint: .mainnetBetaSolana)
+    public init(environment: String?, index: Double, endpoint: String?) {
+        // TODO: add logging and Solana RPC config here
+        self.environment = environment ?? "devnet"
+        self.index = index
+        networkingRouter = { switch self.environment {
+        case "devnet":
+            return NetworkingRouter(endpoint: .devnetSolana)
+        case "testnet":
+            return NetworkingRouter(endpoint: .testnetSolana)
+        default:
+            return NetworkingRouter(endpoint: .mainnetBetaSolana)
+        } }()
         accountStorage = KeychainAccountStorage()
         solana = Solana(router: networkingRouter!)
+        OpenAPIClientAPI.basePath = endpoint ?? "http://localhost:3000"
     }
 
     public func createAccount(account: Account, _ callback: @escaping ((String) -> Void)) {
-        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfig, e in
+        AppAPI.getAppConfig(environment: environment, index: index) { appConfig, e in
             guard let appConfig = appConfig else {
                 if let e = e {
                     callback(String(describing: e))
@@ -30,7 +43,7 @@ public struct Kinetic {
             }
             let mintKey = PublicKey(string: appConfig.mint.publicKey)!
             let feePayer = PublicKey(string: appConfig.mint.feePayer)!
-            TransactionAPI.getLatestBlockhash(environment: "devnet", index: 1) { latestBlockhashResponse, e in
+            TransactionAPI.getLatestBlockhash(environment: environment, index: index) { latestBlockhashResponse, e in
                 guard let latestBlockhashResponse = latestBlockhashResponse
                 else {
                     if let e = e {
@@ -48,7 +61,7 @@ public struct Kinetic {
                     return
                 }
 
-                let memo = try! KinBinaryMemo(typeId: KinBinaryMemo.TransferType.none.rawValue, appIdx: 1)
+                let memo = try! KinBinaryMemo(typeId: KinBinaryMemo.TransferType.none.rawValue, appIdx: UInt16(index))
                 let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
                 let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
 
@@ -79,7 +92,7 @@ public struct Kinetic {
                         let serializeRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
                         switch serializeRes {
                         case .success(let serialized):
-                            let createAccountRequest = CreateAccountRequest(environment: "devnet", index: 1, mint: appConfig.mint.symbol, tx: serialized.bytes)
+                            let createAccountRequest = CreateAccountRequest(environment: environment, index: index, mint: appConfig.mint.symbol, tx: serialized.bytes)
                             AccountAPI.createAccount(createAccountRequest: createAccountRequest) { appTransaction, e in
                                 guard let appTransaction = appTransaction else {
                                     if let e = e {
@@ -113,7 +126,7 @@ public struct Kinetic {
     }
 
     public func getAirdrop(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfig, e in
+        AppAPI.getAppConfig(environment: environment, index: index) { appConfig, e in
             guard let appConfig = appConfig else {
                 if let e = e {
                     callback(String(describing: e))
@@ -122,7 +135,7 @@ public struct Kinetic {
                 callback("failed to get app config")
                 return
             }
-            AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: "devnet", index: 1, mint: appConfig.mint.symbol)) { airdropResponse, e in
+            AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: environment, index: index, mint: appConfig.mint.symbol)) { airdropResponse, e in
                 if let e = e {
                     callback(e.localizedDescription)
                 } else {
@@ -133,7 +146,7 @@ public struct Kinetic {
     }
 
     public func getAccountBalance(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AccountAPI.getBalance(environment: "devnet", index: 1, accountId: publicKey) { balanceResponse, e in
+        AccountAPI.getBalance(environment: environment, index: index, accountId: publicKey) { balanceResponse, e in
             if let e = e {
                 callback(e.localizedDescription)
             } else {
@@ -143,7 +156,7 @@ public struct Kinetic {
     }
 
     public func getAccountInfo(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AccountAPI.apiAccountFeatureControllerGetAccountInfo(environment: "devnet",  index: 1, accountId: publicKey) { accountInfoResponse, e in
+        AccountAPI.apiAccountFeatureControllerGetAccountInfo(environment: environment,  index: index, accountId: publicKey) { accountInfoResponse, e in
             if let e = e {
                 callback(e.localizedDescription)
             } else {
@@ -153,7 +166,7 @@ public struct Kinetic {
     }
 
     public func getAccountHistory(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AccountAPI.getHistory(environment: "devnet", index: 1, accountId: publicKey) { historyResponses, e in
+        AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey) { historyResponses, e in
             if let e = e {
                 callback(e.localizedDescription)
             } else {
@@ -163,7 +176,7 @@ public struct Kinetic {
     }
 
     public func getTokenAccounts(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AccountAPI.tokenAccounts(environment: "devnet", index: 1, accountId: publicKey) { tokenAccountsResponse, e in
+        AccountAPI.tokenAccounts(environment: environment, index: index, accountId: publicKey) { tokenAccountsResponse, e in
             if let e = e {
                 callback(e.localizedDescription)
             } else {
@@ -173,7 +186,7 @@ public struct Kinetic {
     }
 
     public func getAppConfig(_ callback: @escaping ((String) -> Void)) {
-        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfigResponse, e in
+        AppAPI.getAppConfig(environment: environment, index: index) { appConfigResponse, e in
             if let e = e {
                 callback(e.localizedDescription)
             } else {
@@ -184,7 +197,7 @@ public struct Kinetic {
     }
 
     public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int, _ callback: @escaping ((String) -> Void)) {
-        AppAPI.getAppConfig(environment: "devnet", index: 1) { appConfig, e in
+        AppAPI.getAppConfig(environment: environment, index: index) { appConfig, e in
             guard let appConfig = appConfig else {
                 if let e = e {
                     callback(String(describing: e))
@@ -196,7 +209,7 @@ public struct Kinetic {
             let tokenProgramId = PublicKey(string: appConfig.mint.programId)!
             let mintKey = PublicKey(string: appConfig.mint.publicKey)!
             let feePayer = PublicKey(string: appConfig.mint.feePayer)!
-            TransactionAPI.getLatestBlockhash(environment: "devnet", index: 1) { latestBlockhashResponse, e in
+            TransactionAPI.getLatestBlockhash(environment: environment, index: index) { latestBlockhashResponse, e in
                 guard let latestBlockhashResponse = latestBlockhashResponse
                 else {
                     if let e = e {
@@ -216,7 +229,7 @@ public struct Kinetic {
                     return
                 }
 
-                let memo = try! KinBinaryMemo(version: 1, typeId: KinBinaryMemo.TransferType.spend.rawValue, appIdx: 1)
+                let memo = try! KinBinaryMemo(version: 1, typeId: KinBinaryMemo.TransferType.spend.rawValue, appIdx: UInt16(index))
                 let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
                 let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
                 let sendInstruction = TokenProgram.transferInstruction(
@@ -236,7 +249,7 @@ public struct Kinetic {
                 let serializeRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
                 switch serializeRes {
                 case .success(let serialized):
-                    let makeTransferRequest = MakeTransferRequest(commitment: .confirmed, environment: "devnet", index: 1, mint: appConfig.mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: nil, referenceType: nil, tx: serialized)
+                    let makeTransferRequest = MakeTransferRequest(commitment: .confirmed, environment: environment, index: index, mint: appConfig.mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: nil, referenceType: nil, tx: serialized)
                     TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest) { makeTransferResponse, e in
                         guard let makeTransferResponse = makeTransferResponse else {
                             if let e = e {
@@ -306,7 +319,7 @@ public struct Kinetic {
     }
 
     public func makeAMemo() {
-        let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: 124)
+        let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: UInt16(index))
         print(memo)
     }
 
