@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:mogami">
+      location = "group:kinetic">
    </FileRef>
    <FileRef
-      location = "group:MogamiDemo/MogamiDemo.xcodeproj">
+      location = "group:KineticDemo/KineticDemo.xcodeproj">
    </FileRef>
 </Workspace>

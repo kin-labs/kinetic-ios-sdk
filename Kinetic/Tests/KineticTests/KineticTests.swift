@@ -1,11 +1,11 @@
 import XCTest
-@testable import Mogami
+@testable import Kinetic
 
-final class MogamiTests: XCTestCase {
+final class KineticTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(mogami().text, "Hello, World!")
+        XCTAssertEqual(kinetic().text, "Hello, World!")
     }
 }

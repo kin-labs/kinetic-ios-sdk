@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Mogami",
+    name: "Kinetic",
     platforms: [
         .iOS(.v11),
         .macOS(.v10_12)
     ],
     products: [
         .library(
-            name: "Mogami",
-            targets: ["Mogami"]),
+            name: "Kinetic",
+            targets: ["Kinetic"]),
     ],
     dependencies: [
 //        .package(url: "https://github.com/ajamaica/Solana.swift", from: "1.1.0"),
@@ -22,13 +22,13 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Mogami",
+            name: "Kinetic",
             dependencies: [
                 .product(name: "Solana", package: "Solana.swift"),
                 .product(name: "OpenAPIClient", package: "OpenAPIClient")
             ]),
         .testTarget(
-            name: "MogamiTests",
-            dependencies: ["Mogami"]),
+            name: "KineticTests",
+            dependencies: ["Kinetic"]),
     ]
 )

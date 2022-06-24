@@ -1,6 +1,6 @@
 //
 //  KinBinaryMemo.swift
-//  Mogami
+//  Kinetic
 //
 //  Created by Kik Interactive Inc.
 //  Copyright © 2020 Kin Foundation. All rights reserved.

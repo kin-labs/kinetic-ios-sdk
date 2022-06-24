@@ -1,6 +1,6 @@
 //
 //  SecureKeyStorage.swift
-//  Mogami
+//  Kinetic
 //
 //  Created by Kik Interactive Inc. on 2020-02-14.
 //  Copyright © 2020 Kin Foundation. All rights reserved.

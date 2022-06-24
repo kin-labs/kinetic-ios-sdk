@@ -13,18 +13,18 @@ import AnyCodable
 public struct HealthCheckResponse: Codable, JSONEncodable, Hashable {
 
     public var isSolanaOk: Bool
-    public var isMogamiOk: Bool
+    public var isKineticOk: Bool
     public var time: String
 
-    public init(isSolanaOk: Bool, isMogamiOk: Bool, time: String) {
+    public init(isSolanaOk: Bool, isKineticOk: Bool, time: String) {
         self.isSolanaOk = isSolanaOk
-        self.isMogamiOk = isMogamiOk
+        self.isKineticOk = isKineticOk
         self.time = time
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case isSolanaOk
-        case isMogamiOk
+        case isKineticOk
         case time
     }
 
@@ -33,7 +33,7 @@ public struct HealthCheckResponse: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(isSolanaOk, forKey: .isSolanaOk)
-        try container.encode(isMogamiOk, forKey: .isMogamiOk)
+        try container.encode(isKineticOk, forKey: .isKineticOk)
         try container.encode(time, forKey: .time)
     }
 }

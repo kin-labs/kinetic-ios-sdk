@@ -13,19 +13,19 @@
 		7EE05CC227B577A0004AD0DD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE05CC127B577A0004AD0DD /* ViewController.swift */; };
 		7EE05CC727B577A1004AD0DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EE05CC627B577A1004AD0DD /* Assets.xcassets */; };
 		7EE05CCA27B577A1004AD0DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EE05CC827B577A1004AD0DD /* LaunchScreen.storyboard */; };
-		7EE1B69E27B5A04F0056F727 /* Mogami in Frameworks */ = {isa = PBXBuildFile; productRef = 7EE1B69D27B5A04F0056F727 /* Mogami */; };
+		7EE1B69E27B5A04F0056F727 /* Kinetic in Frameworks */ = {isa = PBXBuildFile; productRef = 7EE1B69D27B5A04F0056F727 /* Kinetic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7E7077A527B57B2800E1EA35 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		7E7077AC27B59A4B00E1EA35 /* mogami */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mogami; path = ../mogami; sourceTree = "<group>"; };
-		7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MogamiDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7EE05CBD27B577A0004AD0DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MogamiDemo/AppDelegate.swift; sourceTree = "<group>"; };
-		7EE05CBF27B577A0004AD0DD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = MogamiDemo/SceneDelegate.swift; sourceTree = "<group>"; };
-		7EE05CC127B577A0004AD0DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MogamiDemo/ViewController.swift; sourceTree = "<group>"; };
-		7EE05CC627B577A1004AD0DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = MogamiDemo/Assets.xcassets; sourceTree = "<group>"; };
+		7E7077AC27B59A4B00E1EA35 /* kinetic */ = {isa = PBXFileReference; lastKnownFileType = folder; name = kinetic; path = ../kinetic; sourceTree = "<group>"; };
+		7EE05CBA27B577A0004AD0DD /* KineticDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KineticDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE05CBD27B577A0004AD0DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = KineticDemo/AppDelegate.swift; sourceTree = "<group>"; };
+		7EE05CBF27B577A0004AD0DD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = KineticDemo/SceneDelegate.swift; sourceTree = "<group>"; };
+		7EE05CC127B577A0004AD0DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = KineticDemo/ViewController.swift; sourceTree = "<group>"; };
+		7EE05CC627B577A1004AD0DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = KineticDemo/Assets.xcassets; sourceTree = "<group>"; };
 		7EE05CC927B577A1004AD0DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		7EE05CCB27B577A1004AD0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = MogamiDemo/Info.plist; sourceTree = "<group>"; };
+		7EE05CCB27B577A1004AD0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = KineticDemo/Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EE1B69E27B5A04F0056F727 /* Mogami in Frameworks */,
+				7EE1B69E27B5A04F0056F727 /* Kinetic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,7 +43,7 @@
 		7E7077A727B5960200E1EA35 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				7E7077AC27B59A4B00E1EA35 /* mogami */,
+				7E7077AC27B59A4B00E1EA35 /* kinetic */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -66,7 +66,7 @@
 				7EE05CC627B577A1004AD0DD /* Assets.xcassets */,
 				7EE05CC827B577A1004AD0DD /* LaunchScreen.storyboard */,
 				7EE05CCB27B577A1004AD0DD /* Info.plist */,
-				7EE05CBC27B577A0004AD0DD /* MogamiDemo */,
+				7EE05CBC27B577A0004AD0DD /* KineticDemo */,
 				7EE05CBB27B577A0004AD0DD /* Products */,
 				7E7077AB27B599DE00E1EA35 /* Frameworks */,
 			);
@@ -75,24 +75,24 @@
 		7EE05CBB27B577A0004AD0DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */,
+				7EE05CBA27B577A0004AD0DD /* KineticDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7EE05CBC27B577A0004AD0DD /* MogamiDemo */ = {
+		7EE05CBC27B577A0004AD0DD /* KineticDemo */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = MogamiDemo;
+			path = KineticDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7EE05CB927B577A0004AD0DD /* MogamiDemo */ = {
+		7EE05CB927B577A0004AD0DD /* KineticDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "MogamiDemo" */;
+			buildConfigurationList = 7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "KineticDemo" */;
 			buildPhases = (
 				7EE05CB627B577A0004AD0DD /* Sources */,
 				7EE05CB727B577A0004AD0DD /* Frameworks */,
@@ -102,12 +102,12 @@
 			);
 			dependencies = (
 			);
-			name = MogamiDemo;
+			name = KineticDemo;
 			packageProductDependencies = (
-				7EE1B69D27B5A04F0056F727 /* Mogami */,
+				7EE1B69D27B5A04F0056F727 /* Kinetic */,
 			);
-			productName = MogamiDemo;
-			productReference = 7EE05CBA27B577A0004AD0DD /* MogamiDemo.app */;
+			productName = KineticDemo;
+			productReference = 7EE05CBA27B577A0004AD0DD /* KineticDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -125,7 +125,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7EE05CB527B577A0004AD0DD /* Build configuration list for PBXProject "MogamiDemo" */;
+			buildConfigurationList = 7EE05CB527B577A0004AD0DD /* Build configuration list for PBXProject "KineticDemo" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -140,7 +140,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7EE05CB927B577A0004AD0DD /* MogamiDemo */,
+				7EE05CB927B577A0004AD0DD /* KineticDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -178,7 +178,7 @@
 				7EE05CC927B577A1004AD0DD /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			path = MogamiDemo;
+			path = KineticDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -308,7 +308,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MogamiDemo/Info.plist;
+				INFOPLIST_FILE = KineticDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -319,7 +319,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.MogamiDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.KineticDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -335,7 +335,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = MogamiDemo/Info.plist;
+				INFOPLIST_FILE = KineticDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -346,7 +346,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.MogamiDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.KineticDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -357,7 +357,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7EE05CB527B577A0004AD0DD /* Build configuration list for PBXProject "MogamiDemo" */ = {
+		7EE05CB527B577A0004AD0DD /* Build configuration list for PBXProject "KineticDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7EE05CCC27B577A1004AD0DD /* Debug */,
@@ -366,7 +366,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "MogamiDemo" */ = {
+		7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "KineticDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7EE05CCF27B577A1004AD0DD /* Debug */,
@@ -378,9 +378,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7EE1B69D27B5A04F0056F727 /* Mogami */ = {
+		7EE1B69D27B5A04F0056F727 /* Kinetic */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Mogami;
+			productName = Kinetic;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

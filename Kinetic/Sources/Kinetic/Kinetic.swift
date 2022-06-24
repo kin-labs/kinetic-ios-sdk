@@ -2,7 +2,7 @@ import Solana
 import OpenAPIClient
 import AnyCodable
 
-public struct Mogami {
+public struct Kinetic {
     var networkingRouter: NetworkingRouter?
     var accountStorage: KeychainAccountStorage?
     var solana: Solana?
@@ -143,7 +143,7 @@ public struct Mogami {
     }
 
     public func getAccountInfo(publicKey: String, _ callback: @escaping ((String) -> Void)) {
-        AccountAPI.apiAccountFeatureControllerGetAccountInfo(environment: "devnet", index: 1, accountId: publicKey) { accountInfoResponse, e in
+        AccountAPI.apiAccountFeatureControllerGetAccountInfo(environment: "devnet",  index: 1, accountId: publicKey) { accountInfoResponse, e in
             if let e = e {
                 callback(e.localizedDescription)
             } else {

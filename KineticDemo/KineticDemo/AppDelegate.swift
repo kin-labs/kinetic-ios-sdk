@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  MogamiDemo
+//  KineticDemo
 //
 //  Created by Samuel Dowd on 2/10/22.
 //

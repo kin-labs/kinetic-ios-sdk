@@ -1,3 +1,3 @@
-# mogami
+# kinetic
 
 A description of this package.
