@@ -14,7 +14,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var createAccountResultLabel: UILabel!
     @IBOutlet weak var getAirdropResultLabel: UILabel!
     @IBOutlet weak var getAccountBalanceResultLabel: UILabel!
-    @IBOutlet weak var getAccountInfoResultLabel: UILabel!
     @IBOutlet weak var getAccountHistoryResultLabel: UILabel!
     @IBOutlet weak var getTokenAccountsResultLabel: UILabel!
     @IBOutlet weak var getAppConfigResultLabel: UILabel!
@@ -29,23 +28,36 @@ class ViewController: UIViewController {
             print(account.publicKey)
             print(account.secretKey)
             print(account.phrase.joined(separator: " "))
-            kinetic.createAccount(account: localAccount!) { res in
-                DispatchQueue.main.async {
-                    self.createAccountResultLabel.text = res
+            Task {
+                do {
+                    let appTransaction = try await kinetic.createAccount(account: localAccount!)
+                    self.createAccountResultLabel.text = String(describing: appTransaction)
+                } catch {
+                    self.createAccountResultLabel.text = error.localizedDescription
                 }
             }
         }
     }
 
     @IBAction func airdropButtonPressed(_ sender: Any) {
-        kinetic.getAirdrop(publicKey: localAccount!.publicKey.base58EncodedString) { res in
-            self.getAirdropResultLabel.text = res
+        Task {
+            do {
+                let airdropResult = try await kinetic.getAirdrop(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getAirdropResultLabel.text = airdropResult.signature
+            } catch {
+                self.getAirdropResultLabel.text = error.localizedDescription
+            }
         }
     }
 
     @IBAction func getBalancePressed(_ sender: Any) {
-        kinetic.getAccountBalance(publicKey: localAccount!.publicKey.base58EncodedString) { res in
-            self.getAccountBalanceResultLabel.text = res
+        Task {
+            do {
+                let balanceResult = try await kinetic.getAccountBalance(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getAccountBalanceResultLabel.text = String(describing: balanceResult)
+            } catch {
+                self.getAccountBalanceResultLabel.text = error.localizedDescription
+            }
         }
 //        kinetic.getSOLBalance() { SOLBalance in
 //            DispatchQueue.main.async {
@@ -59,33 +71,44 @@ class ViewController: UIViewController {
 //        }
     }
 
-    @IBAction func getAccountInfoButtonPressed(_ sender: Any) {
-        kinetic.getAccountInfo(publicKey: localAccount!.publicKey.base58EncodedString) { res in
-            self.getAccountInfoResultLabel.text = res
-        }
-    }
-
     @IBAction func getAccountHistoryButtonPressed(_ sender: Any) {
-        kinetic.getAccountHistory(publicKey: localAccount!.publicKey.base58EncodedString) { res in
-            self.getAccountHistoryResultLabel.text = res
+        Task {
+            do {
+                let accountHistoryResult = try await kinetic.getAccountHistory(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getAccountHistoryResultLabel.text = accountHistoryResult.description
+            } catch {
+                self.getAccountHistoryResultLabel.text = error.localizedDescription
+            }
         }
     }
 
     @IBAction func getTokenAccountsButtonPressed(_ sender: Any) {
-        kinetic.getTokenAccounts(publicKey: localAccount!.publicKey.base58EncodedString) { res in
-            self.getTokenAccountsResultLabel.text = res
+        Task {
+            do {
+                let tokenAccountsResult = try await kinetic.getTokenAccounts(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getTokenAccountsResultLabel.text = tokenAccountsResult.description
+            } catch {
+                self.getTokenAccountsResultLabel.text = error.localizedDescription
+            }
         }
     }
 
     @IBAction func getAppConfigButtonPressed(_ sender: Any) {
-        kinetic.getAppConfig() { res in
-            self.getAppConfigResultLabel.text = res
+        Task {
+            do {
+                let appConfig = try await kinetic.getAppConfig()
+                self.getAppConfigResultLabel.text = String(describing: appConfig)
+            } catch {
+                self.getAppConfigResultLabel.text = error.localizedDescription
+            }
         }
     }
     
     @IBAction func makeTransferButtonPressed(_ sender: Any) {
-        kinetic.makeTransfer(fromAccount: localAccount!, toPublicKey: PublicKey(string: "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y")!, amount: 1) { res in
-            self.makeTransferResultLabel.text = res
+        Task {
+            if let appTransaction = try? await kinetic.makeTransfer(fromAccount: localAccount!, toPublicKey: PublicKey(string: "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y")!, amount: 1) {
+                self.makeTransferResultLabel.text = String(describing: appTransaction)
+            }
         }
     }
 

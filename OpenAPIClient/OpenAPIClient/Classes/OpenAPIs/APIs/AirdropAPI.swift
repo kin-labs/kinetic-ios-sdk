@@ -15,17 +15,30 @@ open class AirdropAPI {
     /**
 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: AirdropStats
      */
-    @discardableResult
-    open class func airdropStats(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AirdropStats?, _ error: Error?) -> Void)) -> RequestTask {
-        return airdropStatsWithRequestBuilder().execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func airdropStats(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AirdropStats {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = airdropStatsWithRequestBuilder().execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
@@ -55,17 +68,30 @@ open class AirdropAPI {
 
      - parameter requestAirdropRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: RequestAirdropResponse
      */
-    @discardableResult
-    open class func requestAirdrop(requestAirdropRequest: RequestAirdropRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: RequestAirdropResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return requestAirdropWithRequestBuilder(requestAirdropRequest: requestAirdropRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func requestAirdrop(requestAirdropRequest: RequestAirdropRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> RequestAirdropResponse {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = requestAirdropWithRequestBuilder(requestAirdropRequest: requestAirdropRequest).execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 

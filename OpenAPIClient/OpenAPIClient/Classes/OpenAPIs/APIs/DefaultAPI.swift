@@ -15,17 +15,30 @@ open class DefaultAPI {
     /**
 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: Void
      */
-    @discardableResult
-    open class func apiCoreFeatureControllerMetrics(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
-        return apiCoreFeatureControllerMetricsWithRequestBuilder().execute(apiResponseQueue) { result in
-            switch result {
-            case .success:
-                completion((), nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func apiCoreFeatureControllerMetrics(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = apiCoreFeatureControllerMetricsWithRequestBuilder().execute(apiResponseQueue) { result in
+                    switch result {
+                    case .success:
+                        continuation.resume(returning: ())
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
@@ -54,17 +67,30 @@ open class DefaultAPI {
     /**
 
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: Void
      */
-    @discardableResult
-    open class func apiCoreFeatureControllerUptime(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
-        return apiCoreFeatureControllerUptimeWithRequestBuilder().execute(apiResponseQueue) { result in
-            switch result {
-            case .success:
-                completion((), nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func apiCoreFeatureControllerUptime(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = apiCoreFeatureControllerUptimeWithRequestBuilder().execute(apiResponseQueue) { result in
+                    switch result {
+                    case .success:
+                        continuation.resume(returning: ())
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 

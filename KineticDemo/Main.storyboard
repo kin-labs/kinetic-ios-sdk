@@ -28,13 +28,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SPT-O2-iOx">
-                                        <rect key="frame" x="207" y="69" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="207" y="77" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zwx-S9-wPm">
-                                        <rect key="frame" x="158" y="107" width="98.5" height="31"/>
+                                        <rect key="frame" x="158" y="123.5" width="98.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Get Airdrop"/>
                                         <connections>
@@ -42,13 +42,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DcX-sC-Zp4">
-                                        <rect key="frame" x="207" y="176" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="207" y="200.5" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qzs-GB-060">
-                                        <rect key="frame" x="127.5" y="214" width="159.5" height="31"/>
+                                        <rect key="frame" x="127.5" y="247" width="159.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Get Account Balance"/>
                                         <connections>
@@ -56,27 +56,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EwV-4O-Y0L">
-                                        <rect key="frame" x="207" y="283" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5k-p2-ym2">
-                                        <rect key="frame" x="141" y="321" width="132.5" height="31"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Get Account Info"/>
-                                        <connections>
-                                            <action selector="getAccountInfoButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="kYF-D7-cPi"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tYu-3Q-Oui">
-                                        <rect key="frame" x="207" y="390" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="207" y="324" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="epD-EB-AW2">
-                                        <rect key="frame" x="130" y="428" width="154.5" height="31"/>
+                                        <rect key="frame" x="130" y="370.5" width="154.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Get Account History"/>
                                         <connections>
@@ -84,13 +70,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4u5-TP-jDk">
-                                        <rect key="frame" x="207" y="497" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="207" y="447.5" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gTg-Vv-9ba">
-                                        <rect key="frame" x="130.5" y="535" width="153.5" height="31"/>
+                                        <rect key="frame" x="130.5" y="494" width="153.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Get Token Accounts"/>
                                         <connections>
@@ -98,13 +84,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTl-g2-kO0">
-                                        <rect key="frame" x="207" y="604" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="207" y="571" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YiA-86-TJW">
-                                        <rect key="frame" x="145.5" y="642" width="123.5" height="31"/>
+                                        <rect key="frame" x="145.5" y="617.5" width="123.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Get App Config"/>
                                         <connections>
@@ -112,13 +98,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9eP-7W-VAO">
-                                        <rect key="frame" x="207" y="711" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="207" y="694.5" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cRv-Nk-MA9">
-                                        <rect key="frame" x="149" y="749" width="116" height="31"/>
+                                        <rect key="frame" x="149" y="741" width="116" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Make Transfer"/>
                                         <connections>
@@ -147,7 +133,6 @@
                         <outlet property="createAccountResultLabel" destination="SPT-O2-iOx" id="haG-o0-w70"/>
                         <outlet property="getAccountBalanceResultLabel" destination="EwV-4O-Y0L" id="YVQ-sa-eYZ"/>
                         <outlet property="getAccountHistoryResultLabel" destination="4u5-TP-jDk" id="i1Q-FF-Fdy"/>
-                        <outlet property="getAccountInfoResultLabel" destination="tYu-3Q-Oui" id="6wi-x7-Y7U"/>
                         <outlet property="getAirdropResultLabel" destination="DcX-sC-Zp4" id="rwj-7K-Kkk"/>
                         <outlet property="getAppConfigResultLabel" destination="9eP-7W-VAO" id="qwT-2F-TeD"/>
                         <outlet property="getTokenAccountsResultLabel" destination="gTl-g2-kO0" id="Fgg-36-W8E"/>

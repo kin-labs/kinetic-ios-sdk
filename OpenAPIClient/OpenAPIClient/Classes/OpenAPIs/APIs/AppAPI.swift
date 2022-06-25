@@ -18,17 +18,30 @@ open class AppAPI {
      - parameter index: (path)  
      - parameter type: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: Void
      */
-    @discardableResult
-    open class func apiAppFeatureControllerAppWebhook(environment: String, index: Double, type: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: Void?, _ error: Error?) -> Void)) -> RequestTask {
-        return apiAppFeatureControllerAppWebhookWithRequestBuilder(environment: environment, index: index, type: type).execute(apiResponseQueue) { result in
-            switch result {
-            case .success:
-                completion((), nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func apiAppFeatureControllerAppWebhook(environment: String, index: Double, type: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = apiAppFeatureControllerAppWebhookWithRequestBuilder(environment: environment, index: index, type: type).execute(apiResponseQueue) { result in
+                    switch result {
+                    case .success:
+                        continuation.resume(returning: ())
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
@@ -71,17 +84,30 @@ open class AppAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: AppConfig
      */
-    @discardableResult
-    open class func getAppConfig(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppConfig?, _ error: Error?) -> Void)) -> RequestTask {
-        return getAppConfigWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getAppConfig(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AppConfig {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = getAppConfigWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
@@ -120,17 +146,30 @@ open class AppAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: AppHealth
      */
-    @discardableResult
-    open class func getAppHealth(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppHealth?, _ error: Error?) -> Void)) -> RequestTask {
-        return getAppHealthWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getAppHealth(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AppHealth {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = getAppHealthWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 

@@ -17,17 +17,30 @@ open class TransactionAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: LatestBlockhashResponse
      */
-    @discardableResult
-    open class func getLatestBlockhash(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: LatestBlockhashResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getLatestBlockhashWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getLatestBlockhash(environment: String, index: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> LatestBlockhashResponse {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = getLatestBlockhashWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
@@ -67,17 +80,30 @@ open class TransactionAPI {
      - parameter index: (path)  
      - parameter dataLength: (query)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: MinimumRentExemptionBalanceResponse
      */
-    @discardableResult
-    open class func getMinimumRentExemptionBalance(environment: String, index: Double, dataLength: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: MinimumRentExemptionBalanceResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getMinimumRentExemptionBalanceWithRequestBuilder(environment: environment, index: index, dataLength: dataLength).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getMinimumRentExemptionBalance(environment: String, index: Double, dataLength: Double, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> MinimumRentExemptionBalanceResponse {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = getMinimumRentExemptionBalanceWithRequestBuilder(environment: environment, index: index, dataLength: dataLength).execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
@@ -119,17 +145,30 @@ open class TransactionAPI {
 
      - parameter makeTransferRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - returns: AppTransaction
      */
-    @discardableResult
-    open class func makeTransfer(makeTransferRequest: MakeTransferRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: AppTransaction?, _ error: Error?) -> Void)) -> RequestTask {
-        return makeTransferWithRequestBuilder(makeTransferRequest: makeTransferRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func makeTransfer(makeTransferRequest: MakeTransferRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AppTransaction {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = makeTransferWithRequestBuilder(makeTransferRequest: makeTransferRequest).execute(apiResponseQueue) { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
         }
     }
 
