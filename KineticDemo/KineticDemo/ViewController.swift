@@ -21,13 +21,11 @@ class ViewController: UIViewController {
 
     var kinetic = Kinetic(environment: "devnet", index: 1, endpoint: "http://localhost:3000")
     var localAccount: Account?
+    var logsListener: Any?
 
     @IBAction func createAccountButtonPressed(_ sender: Any) {
         if let account = kinetic.createAccountLocal() {
             localAccount = account
-            print(account.publicKey)
-            print(account.secretKey)
-            print(account.phrase.joined(separator: " "))
             Task {
                 do {
                     let appTransaction = try await kinetic.createAccount(account: localAccount!)
@@ -114,5 +112,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        logsListener = kinetic.logPublisher.sink { (level, log) in
+            NSLog(log)
+        }
+
     }
 }

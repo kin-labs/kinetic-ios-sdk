@@ -2,8 +2,13 @@ import Solana
 import OpenAPIClient
 import AnyCodable
 import os
+import Combine
 
 public struct Kinetic {
+    public var logPublisher: AnyPublisher<(KineticLogLevel, String), Never> {
+        logSubject.eraseToAnyPublisher()
+    }
+    private let logSubject = PassthroughSubject<(KineticLogLevel, String), Never>()
     var networkingRouter: NetworkingRouter?
     var accountStorage: KeychainAccountStorage?
     var solana: Solana?
@@ -17,7 +22,7 @@ public struct Kinetic {
     let ASSOCIATED_TOKEN_PROGRAM_ID = PublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
     public init(environment: String?, index: Double, endpoint: String?) {
-        // TODO: add logging and Solana RPC config here
+        // TODO: add Solana RPC config here
         self.environment = environment ?? "devnet"
         self.index = index
         self.networkingRouter = { switch self.environment {
@@ -119,6 +124,7 @@ public struct Kinetic {
     }
 
     public func getAppConfig() async throws -> AppConfig {
+        debugLog("Getting app config")
         return try await AppAPI.getAppConfig(environment: environment, index: index)
     }
 
@@ -175,10 +181,10 @@ public struct Kinetic {
         let res = accountStorage!.account
         switch res {
             case .success(let account):
-                print(account)
+                debugLog(String(describing: account))
                 return account
             case .failure(let e):
-                print(e.localizedDescription)
+                errorLog(e.localizedDescription)
                 let account = Account(network: .mainnetBeta)
                 accountStorage!.save(account!)
                 return account!
@@ -191,7 +197,7 @@ public struct Kinetic {
                 callback(Int(balance))
             }
             res.onFailure { e in
-                print(e.localizedDescription)
+                errorLog(e.localizedDescription)
             }
         }
 
@@ -207,25 +213,41 @@ public struct Kinetic {
                         callback(Int(balance.uiAmount ?? 0))
                     }
                     res.onFailure { e in
-                        print(e.localizedDescription)
+                        errorLog(e.localizedDescription)
                     }
                 }
 
             }
             res.onFailure { e in
-                print(e)
+                errorLog(e.localizedDescription)
             }
         }
     }
 
     public func makeAMemo() {
         let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: UInt16(index))
-        print(memo)
+        infoLog(String(describing: memo))
     }
 
     private func fixtureTest() {
         let fixtureAccount = Account(phrase: ["pill", "tomorrow", "foster", "begin", "walnut", "borrow", "virtual", "kick", "shift", "mutual", "shoe", "scatter"], network: .mainnetBeta, derivablePath: .default)
-        print(fixtureAccount?.publicKey.base58EncodedString)
+        infoLog(fixtureAccount?.publicKey.base58EncodedString ?? "fixture test failed")
+    }
+
+    private func debugLog(_ msg: String) {
+        logSubject.send((KineticLogLevel.Debug, "KINETIC::D::" + msg))
+    }
+
+    private func infoLog(_ msg: String) {
+        logSubject.send((KineticLogLevel.Info, "KINETIC::I::" + msg))
+    }
+
+    private func warningLog(_ msg: String) {
+        logSubject.send((KineticLogLevel.Warning, "KINETIC::W::" + msg))
+    }
+
+    private func errorLog(_ msg: String) {
+        logSubject.send((KineticLogLevel.Error, "KINETIC::E::" + msg))
     }
 }
 
@@ -234,4 +256,11 @@ enum KineticError: Error {
     case GetMinimumBalanceError
     case SerializationError
     case UnknownError
+}
+
+public enum KineticLogLevel {
+    case Debug
+    case Info
+    case Warning
+    case Error
 }

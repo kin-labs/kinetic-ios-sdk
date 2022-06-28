@@ -24,9 +24,9 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
     public var lastValidBlockHeight: Double
     public var referenceId: String?
     public var referenceType: String?
-    public var tx: Data
+    public var tx: [UInt8]
 
-    public init(commitment: Commitment, environment: String, index: Double, mint: String, lastValidBlockHeight: Double, referenceId: String?, referenceType: String?, tx: Data) {
+    public init(commitment: Commitment, environment: String, index: Double, mint: String, lastValidBlockHeight: Double, referenceId: String?, referenceType: String?, tx: [UInt8]) {
         self.commitment = commitment
         self.environment = environment
         self.index = index
