@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/ajamaica/Solana.swift", revision: "f487b25"),
 //        .package(name: "Solana.swift", path: "../../Solana.swift"),
-        .package(name: "OpenAPIClient", path: "../OpenAPIClient"),
+        .package(name: "OpenAPIClient", path: "../Kinetic/Sources/OpenAPIClient"),
     ],
     targets: [
         .target(
