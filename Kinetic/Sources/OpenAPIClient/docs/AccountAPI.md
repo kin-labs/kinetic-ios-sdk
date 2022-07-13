@@ -25,6 +25,7 @@ import OpenAPIClient
 
 let createAccountRequest = CreateAccountRequest(environment: "environment_example", index: 123, mint: "mint_example", tx: 123) // CreateAccountRequest | 
 
+// 
 AccountAPI.createAccount(createAccountRequest: createAccountRequest) { (response, error) in
     guard error == nil else {
         print(error)
@@ -74,6 +75,7 @@ let environment = "environment_example" // String |
 let index = 987 // Int | 
 let accountId = "accountId_example" // String | 
 
+// 
 AccountAPI.getAccountInfo(environment: environment, index: index, accountId: accountId) { (response, error) in
     guard error == nil else {
         print(error)
@@ -125,6 +127,7 @@ let environment = "environment_example" // String |
 let index = 987 // Int | 
 let accountId = "accountId_example" // String | 
 
+// 
 AccountAPI.getBalance(environment: environment, index: index, accountId: accountId) { (response, error) in
     guard error == nil else {
         print(error)
@@ -177,6 +180,7 @@ let index = 987 // Int |
 let accountId = "accountId_example" // String | 
 let mint = "mint_example" // String | 
 
+// 
 AccountAPI.getHistory(environment: environment, index: index, accountId: accountId, mint: mint) { (response, error) in
     guard error == nil else {
         print(error)
@@ -230,6 +234,7 @@ let index = 987 // Int |
 let accountId = "accountId_example" // String | 
 let mint = "mint_example" // String | 
 
+// 
 AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: accountId, mint: mint) { (response, error) in
     guard error == nil else {
         print(error)

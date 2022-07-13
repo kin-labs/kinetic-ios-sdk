@@ -94,6 +94,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7EE05CCE27B577A1004AD0DD /* Build configuration list for PBXNativeTarget "KineticDemo" */;
 			buildPhases = (
+				7E26AC18287DEDAB00A0B851 /* Generate OpenAPIClient */,
 				7EE05CB627B577A0004AD0DD /* Sources */,
 				7EE05CB727B577A0004AD0DD /* Frameworks */,
 				7EE05CB827B577A0004AD0DD /* Resources */,
@@ -157,6 +158,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7E26AC18287DEDAB00A0B851 /* Generate OpenAPIClient */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate OpenAPIClient";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "npx @openapitools/openapi-generator-cli generate -i ~/p/kin/mogami/api-swagger.json -g swift5 -o ../Kinetic/Sources/OpenAPIClient --additional-properties=useAsyncAwait=true\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7EE05CB627B577A0004AD0DD /* Sources */ = {

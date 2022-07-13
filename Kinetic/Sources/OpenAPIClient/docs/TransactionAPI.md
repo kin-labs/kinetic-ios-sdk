@@ -24,6 +24,7 @@ import OpenAPIClient
 let environment = "environment_example" // String | 
 let index = 987 // Int | 
 
+// 
 TransactionAPI.getLatestBlockhash(environment: environment, index: index) { (response, error) in
     guard error == nil else {
         print(error)
@@ -74,6 +75,7 @@ let environment = "environment_example" // String |
 let index = 987 // Int | 
 let dataLength = 987 // Int | 
 
+// 
 TransactionAPI.getMinimumRentExemptionBalance(environment: environment, index: index, dataLength: dataLength) { (response, error) in
     guard error == nil else {
         print(error)
@@ -123,6 +125,7 @@ import OpenAPIClient
 
 let makeTransferRequest = MakeTransferRequest(commitment: "commitment_example", environment: "environment_example", index: 123, mint: "mint_example", lastValidBlockHeight: 123, referenceId: "referenceId_example", referenceType: "referenceType_example", tx: 123) // MakeTransferRequest | 
 
+// 
 TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest) { (response, error) in
     guard error == nil else {
         print(error)

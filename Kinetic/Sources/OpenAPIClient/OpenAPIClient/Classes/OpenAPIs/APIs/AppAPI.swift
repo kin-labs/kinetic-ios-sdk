@@ -13,14 +13,14 @@ import AnyCodable
 open class AppAPI {
 
     /**
-
+     
+     
      - parameter environment: (path)  
      - parameter index: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: AppConfig
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getAppConfig(environment: String, index: Int, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AppConfig {
+    open class func getAppConfig(environment: String, index: Int) async throws -> AppConfig {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -30,7 +30,7 @@ open class AppAPI {
                   return
                 }
 
-                requestTask = getAppConfigWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
+                requestTask = getAppConfigWithRequestBuilder(environment: environment, index: index).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -45,6 +45,7 @@ open class AppAPI {
     }
 
     /**
+     
      - GET /api/app/{environment}/{index}/config
      - parameter environment: (path)  
      - parameter index: (path)  
@@ -75,14 +76,14 @@ open class AppAPI {
     }
 
     /**
-
+     
+     
      - parameter environment: (path)  
      - parameter index: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: AppHealth
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getAppHealth(environment: String, index: Int, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AppHealth {
+    open class func getAppHealth(environment: String, index: Int) async throws -> AppHealth {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -92,7 +93,7 @@ open class AppAPI {
                   return
                 }
 
-                requestTask = getAppHealthWithRequestBuilder(environment: environment, index: index).execute(apiResponseQueue) { result in
+                requestTask = getAppHealthWithRequestBuilder(environment: environment, index: index).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -107,6 +108,7 @@ open class AppAPI {
     }
 
     /**
+     
      - GET /api/app/{environment}/{index}/health
      - parameter environment: (path)  
      - parameter index: (path)  

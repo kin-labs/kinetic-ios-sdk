@@ -23,6 +23,7 @@ import OpenAPIClient
 let environment = "environment_example" // String | 
 let index = 987 // Int | 
 
+// 
 AppAPI.getAppConfig(environment: environment, index: index) { (response, error) in
     guard error == nil else {
         print(error)
@@ -72,6 +73,7 @@ import OpenAPIClient
 let environment = "environment_example" // String | 
 let index = 987 // Int | 
 
+// 
 AppAPI.getAppHealth(environment: environment, index: index) { (response, error) in
     guard error == nil else {
         print(error)

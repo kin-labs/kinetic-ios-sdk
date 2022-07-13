@@ -3,6 +3,7 @@ import OpenAPIClient
 import AnyCodable
 import os
 import Combine
+import Foundation
 
 public struct Kinetic {
     public var logPublisher: AnyPublisher<(KineticLogLevel, String), Never> {
@@ -13,7 +14,7 @@ public struct Kinetic {
     var accountStorage: KeychainAccountStorage?
     var solana: Solana?
     var environment: String
-    var index: Double
+    var index: Int
     var logger = OSLog.init(subsystem: "org.kinetic.sdk", category: "logs")
     let KIN_MINT = PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
@@ -21,7 +22,7 @@ public struct Kinetic {
     let MEMO_V1_PROGRAM_ID = PublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
     let ASSOCIATED_TOKEN_PROGRAM_ID = PublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
-    public init(environment: String?, index: Double, endpoint: String?) {
+    public init(environment: String?, index: Int, endpoint: String?) {
         // TODO: add Solana RPC config here
         self.environment = environment ?? "devnet"
         self.index = index
@@ -90,11 +91,11 @@ public struct Kinetic {
             createAccountInstruction
         ], recentBlockhash: latestBlockhashResponse.blockhash)
         transaction.partialSign(signers: [account])
-        let serializedRes: [UInt8]? = await withCheckedContinuation { continuation in
+        let serializedRes: Data? = await withCheckedContinuation { continuation in
             let serializedRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
             switch serializedRes {
             case .success(let serialized):
-                continuation.resume(returning: serialized.bytes)
+                continuation.resume(returning: serialized)
             case .failure(let e):
                 continuation.resume(returning: nil)
             }
@@ -108,7 +109,7 @@ public struct Kinetic {
 
     public func getAirdrop(publicKey: String) async throws -> RequestAirdropResponse {
         let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", environment: environment, index: index, mint: appConfig.mint.symbol))
+        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", commitment: .confirmed, environment: environment, index: index, mint: appConfig.mint.symbol))
     }
 
     public func getAccountBalance(publicKey: String) async throws -> BalanceResponse {
@@ -116,11 +117,13 @@ public struct Kinetic {
     }
 
     public func getAccountHistory(publicKey: String) async throws -> [HistoryResponse] {
-        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey)
+        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
+        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey, mint: appConfig.mint.symbol)
     }
 
     public func getTokenAccounts(publicKey: String) async throws -> [String] {
-        return try await AccountAPI.tokenAccounts(environment: environment, index: index, accountId: publicKey)
+        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
+        return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey, mint: appConfig.mint.symbol)
     }
 
     public func getAppConfig() async throws -> AppConfig {
@@ -160,11 +163,11 @@ public struct Kinetic {
             recentBlockhash: latestBlockhashResponse.blockhash
         )
         transaction.partialSign(signers: [fromAccount])
-        let serializedRes: [UInt8]? = await withCheckedContinuation { continuation in
+        let serializedRes: Data? = await withCheckedContinuation { continuation in
             let serializedRes = transaction.serialize(requiredAllSignatures: false, verifySignatures: false)
             switch serializedRes {
             case .success(let serialized):
-                continuation.resume(returning: serialized.bytes)
+                continuation.resume(returning: serialized)
             case .failure(let e):
                 continuation.resume(returning: nil)
             }

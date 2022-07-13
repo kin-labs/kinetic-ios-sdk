@@ -21,6 +21,7 @@ Method | HTTP request | Description
 import OpenAPIClient
 
 
+// 
 AirdropAPI.airdropStats() { (response, error) in
     guard error == nil else {
         print(error)
@@ -65,6 +66,7 @@ import OpenAPIClient
 
 let requestAirdropRequest = RequestAirdropRequest(account: "account_example", amount: "amount_example", commitment: "commitment_example", environment: "environment_example", index: 123, mint: "mint_example") // RequestAirdropRequest | 
 
+// 
 AirdropAPI.requestAirdrop(requestAirdropRequest: requestAirdropRequest) { (response, error) in
     guard error == nil else {
         print(error)

@@ -13,12 +13,12 @@ import AnyCodable
 open class AirdropAPI {
 
     /**
-
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     
+     
      - returns: AirdropStats
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func airdropStats(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AirdropStats {
+    open class func airdropStats() async throws -> AirdropStats {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -28,7 +28,7 @@ open class AirdropAPI {
                   return
                 }
 
-                requestTask = airdropStatsWithRequestBuilder().execute(apiResponseQueue) { result in
+                requestTask = airdropStatsWithRequestBuilder().execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -43,6 +43,7 @@ open class AirdropAPI {
     }
 
     /**
+     
      - GET /api/airdrop/stats
      - returns: RequestBuilder<AirdropStats> 
      */
@@ -65,13 +66,13 @@ open class AirdropAPI {
     }
 
     /**
-
+     
+     
      - parameter requestAirdropRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: RequestAirdropResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func requestAirdrop(requestAirdropRequest: RequestAirdropRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> RequestAirdropResponse {
+    open class func requestAirdrop(requestAirdropRequest: RequestAirdropRequest) async throws -> RequestAirdropResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -81,7 +82,7 @@ open class AirdropAPI {
                   return
                 }
 
-                requestTask = requestAirdropWithRequestBuilder(requestAirdropRequest: requestAirdropRequest).execute(apiResponseQueue) { result in
+                requestTask = requestAirdropWithRequestBuilder(requestAirdropRequest: requestAirdropRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -96,6 +97,7 @@ open class AirdropAPI {
     }
 
     /**
+     
      - POST /api/airdrop
      - parameter requestAirdropRequest: (body)  
      - returns: RequestBuilder<RequestAirdropResponse> 

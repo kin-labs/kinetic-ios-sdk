@@ -13,13 +13,13 @@ import AnyCodable
 open class AccountAPI {
 
     /**
-
+     
+     
      - parameter createAccountRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: AppTransaction
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createAccount(createAccountRequest: CreateAccountRequest, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> AppTransaction {
+    open class func createAccount(createAccountRequest: CreateAccountRequest) async throws -> AppTransaction {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -29,7 +29,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = createAccountWithRequestBuilder(createAccountRequest: createAccountRequest).execute(apiResponseQueue) { result in
+                requestTask = createAccountWithRequestBuilder(createAccountRequest: createAccountRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -44,6 +44,7 @@ open class AccountAPI {
     }
 
     /**
+     
      - POST /api/account/create
      - parameter createAccountRequest: (body)  
      - returns: RequestBuilder<AppTransaction> 
@@ -67,15 +68,15 @@ open class AccountAPI {
     }
 
     /**
-
+     
+     
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: Void
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getAccountInfo(environment: String, index: Int, accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws {
+    open class func getAccountInfo(environment: String, index: Int, accountId: String) async throws {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -85,7 +86,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getAccountInfoWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute(apiResponseQueue) { result in
+                requestTask = getAccountInfoWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute { result in
                     switch result {
                     case .success:
                         continuation.resume(returning: ())
@@ -100,6 +101,7 @@ open class AccountAPI {
     }
 
     /**
+     
      - GET /api/account/info/{environment}/{index}/{accountId}
      - parameter environment: (path)  
      - parameter index: (path)  
@@ -134,15 +136,15 @@ open class AccountAPI {
     }
 
     /**
-
+     
+     
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: BalanceResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getBalance(environment: String, index: Int, accountId: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> BalanceResponse {
+    open class func getBalance(environment: String, index: Int, accountId: String) async throws -> BalanceResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -152,7 +154,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getBalanceWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute(apiResponseQueue) { result in
+                requestTask = getBalanceWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -167,6 +169,7 @@ open class AccountAPI {
     }
 
     /**
+     
      - GET /api/account/balance/{environment}/{index}/{accountId}
      - parameter environment: (path)  
      - parameter index: (path)  
@@ -201,16 +204,16 @@ open class AccountAPI {
     }
 
     /**
-
+     
+     
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter mint: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: [HistoryResponse]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getHistory(environment: String, index: Int, accountId: String, mint: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> [HistoryResponse] {
+    open class func getHistory(environment: String, index: Int, accountId: String, mint: String) async throws -> [HistoryResponse] {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -220,7 +223,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getHistoryWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint).execute(apiResponseQueue) { result in
+                requestTask = getHistoryWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -235,6 +238,7 @@ open class AccountAPI {
     }
 
     /**
+     
      - GET /api/account/history/{environment}/{index}/{accountId}/{mint}
      - parameter environment: (path)  
      - parameter index: (path)  
@@ -273,16 +277,16 @@ open class AccountAPI {
     }
 
     /**
-
+     
+     
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter mint: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
      - returns: [String]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getTokenAccounts(environment: String, index: Int, accountId: String, mint: String, apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> [String] {
+    open class func getTokenAccounts(environment: String, index: Int, accountId: String, mint: String) async throws -> [String] {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -292,7 +296,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getTokenAccountsWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint).execute(apiResponseQueue) { result in
+                requestTask = getTokenAccountsWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -307,6 +311,7 @@ open class AccountAPI {
     }
 
     /**
+     
      - GET /api/account/token-accounts/{environment}/{index}/{accountId}/{mint}
      - parameter environment: (path)  
      - parameter index: (path)  
