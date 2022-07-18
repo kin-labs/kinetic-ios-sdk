@@ -18,12 +18,12 @@ internal protocol SecureKeyStorage {
     ///   - account: A string that uniquely identifies the account, e.g. account id.
     ///   - key: A piece of data. Caller is responsible for determining what data needs to be stored securely and the encoding/decoding of this key.
     /// - Throws: `KeyStoreError` with `OSStatus`
-    func add(account: String, key: Data) throws
+    func add(account: String, key: String) throws
 
     /// Retrieves key data from secure storage base on account.
     /// - Parameter account: The string identifier that was used when adding key.
     /// - Returns: The stored key data with the account if exists.
-    func retrieve(account: String) -> Data?
+    func retrieve(account: String) -> String?
 
     /// Returns all account identifiers in the storage.
     /// - Returns: A string array of all account identifiers stored.
@@ -48,7 +48,7 @@ internal protocol SecureKeyStorage {
 /// is unlocked.
 class KeyChainStorage: SecureKeyStorage {
 
-    func add(account: String, key: Data) throws {
+    func add(account: String, key: String) throws {
         if retrieve(account: account) != nil {
             try? update(account: account, key: key)
             return
@@ -57,7 +57,7 @@ class KeyChainStorage: SecureKeyStorage {
         let addquery: [String: Any] = [
             String(kSecClass):          kSecClassGenericPassword,
             String(kSecAttrAccount):    account,
-            String(kSecValueData):      key
+            String(kSecValueData):      key.data(using: .utf8)!
         ]
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
@@ -65,7 +65,7 @@ class KeyChainStorage: SecureKeyStorage {
         }
     }
 
-    func retrieve(account: String) -> Data? {
+    func retrieve(account: String) -> String? {
         let query: [String: Any] = [
             String(kSecClass):        kSecClassGenericPassword,
             String(kSecAttrAccount):  account,
@@ -77,8 +77,7 @@ class KeyChainStorage: SecureKeyStorage {
         guard status == errSecSuccess, let data = item as? Data else {
             return nil
         }
-
-        return data
+        return String(decoding: data, as: UTF8.self)
     }
 
     func allAccounts() throws -> [String] {
@@ -125,7 +124,7 @@ class KeyChainStorage: SecureKeyStorage {
         }
     }
 
-    private func update(account: String, key: Data) throws {
+    private func update(account: String, key: String) throws {
         let query: [String: Any] = [
             String(kSecClass):          kSecClassGenericPassword,
             String(kSecAttrAccount):    account

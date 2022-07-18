@@ -24,15 +24,21 @@ class ViewController: UIViewController {
     var logsListener: Any?
 
     @IBAction func createAccountButtonPressed(_ sender: Any) {
-        if let account = kinetic.createAccountLocal() {
+        if let account = kinetic.getLocalAccount() {
             localAccount = account
-            Task {
-                do {
-                    let appTransaction = try await kinetic.createAccount(account: localAccount!)
-                    self.createAccountResultLabel.text = String(describing: appTransaction)
-                } catch {
-                    self.createAccountResultLabel.text = error.localizedDescription
-                }
+        } else if let account = kinetic.createLocalAccount() {
+            localAccount = account
+        } else {
+            self.createAccountResultLabel.text = "Account creation failed"
+            return
+        }
+        print(localAccount)
+        Task {
+            do {
+                let appTransaction = try await kinetic.createAccount(account: localAccount!)
+                self.createAccountResultLabel.text = String(describing: appTransaction)
+            } catch {
+                self.createAccountResultLabel.text = error.localizedDescription
             }
         }
     }

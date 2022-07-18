@@ -180,18 +180,36 @@ public struct Kinetic {
     }
 
     // START: Pre-backend local functions
-    public func createAccountLocal() -> Account? {
+    public func getLocalAccount() -> Account? {
         let res = accountStorage!.account
         switch res {
-            case .success(let account):
-                debugLog(String(describing: account))
-                return account
-            case .failure(let e):
-                errorLog(e.localizedDescription)
-                let account = Account(network: .mainnetBeta)
-                accountStorage!.save(account!)
-                return account!
+        case .success(let account):
+            return account
+        case .failure(let e):
+            errorLog(e.localizedDescription)
+            return nil
         }
+    }
+
+    public func createLocalAccount() -> Account? {
+        if let account = Account(network: .mainnetBeta) {
+            accountStorage!.save(account)
+            return account
+        } else { return nil }
+    }
+
+    public func loadAccount(fromMnemonic mnemonic: [String]) -> Account? {
+        if let account = Account(phrase: mnemonic, network: .mainnetBeta) {
+            accountStorage!.save(account)
+            return account
+        } else { return nil }
+    }
+
+    public func loadAccount(fromSecret secret: Data) -> Account? {
+        if let account = Account(secretKey: secret) {
+            accountStorage!.save(account)
+            return account
+        } else { return nil }
     }
 
     public func getSOLBalance(callback: @escaping (Int?) -> ()) {

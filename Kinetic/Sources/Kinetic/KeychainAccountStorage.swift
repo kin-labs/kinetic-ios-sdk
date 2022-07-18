@@ -17,7 +17,9 @@ class KeychainAccountStorage: SolanaAccountStorage {
     private var keychain = KeyChainStorage()
     func save(_ account: Account) -> Result<Void, Error> {
         do {
-            try keychain.add(account: account.publicKey.base58EncodedString, key: account.secretKey)
+            let encodedAccount = try JSONEncoder().encode(account)
+            let accountString = String(data: encodedAccount, encoding: .utf8)!
+            try keychain.add(account: account.publicKey.base58EncodedString, key: accountString)
         } catch {
             return .failure(StorageError.unknown)
         }
@@ -29,11 +31,20 @@ class KeychainAccountStorage: SolanaAccountStorage {
             if accounts.count == 0 {
                 return .failure(StorageError.unknown)
             }
-            if let pkey = keychain.retrieve(account: accounts[0]) {
-                guard let account = Account(secretKey: pkey) else {
-                    return .failure(StorageError.unknown)
+            if let accountJSON = keychain.retrieve(account: accounts[0]) {
+                let accountData = accountJSON.data(using: .utf8)!
+                let decodedAccount = try JSONDecoder().decode(Account.self, from: accountData)
+                if decodedAccount.phrase.count != 48 { // TODO: Stop Solana SDK from making fake mnemonics and change this check
+                    guard let account = Account(phrase: decodedAccount.phrase, network: .mainnetBeta) else {
+                        return .failure(StorageError.unknown)
+                    }
+                    return .success(account)
+                } else {
+                    guard let account = Account(secretKey: decodedAccount.secretKey) else {
+                        return .failure(StorageError.unknown)
+                    }
+                    return .success(account)
                 }
-                return .success(account)
             } else {
                 return .failure(StorageError.unknown)
             }
