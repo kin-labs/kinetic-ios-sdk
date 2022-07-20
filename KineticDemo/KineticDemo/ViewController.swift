@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     @IBAction func airdropButtonPressed(_ sender: Any) {
         Task {
             do {
-                let airdropResult = try await kinetic?.getAirdrop(publicKey: localAccount!.publicKey.base58EncodedString)
+                let airdropResult = try await kinetic?.getAirdrop(publicKey: localAccount!.publicKey.base58EncodedString, amount: 10)
                 self.getAirdropResultLabel.text = airdropResult?.signature
             } catch {
                 self.getAirdropResultLabel.text = error.localizedDescription

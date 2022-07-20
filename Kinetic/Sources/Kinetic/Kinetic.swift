@@ -15,7 +15,7 @@ public struct Kinetic {
     var solana: Solana?
     var environment: String
     var index: Int
-    var appConfig: AppConfig?
+    var appConfig: AppConfig!
     var logger = OSLog.init(subsystem: "org.kinetic.sdk", category: "logs")
     let KIN_MINT = PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
@@ -27,23 +27,17 @@ public struct Kinetic {
         // TODO: add Solana RPC config here
         self.environment = environment ?? "devnet"
         self.index = index
-        self.networkingRouter = { switch self.environment {
-        case "devnet":
-            return NetworkingRouter(endpoint: .devnetSolana)
-        case "testnet":
-            return NetworkingRouter(endpoint: .testnetSolana)
-        default:
-            return NetworkingRouter(endpoint: .mainnetBetaSolana)
-        } }()
+        let rpcEndpoint = getSolanaRpcEndpoint(environment: self.environment)
+        self.networkingRouter = NetworkingRouter(endpoint: rpcEndpoint)
         self.accountStorage = KeychainAccountStorage()
         self.solana = Solana(router: networkingRouter!)
         OpenAPIClientAPI.basePath = endpoint ?? "https://devnet.kinetic.kin.org"
     }
 
-    public func createAccount(account: Account) async throws -> AppTransaction {
-        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        let mintKey = PublicKey(string: appConfig.mint.publicKey)!
-        let feePayer = PublicKey(string: appConfig.mint.feePayer)!
+    public func createAccount(account: Account, mint: AppConfigMint? = nil) async throws -> AppTransaction {
+        let mint = mint ?? appConfig.mint
+        let mintKey = PublicKey(string: mint.publicKey)!
+        let feePayer = PublicKey(string: mint.feePayer)!
         let latestBlockhashResponse = try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
 
         // Get token account
@@ -108,23 +102,23 @@ public struct Kinetic {
         return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
     }
 
-    public func getAirdrop(publicKey: String) async throws -> RequestAirdropResponse {
-        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: "100", commitment: .confirmed, environment: environment, index: index, mint: appConfig.mint.symbol))
+    public func getAirdrop(publicKey: String, amount: Int, commitment: RequestAirdropRequest.Commitment = .confirmed, mint: AppConfigMint? = nil) async throws -> RequestAirdropResponse {
+        let mint = mint ?? appConfig.mint
+        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: String(amount), commitment: commitment, environment: environment, index: index, mint: mint.symbol))
     }
 
     public func getAccountBalance(publicKey: String) async throws -> BalanceResponse {
         return try await AccountAPI.getBalance(environment: environment, index: index, accountId: publicKey)
     }
 
-    public func getAccountHistory(publicKey: String) async throws -> [HistoryResponse] {
-        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey, mint: appConfig.mint.symbol)
+    public func getAccountHistory(publicKey: String, mint: AppConfigMint? = nil) async throws -> [HistoryResponse] {
+        let mint = mint ?? appConfig.mint
+        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey, mint: mint.symbol)
     }
 
-    public func getTokenAccounts(publicKey: String) async throws -> [String] {
-        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey, mint: appConfig.mint.symbol)
+    public func getTokenAccounts(publicKey: String, mint: AppConfigMint? = nil) async throws -> [String] {
+        let mint = mint ?? appConfig.mint
+        return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey, mint: mint.symbol)
     }
 
     public mutating func getAppConfig() async throws -> AppConfig {
@@ -134,11 +128,11 @@ public struct Kinetic {
         return appConfig
     }
 
-    public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int) async throws -> AppTransaction {
-        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        let tokenProgramId = PublicKey(string: appConfig.mint.programId)!
-        let mintKey = PublicKey(string: appConfig.mint.publicKey)!
-        let feePayer = PublicKey(string: appConfig.mint.feePayer)!
+    public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KinBinaryMemo.TransferType = .none) async throws -> AppTransaction {
+        let mint = mint ?? appConfig.mint
+        let tokenProgramId = PublicKey(string: mint.programId)!
+        let mintKey = PublicKey(string: mint.publicKey)!
+        let feePayer = PublicKey(string: mint.feePayer)!
         let latestBlockhashResponse = try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
 
         // Get token accounts
@@ -149,7 +143,7 @@ public struct Kinetic {
             throw KineticError.GenerateTokenAccountError
         }
 
-        let memo = try KinBinaryMemo(version: 1, typeId: KinBinaryMemo.TransferType.spend.rawValue, appIdx: UInt16(index))
+        let memo = try KinBinaryMemo(version: 1, typeId: type.rawValue, appIdx: UInt16(index))
         let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
         let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
         let sendInstruction = TokenProgram.transferInstruction(
@@ -178,7 +172,7 @@ public struct Kinetic {
         guard let serialized = serializedRes else {
             throw KineticError.SerializationError
         }
-        let makeTransferRequest = MakeTransferRequest(commitment: .confirmed, environment: environment, index: index, mint: appConfig.mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: nil, referenceType: nil, tx: serialized)
+        let makeTransferRequest = MakeTransferRequest(commitment: commitment, environment: environment, index: index, mint: mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: referenceId, referenceType: referenceType, tx: serialized)
         return try await TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest)
     }
 
@@ -279,6 +273,7 @@ enum KineticError: Error {
     case GenerateTokenAccountError
     case GetMinimumBalanceError
     case SerializationError
+    case UndefinedEndpointError
     case UnknownError
 }
 
