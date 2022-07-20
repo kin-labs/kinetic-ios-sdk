@@ -7,6 +7,7 @@
 
 import UIKit
 import Kinetic
+
 import Solana
 
 class ViewController: UIViewController {
@@ -19,14 +20,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var getAppConfigResultLabel: UILabel!
     @IBOutlet weak var makeTransferResultLabel: UILabel!
 
-    var kinetic = Kinetic(environment: "devnet", index: 1, endpoint: "http://localhost:3000")
+    var kinetic: Kinetic?
     var localAccount: Account?
     var logsListener: Any?
 
     @IBAction func createAccountButtonPressed(_ sender: Any) {
-        if let account = kinetic.getLocalAccount() {
+        if let account = kinetic?.getLocalAccount() {
             localAccount = account
-        } else if let account = kinetic.createLocalAccount() {
+        } else if let account = kinetic?.createLocalAccount() {
             localAccount = account
         } else {
             self.createAccountResultLabel.text = "Account creation failed"
@@ -35,7 +36,7 @@ class ViewController: UIViewController {
         print(localAccount)
         Task {
             do {
-                let appTransaction = try await kinetic.createAccount(account: localAccount!)
+                let appTransaction = try await kinetic?.createAccount(account: localAccount!)
                 self.createAccountResultLabel.text = String(describing: appTransaction)
             } catch {
                 self.createAccountResultLabel.text = error.localizedDescription
@@ -46,8 +47,8 @@ class ViewController: UIViewController {
     @IBAction func airdropButtonPressed(_ sender: Any) {
         Task {
             do {
-                let airdropResult = try await kinetic.getAirdrop(publicKey: localAccount!.publicKey.base58EncodedString)
-                self.getAirdropResultLabel.text = airdropResult.signature
+                let airdropResult = try await kinetic?.getAirdrop(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getAirdropResultLabel.text = airdropResult?.signature
             } catch {
                 self.getAirdropResultLabel.text = error.localizedDescription
             }
@@ -57,7 +58,7 @@ class ViewController: UIViewController {
     @IBAction func getBalancePressed(_ sender: Any) {
         Task {
             do {
-                let balanceResult = try await kinetic.getAccountBalance(publicKey: localAccount!.publicKey.base58EncodedString)
+                let balanceResult = try await kinetic?.getAccountBalance(publicKey: localAccount!.publicKey.base58EncodedString)
                 self.getAccountBalanceResultLabel.text = String(describing: balanceResult)
             } catch {
                 self.getAccountBalanceResultLabel.text = error.localizedDescription
@@ -78,8 +79,8 @@ class ViewController: UIViewController {
     @IBAction func getAccountHistoryButtonPressed(_ sender: Any) {
         Task {
             do {
-                let accountHistoryResult = try await kinetic.getAccountHistory(publicKey: localAccount!.publicKey.base58EncodedString)
-                self.getAccountHistoryResultLabel.text = accountHistoryResult.description
+                let accountHistoryResult = try await kinetic?.getAccountHistory(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getAccountHistoryResultLabel.text = accountHistoryResult?.description
             } catch {
                 self.getAccountHistoryResultLabel.text = error.localizedDescription
             }
@@ -89,28 +90,17 @@ class ViewController: UIViewController {
     @IBAction func getTokenAccountsButtonPressed(_ sender: Any) {
         Task {
             do {
-                let tokenAccountsResult = try await kinetic.getTokenAccounts(publicKey: localAccount!.publicKey.base58EncodedString)
-                self.getTokenAccountsResultLabel.text = tokenAccountsResult.description
+                let tokenAccountsResult = try await kinetic?.getTokenAccounts(publicKey: localAccount!.publicKey.base58EncodedString)
+                self.getTokenAccountsResultLabel.text = tokenAccountsResult?.description
             } catch {
                 self.getTokenAccountsResultLabel.text = error.localizedDescription
-            }
-        }
-    }
-
-    @IBAction func getAppConfigButtonPressed(_ sender: Any) {
-        Task {
-            do {
-                let appConfig = try await kinetic.getAppConfig()
-                self.getAppConfigResultLabel.text = String(describing: appConfig)
-            } catch {
-                self.getAppConfigResultLabel.text = error.localizedDescription
             }
         }
     }
     
     @IBAction func makeTransferButtonPressed(_ sender: Any) {
         Task {
-            if let appTransaction = try? await kinetic.makeTransfer(fromAccount: localAccount!, toPublicKey: PublicKey(string: "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y")!, amount: 1) {
+            if let appTransaction = try? await kinetic?.makeTransfer(fromAccount: localAccount!, toPublicKey: PublicKey(string: "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y")!, amount: 1) {
                 self.makeTransferResultLabel.text = String(describing: appTransaction)
             }
         }
@@ -118,9 +108,20 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        logsListener = kinetic.logPublisher.sink { (level, log) in
-            NSLog(log)
+        Task {
+            do {
+                self.kinetic = try await KineticBuilder()
+                    .setEnvironment("devnet")
+                    .setIndex(1)
+                    .setEndpoint("https://devnet.kinetic.kin.org")
+                    .build()
+                logsListener = kinetic?.logPublisher.sink { (level, log) in
+                    NSLog(log)
+                }
+            } catch {
+                print("Kinetic failed to build")
+                print(error)
+            }
         }
-
     }
 }

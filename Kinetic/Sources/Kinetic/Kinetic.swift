@@ -15,6 +15,7 @@ public struct Kinetic {
     var solana: Solana?
     var environment: String
     var index: Int
+    var appConfig: AppConfig?
     var logger = OSLog.init(subsystem: "org.kinetic.sdk", category: "logs")
     let KIN_MINT = PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
@@ -126,9 +127,11 @@ public struct Kinetic {
         return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey, mint: appConfig.mint.symbol)
     }
 
-    public func getAppConfig() async throws -> AppConfig {
+    public mutating func getAppConfig() async throws -> AppConfig {
         debugLog("Getting app config")
-        return try await AppAPI.getAppConfig(environment: environment, index: index)
+        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
+        self.appConfig = appConfig
+        return appConfig
     }
 
     public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int) async throws -> AppTransaction {
@@ -255,19 +258,19 @@ public struct Kinetic {
         infoLog(fixtureAccount?.publicKey.base58EncodedString ?? "fixture test failed")
     }
 
-    private func debugLog(_ msg: String) {
+    internal func debugLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Debug, "KINETIC::D::" + msg))
     }
 
-    private func infoLog(_ msg: String) {
+    internal func infoLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Info, "KINETIC::I::" + msg))
     }
 
-    private func warningLog(_ msg: String) {
+    internal func warningLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Warning, "KINETIC::W::" + msg))
     }
 
-    private func errorLog(_ msg: String) {
+    internal func errorLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Error, "KINETIC::E::" + msg))
     }
 }
