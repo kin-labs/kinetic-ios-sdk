@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** |  | 
+**logs** | **[String]** |  | 
 **message** | **String** |  | 
 **type** | **String** |  | 
 **instruction** | **Int** |  | 

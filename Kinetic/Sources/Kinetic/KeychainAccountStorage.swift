@@ -15,6 +15,7 @@ class KeychainAccountStorage: SolanaAccountStorage {
     }
 
     private var keychain = KeyChainStorage()
+
     func save(_ account: Account) -> Result<Void, Error> {
         do {
             let encodedAccount = try JSONEncoder().encode(account)
@@ -25,13 +26,14 @@ class KeychainAccountStorage: SolanaAccountStorage {
         }
         return .success(())
     }
-    var account: Result<Account, Error> {
+
+    func getAccount(_ publicKey: PublicKey? = nil) -> Result<Account, Error> {
         do {
             let accounts = try keychain.allAccounts()
             if accounts.count == 0 {
                 return .failure(StorageError.unknown)
             }
-            if let accountJSON = keychain.retrieve(account: accounts[0]) {
+            if let accountJSON = keychain.retrieve(account: publicKey?.base58EncodedString ?? accounts[0]) {
                 let accountData = accountJSON.data(using: .utf8)!
                 let decodedAccount = try JSONDecoder().decode(Account.self, from: accountData)
                 if decodedAccount.phrase.count != 48 { // TODO: Stop Solana SDK from making fake mnemonics and change this check
@@ -52,6 +54,11 @@ class KeychainAccountStorage: SolanaAccountStorage {
             return .failure(StorageError.unknown)
         }
     }
+
+    var account: Result<Account, Error> {
+        return self.getAccount()
+    }
+
     func clear() -> Result<Void, Error> {
         do {
             let accounts = try keychain.allAccounts()

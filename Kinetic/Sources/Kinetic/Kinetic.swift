@@ -177,8 +177,8 @@ public struct Kinetic {
     }
 
     // START: Pre-backend local functions
-    public func getLocalAccount() -> Account? {
-        let res = accountStorage!.account
+    public func getLocalAccount(_ publicKey: PublicKey? = nil) -> Account? {
+        let res = accountStorage!.getAccount(publicKey)
         switch res {
         case .success(let account):
             return account

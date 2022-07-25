@@ -3,6 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**addMemo** | **Bool** |  | 
 **airdrop** | **Bool** |  | 
 **airdropAmount** | **Int** |  | 
 **airdropMax** | **Int** |  | 

@@ -12,6 +12,7 @@ import AnyCodable
 
 public struct AppConfigMint: Codable, JSONEncodable, Hashable {
 
+    public var addMemo: Bool
     public var airdrop: Bool
     public var airdropAmount: Int
     public var airdropMax: Int
@@ -23,7 +24,8 @@ public struct AppConfigMint: Codable, JSONEncodable, Hashable {
     public var publicKey: String
     public var symbol: String
 
-    public init(airdrop: Bool, airdropAmount: Int, airdropMax: Int, decimals: Int, feePayer: String, logoUrl: String, name: String, programId: String, publicKey: String, symbol: String) {
+    public init(addMemo: Bool, airdrop: Bool, airdropAmount: Int, airdropMax: Int, decimals: Int, feePayer: String, logoUrl: String, name: String, programId: String, publicKey: String, symbol: String) {
+        self.addMemo = addMemo
         self.airdrop = airdrop
         self.airdropAmount = airdropAmount
         self.airdropMax = airdropMax
@@ -37,6 +39,7 @@ public struct AppConfigMint: Codable, JSONEncodable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case addMemo
         case airdrop
         case airdropAmount
         case airdropMax
@@ -53,6 +56,7 @@ public struct AppConfigMint: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(addMemo, forKey: .addMemo)
         try container.encode(airdrop, forKey: .airdrop)
         try container.encode(airdropAmount, forKey: .airdropAmount)
         try container.encode(airdropMax, forKey: .airdropMax)
