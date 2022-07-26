@@ -46,7 +46,7 @@ public struct Kinetic {
             throw KineticError.GenerateTokenAccountError
         }
 
-        let memo = try KinBinaryMemo(typeId: KinBinaryMemo.TransferType.none.rawValue, appIdx: UInt16(index))
+        let memo = try KineticKinMemo(typeId: KineticKinMemo.TransferType.none.rawValue, appIdx: UInt16(index))
         let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
         let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
 
@@ -128,7 +128,7 @@ public struct Kinetic {
         return appConfig
     }
 
-    public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KinBinaryMemo.TransferType = .none) async throws -> AppTransaction {
+    public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KineticKinMemo.TransferType = .none) async throws -> AppTransaction {
         let mint = mint ?? appConfig.mint
         let tokenProgramId = PublicKey(string: mint.programId)!
         let mintKey = PublicKey(string: mint.publicKey)!
@@ -143,7 +143,7 @@ public struct Kinetic {
             throw KineticError.GenerateTokenAccountError
         }
 
-        let memo = try KinBinaryMemo(version: 1, typeId: type.rawValue, appIdx: UInt16(index))
+        let memo = try KineticKinMemo(version: 1, typeId: type.rawValue, appIdx: UInt16(index))
         let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
         let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
         let sendInstruction = TokenProgram.transferInstruction(
@@ -243,7 +243,7 @@ public struct Kinetic {
     }
 
     public func makeAMemo() {
-        let memo = try? KinBinaryMemo(typeId: KinBinaryMemo.TransferType.earn.rawValue, appIdx: UInt16(index))
+        let memo = try? KineticKinMemo(typeId: KineticKinMemo.TransferType.earn.rawValue, appIdx: UInt16(index))
         infoLog(String(describing: memo))
     }
 

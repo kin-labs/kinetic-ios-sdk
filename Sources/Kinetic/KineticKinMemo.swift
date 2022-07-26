@@ -1,5 +1,5 @@
 //
-//  KinBinaryMemo.swift
+//  KineticKinMemo.swift
 //  Kinetic
 //
 //  Created by Kik Interactive Inc.
@@ -16,7 +16,7 @@ import Foundation
  * @param appIdx                16 bits  | < 65,536
  * @param foreignKey            230 bits | Base64 Encoded String of [230 bits + (2 zeros padding)]
 */
-public struct KinBinaryMemo {
+public struct KineticKinMemo {
     struct Constants {
         static let magicByteIndicatorBitLength: Int = 2
         static let versionBitLength: Int            = 3
@@ -48,7 +48,7 @@ public struct KinBinaryMemo {
             Int(ceil(Double(magicByteIndicatorBitLength + versionBitLength + typeIdBitLength + appIdxBitLength + foreignKeyBitLength) / 8.0))
     }
 
-    public enum KinBinaryMemoFormatError: String, Error {
+    public enum KineticKinMemoFormatError: String, Error {
         case invalidMagicByteIndicator = "Invalid magicByteIndicator. Valid range is [0, 4)."
         case invalidVersion = "Invalid version. Valid range is [0, 8)."
         case invalidTypeId = "Invalid typeId. Valid range is [0, 32)."
@@ -99,7 +99,7 @@ public struct KinBinaryMemo {
                 appIdx: UInt16,
                 foreignKeyBytes: [UInt8] = []) throws {
         guard magicByteIndicator >= 0, magicByteIndicator < Constants.maxMagicByteIndicatorSize else {
-            throw KinBinaryMemoFormatError.invalidMagicByteIndicator
+            throw KineticKinMemoFormatError.invalidMagicByteIndicator
         }
 
         self.magicByteIndicator = magicByteIndicator
@@ -107,7 +107,7 @@ public struct KinBinaryMemo {
         self.version = version
 
         guard let transferType = TransferType(rawValue: typeId), transferType != TransferType.unknown else {
-            throw KinBinaryMemoFormatError.invalidTypeId
+            throw KineticKinMemoFormatError.invalidTypeId
         }
 
         self.typeId = transferType
