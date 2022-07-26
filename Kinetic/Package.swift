@@ -16,6 +16,10 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ajamaica/Solana.swift", revision: "f487b25"),
+        .package(
+                url: "https://github.com/Flight-School/AnyCodable",
+                from: "0.6.0"
+            ),
 //        .package(name: "OpenAPIClient", path: "../Kinetic/Sources/OpenAPIClient"),
     ],
     targets: [
@@ -23,6 +27,7 @@ let package = Package(
             name: "Kinetic",
             dependencies: [
                 .product(name: "Solana", package: "Solana.swift"),
+                .product(name: "AnyCodable", package: "AnyCodable")
 //                .product(name: "OpenAPIClient", package: "OpenAPIClient")
             ]),
         .testTarget(
