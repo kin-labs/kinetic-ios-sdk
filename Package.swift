@@ -29,7 +29,9 @@ let package = Package(
                 .product(name: "Solana", package: "Solana.swift"),
                 .product(name: "AnyCodable", package: "AnyCodable")
 //                .product(name: "OpenAPIClient", package: "OpenAPIClient")
-            ]),
+            ],
+            path: "Kinetic/Sources/Kinetic",
+    ),
         .testTarget(
             name: "KineticTests",
             dependencies: ["Kinetic"]),
