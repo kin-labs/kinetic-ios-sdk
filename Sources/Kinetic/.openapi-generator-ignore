@@ -2,7 +2,7 @@ Cartfile
 OpenAPIClient.podspec
 Package.swift
 README.md
-docs
+docs/*
 git_push.sh
 project.yml
 
