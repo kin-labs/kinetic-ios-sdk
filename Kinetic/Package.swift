@@ -16,14 +16,14 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ajamaica/Solana.swift", revision: "f487b25"),
-        .package(name: "OpenAPIClient", path: "../Kinetic/Sources/OpenAPIClient"),
+//        .package(name: "OpenAPIClient", path: "../Kinetic/Sources/OpenAPIClient"),
     ],
     targets: [
         .target(
             name: "Kinetic",
             dependencies: [
                 .product(name: "Solana", package: "Solana.swift"),
-                .product(name: "OpenAPIClient", package: "OpenAPIClient")
+//                .product(name: "OpenAPIClient", package: "OpenAPIClient")
             ]),
         .testTarget(
             name: "KineticTests",
