@@ -14,8 +14,8 @@ public struct AppConfigMint: Codable, JSONEncodable, Hashable {
 
     public var addMemo: Bool
     public var airdrop: Bool
-    public var airdropAmount: Int
-    public var airdropMax: Int
+    public var airdropAmount: Int?
+    public var airdropMax: Int?
     public var decimals: Int
     public var feePayer: String
     public var logoUrl: String
@@ -24,7 +24,7 @@ public struct AppConfigMint: Codable, JSONEncodable, Hashable {
     public var publicKey: String
     public var symbol: String
 
-    public init(addMemo: Bool, airdrop: Bool, airdropAmount: Int, airdropMax: Int, decimals: Int, feePayer: String, logoUrl: String, name: String, programId: String, publicKey: String, symbol: String) {
+    public init(addMemo: Bool, airdrop: Bool, airdropAmount: Int? = nil, airdropMax: Int? = nil, decimals: Int, feePayer: String, logoUrl: String, name: String, programId: String, publicKey: String, symbol: String) {
         self.addMemo = addMemo
         self.airdrop = airdrop
         self.airdropAmount = airdropAmount
@@ -58,8 +58,8 @@ public struct AppConfigMint: Codable, JSONEncodable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(addMemo, forKey: .addMemo)
         try container.encode(airdrop, forKey: .airdrop)
-        try container.encode(airdropAmount, forKey: .airdropAmount)
-        try container.encode(airdropMax, forKey: .airdropMax)
+        try container.encodeIfPresent(airdropAmount, forKey: .airdropAmount)
+        try container.encodeIfPresent(airdropMax, forKey: .airdropMax)
         try container.encode(decimals, forKey: .decimals)
         try container.encode(feePayer, forKey: .feePayer)
         try container.encode(logoUrl, forKey: .logoUrl)

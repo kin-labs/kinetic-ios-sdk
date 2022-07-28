@@ -24,6 +24,7 @@ OpenAPIClient/Classes/OpenAPIs/Models/AppTransaction.swift
 OpenAPIClient/Classes/OpenAPIs/Models/AppTransactionError.swift
 OpenAPIClient/Classes/OpenAPIs/Models/BalanceResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/BalanceToken.swift
+OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedSignatureInfo.swift
 OpenAPIClient/Classes/OpenAPIs/Models/CreateAccountRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/HistoryResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/LatestBlockhashResponse.swift

@@ -12,11 +12,11 @@ import AnyCodable
 
 public struct BalanceResponse: Codable, JSONEncodable, Hashable {
 
-    public var balance: AnyCodable
+    public var balance: String
     public var mints: AnyCodable
     public var tokens: [BalanceToken]
 
-    public init(balance: AnyCodable, mints: AnyCodable, tokens: [BalanceToken]) {
+    public init(balance: String, mints: AnyCodable, tokens: [BalanceToken]) {
         self.balance = balance
         self.mints = mints
         self.tokens = tokens

@@ -13,10 +13,10 @@ import AnyCodable
 public struct BalanceToken: Codable, JSONEncodable, Hashable {
 
     public var account: String
-    public var balance: AnyCodable
+    public var balance: String
     public var mint: String
 
-    public init(account: String, balance: AnyCodable, mint: String) {
+    public init(account: String, balance: String, mint: String) {
         self.account = account
         self.balance = balance
         self.mint = mint

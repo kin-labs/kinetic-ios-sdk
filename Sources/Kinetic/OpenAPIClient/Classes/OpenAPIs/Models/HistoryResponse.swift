@@ -12,10 +12,10 @@ import AnyCodable
 
 public struct HistoryResponse: Codable, JSONEncodable, Hashable {
 
-    public var account: AnyCodable
-    public var history: [String]
+    public var account: String
+    public var history: [ConfirmedSignatureInfo]
 
-    public init(account: AnyCodable, history: [String]) {
+    public init(account: String, history: [ConfirmedSignatureInfo]) {
         self.account = account
         self.history = history
     }
