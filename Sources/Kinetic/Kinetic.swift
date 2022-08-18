@@ -23,13 +23,13 @@ public struct Kinetic {
     let MEMO_V1_PROGRAM_ID = PublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
     let ASSOCIATED_TOKEN_PROGRAM_ID = PublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
-    public init(environment: String?, index: Int, endpoint: String?) {
+    public init(environment: String?, index: Int, endpoint: String?, fileDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("kinetic")) {
         // TODO: add Solana RPC config here
         self.environment = environment ?? "devnet"
         self.index = index
         let rpcEndpoint = getSolanaRpcEndpoint(environment: self.environment)
         self.networkingRouter = NetworkingRouter(endpoint: rpcEndpoint)
-        self.accountStorage = KeychainAccountStorage()
+        self.accountStorage = KeychainAccountStorage(fileDirectory: fileDirectory)
         self.solana = Solana(router: networkingRouter!)
         OpenAPIClientAPI.basePath = endpoint ?? "https://devnet.kinetic.kin.org"
     }
