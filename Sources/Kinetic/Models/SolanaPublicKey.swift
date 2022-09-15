@@ -8,3 +8,7 @@
 import struct Solana.PublicKey
 
 typealias SolanaPublicKey = Solana.PublicKey
+
+import struct Solana.Transaction
+
+typealias SolanaTransaction = Solana.Transaction

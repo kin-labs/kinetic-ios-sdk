@@ -34,7 +34,7 @@ public struct Kinetic {
         OpenAPIClientAPI.basePath = endpoint ?? "https://devnet.kinetic.kin.org"
     }
 
-    public func createAccount(account: KineticAccount, mint: AppConfigMint? = nil) async throws -> AppTransaction {
+    public func createAccount(account: KineticAccount, mint: AppConfigMint? = nil) async throws -> Transaction {
         let account = account.asSolanaAccount
         let mint = mint ?? appConfig.mint
         let mintKey = SolanaPublicKey(string: mint.publicKey)!
@@ -80,8 +80,8 @@ public struct Kinetic {
             data: []
         )
 
-        var transaction = Transaction(signatures: [
-            Transaction.Signature(signature: nil, publicKey: account.publicKey)
+        var transaction = SolanaTransaction(signatures: [
+            SolanaTransaction.Signature(signature: nil, publicKey: account.publicKey)
         ], feePayer: feePayer, instructions: [
             memoInstruction,
             createAccountInstruction
@@ -99,7 +99,7 @@ public struct Kinetic {
         guard let serialized = serializedRes else {
             throw KineticError.SerializationError
         }
-        let createAccountRequest = CreateAccountRequest(environment: environment, index: index, mint: appConfig.mint.publicKey, tx: serialized)
+        let createAccountRequest = CreateAccountRequest(commitment: .confirmed, environment: environment, index: index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: appConfig.mint.publicKey, tx: serialized)
         return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
     }
 
@@ -129,7 +129,7 @@ public struct Kinetic {
         return appConfig
     }
 
-    public func makeTransfer(fromAccount: KineticAccount, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KineticKinMemo.TransferType = .none) async throws -> AppTransaction {
+    public func makeTransfer(fromAccount: KineticAccount, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KineticKinMemo.TransferType = .none) async throws -> Transaction {
         let fromAccount = fromAccount.asSolanaAccount
         let toPublicKey = toPublicKey.asSolanaPublicKey
         let mint = mint ?? appConfig.mint
@@ -156,8 +156,8 @@ public struct Kinetic {
             owner: fromAccount.publicKey,
             amount: UInt64(amount)
         )
-        var transaction = Transaction(
-            signatures: [Transaction.Signature(signature: nil, publicKey: fromAccount.publicKey)],
+        var transaction = SolanaTransaction(
+            signatures: [SolanaTransaction.Signature(signature: nil, publicKey: fromAccount.publicKey)],
             feePayer: feePayer,
             instructions: [memoInstruction, sendInstruction],
             recentBlockhash: latestBlockhashResponse.blockhash
