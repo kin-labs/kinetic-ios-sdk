@@ -17,11 +17,11 @@ public struct Kinetic {
     var index: Int
     var appConfig: AppConfig!
     var logger = OSLog.init(subsystem: "org.kinetic.sdk", category: "logs")
-    let KIN_MINT = PublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
+    let KIN_MINT = SolanaPublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
-    let SAMPLE_WALLET = PublicKey(string: "3rad7aFPdJS3CkYPSphtDAWCNB8BYpV2yc7o5ZjFQbDb")
-    let MEMO_V1_PROGRAM_ID = PublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
-    let ASSOCIATED_TOKEN_PROGRAM_ID = PublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
+    let SAMPLE_WALLET = SolanaPublicKey(string: "3rad7aFPdJS3CkYPSphtDAWCNB8BYpV2yc7o5ZjFQbDb")
+    let MEMO_V1_PROGRAM_ID = SolanaPublicKey(string: "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
+    let ASSOCIATED_TOKEN_PROGRAM_ID = SolanaPublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
     public init(environment: String?, index: Int, endpoint: String?, fileDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("kinetic")) {
         // TODO: add Solana RPC config here
@@ -34,14 +34,15 @@ public struct Kinetic {
         OpenAPIClientAPI.basePath = endpoint ?? "https://devnet.kinetic.kin.org"
     }
 
-    public func createAccount(account: Account, mint: AppConfigMint? = nil) async throws -> AppTransaction {
+    public func createAccount(account: KineticAccount, mint: AppConfigMint? = nil) async throws -> AppTransaction {
+        let account = account.asSolanaAccount
         let mint = mint ?? appConfig.mint
-        let mintKey = PublicKey(string: mint.publicKey)!
-        let feePayer = PublicKey(string: mint.feePayer)!
+        let mintKey = SolanaPublicKey(string: mint.publicKey)!
+        let feePayer = SolanaPublicKey(string: mint.feePayer)!
         let latestBlockhashResponse = try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
 
         // Get token account
-        guard case let .success(associatedTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: account.publicKey, tokenMintAddress: mintKey)
+        guard case let .success(associatedTokenAccount) = SolanaPublicKey.associatedTokenAddress(walletAddress: account.publicKey as SolanaPublicKey, tokenMintAddress: mintKey)
         else {
             throw KineticError.GenerateTokenAccountError
         }
@@ -71,9 +72,9 @@ public struct Kinetic {
                 Account.Meta(publicKey: associatedTokenAccount, isSigner: false, isWritable: true),
                 Account.Meta(publicKey: account.publicKey, isSigner: true, isWritable: false),
                 Account.Meta(publicKey: mintKey, isSigner: false, isWritable: false),
-                Account.Meta(publicKey: PublicKey.systemProgramId, isSigner: false, isWritable: false),
-                Account.Meta(publicKey: PublicKey.tokenProgramId, isSigner: false, isWritable: false),
-                Account.Meta(publicKey: PublicKey.sysvarRent, isSigner: false, isWritable: false)
+                Account.Meta(publicKey: SolanaPublicKey.systemProgramId, isSigner: false, isWritable: false),
+                Account.Meta(publicKey: SolanaPublicKey.tokenProgramId, isSigner: false, isWritable: false),
+                Account.Meta(publicKey: SolanaPublicKey.sysvarRent, isSigner: false, isWritable: false)
             ],
             programId: ASSOCIATED_TOKEN_PROGRAM_ID,
             data: []
@@ -98,27 +99,27 @@ public struct Kinetic {
         guard let serialized = serializedRes else {
             throw KineticError.SerializationError
         }
-        let createAccountRequest = CreateAccountRequest(environment: environment, index: index, mint: appConfig.mint.symbol, tx: serialized)
+        let createAccountRequest = CreateAccountRequest(environment: environment, index: index, mint: appConfig.mint.publicKey, tx: serialized)
         return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
     }
 
     public func getAirdrop(publicKey: String, amount: Int, commitment: RequestAirdropRequest.Commitment = .confirmed, mint: AppConfigMint? = nil) async throws -> RequestAirdropResponse {
         let mint = mint ?? appConfig.mint
-        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: String(amount), commitment: commitment, environment: environment, index: index, mint: mint.symbol))
+        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: String(amount), commitment: commitment, environment: environment, index: index, mint: mint.publicKey))
     }
 
-    public func getAccountBalance(publicKey: String) async throws -> BalanceResponse {
-        return try await AccountAPI.getBalance(environment: environment, index: index, accountId: publicKey)
+    public func getAccountBalance(publicKey: PublicKey) async throws -> BalanceResponse {
+        return try await AccountAPI.getBalance(environment: environment, index: index, accountId: publicKey.base58)
     }
 
-    public func getAccountHistory(publicKey: String, mint: AppConfigMint? = nil) async throws -> [HistoryResponse] {
+    public func getAccountHistory(publicKey: PublicKey, mint: AppConfigMint? = nil) async throws -> [HistoryResponse] {
         let mint = mint ?? appConfig.mint
-        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey, mint: mint.symbol)
+        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: publicKey.base58, mint: mint.publicKey)
     }
 
-    public func getTokenAccounts(publicKey: String, mint: AppConfigMint? = nil) async throws -> [String] {
+    public func getTokenAccounts(publicKey: PublicKey, mint: AppConfigMint? = nil) async throws -> [String] {
         let mint = mint ?? appConfig.mint
-        return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey, mint: mint.symbol)
+        return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey.base58, mint: mint.publicKey)
     }
 
     public mutating func getAppConfig() async throws -> AppConfig {
@@ -128,17 +129,19 @@ public struct Kinetic {
         return appConfig
     }
 
-    public func makeTransfer(fromAccount: Account, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KineticKinMemo.TransferType = .none) async throws -> AppTransaction {
+    public func makeTransfer(fromAccount: KineticAccount, toPublicKey: PublicKey, amount: Int, commitment: MakeTransferRequest.Commitment = .confirmed, mint: AppConfigMint? = nil, referenceId: String? = nil, referenceType: String? = nil, type: KineticKinMemo.TransferType = .none) async throws -> AppTransaction {
+        let fromAccount = fromAccount.asSolanaAccount
+        let toPublicKey = toPublicKey.asSolanaPublicKey
         let mint = mint ?? appConfig.mint
-        let tokenProgramId = PublicKey(string: mint.programId)!
-        let mintKey = PublicKey(string: mint.publicKey)!
-        let feePayer = PublicKey(string: mint.feePayer)!
+        let tokenProgramId = SolanaPublicKey(string: mint.programId)!
+        let mintKey = SolanaPublicKey(string: mint.publicKey)!
+        let feePayer = SolanaPublicKey(string: mint.feePayer)!
         let latestBlockhashResponse = try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
 
         // Get token accounts
         guard
-            case let .success(fromTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: fromAccount.publicKey, tokenMintAddress: mintKey),
-            case let .success(toTokenAccount) = PublicKey.associatedTokenAddress(walletAddress: toPublicKey, tokenMintAddress: mintKey)
+            case let .success(fromTokenAccount) = SolanaPublicKey.associatedTokenAddress(walletAddress: fromAccount.publicKey, tokenMintAddress: mintKey),
+            case let .success(toTokenAccount) = SolanaPublicKey.associatedTokenAddress(walletAddress: toPublicKey, tokenMintAddress: mintKey)
         else {
             throw KineticError.GenerateTokenAccountError
         }
@@ -172,40 +175,44 @@ public struct Kinetic {
         guard let serialized = serializedRes else {
             throw KineticError.SerializationError
         }
-        let makeTransferRequest = MakeTransferRequest(commitment: commitment, environment: environment, index: index, mint: mint.symbol, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: referenceId, referenceType: referenceType, tx: serialized)
+        let makeTransferRequest = MakeTransferRequest(commitment: commitment, environment: environment, index: index, mint: mint.publicKey, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, referenceId: referenceId, referenceType: referenceType, tx: serialized)
         return try await TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest)
     }
 
-    // START: Pre-backend local functions
-    public func getLocalAccount(_ publicKey: PublicKey? = nil) -> Account? {
+    // START: Local account storage functions
+    public func getAllAccounts() -> [PublicKey] {
+        return accountStorage!.kineticStorage.getAllAccountIds()
+    }
+    
+    public func getLocalAccount(_ publicKey: PublicKey? = nil) -> KineticAccount? {
         let res = accountStorage!.getAccount(publicKey)
         switch res {
         case .success(let account):
-            return account
+            return KineticAccount(solanaAccount: account)
         case .failure(let e):
             errorLog(e.localizedDescription)
             return nil
         }
     }
 
-    public func createLocalAccount() -> Account? {
+    public func createLocalAccount() -> KineticAccount? {
         if let account = Account(network: .mainnetBeta) {
             accountStorage!.save(account)
-            return account
+            return KineticAccount(solanaAccount: account)
         } else { return nil }
     }
 
-    public func loadAccount(fromMnemonic mnemonic: [String]) -> Account? {
+    public func loadAccount(fromMnemonic mnemonic: [String]) -> KineticAccount? {
         if let account = Account(phrase: mnemonic, network: .mainnetBeta) {
             accountStorage!.save(account)
-            return account
+            return KineticAccount(solanaAccount: account)
         } else { return nil }
     }
 
-    public func loadAccount(fromSecret secret: Data) -> Account? {
+    public func loadAccount(fromSecret secret: Data) -> KineticAccount? {
         if let account = Account(secretKey: secret) {
             accountStorage!.save(account)
-            return account
+            return KineticAccount(solanaAccount: account)
         } else { return nil }
     }
 

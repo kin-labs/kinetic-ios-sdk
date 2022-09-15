@@ -14,7 +14,7 @@ class KeychainAccountStorage: SolanaAccountStorage {
         case unknown
     }
 
-    private var kineticStorage: KineticStorage
+    internal var kineticStorage: KineticStorage
 
     public init(fileDirectory: URL) {
         self.kineticStorage = KineticStorage(directory: fileDirectory)
@@ -30,12 +30,13 @@ class KeychainAccountStorage: SolanaAccountStorage {
     }
 
     func getAccount(_ publicKey: PublicKey? = nil) -> Result<Account, Error> {
+        let publicKey = publicKey?.asSolanaPublicKey
         let accounts = kineticStorage.getAllAccountIds()
         print(accounts)
         if accounts.count == 0 {
             return .failure(StorageError.unknown)
         }
-        if let account = kineticStorage.getAccount(publicKey ?? accounts[0]) {
+        if let account = kineticStorage.getAccount(publicKey ?? accounts[0].asSolanaPublicKey) {
             return .success(account)
         } else {
             return .failure(StorageError.unknown)

@@ -1,5 +1,6 @@
 import Foundation
-import Solana
+import struct Solana.Account
+import struct Solana.PublicKey
 
 public class KineticStorage  {
     public enum Errors: Error {
@@ -30,7 +31,7 @@ public extension KineticStorage {
         return account
     }
 
-    func hasPrivateKey(_ publicKey: PublicKey) -> Bool {
+    func hasPrivateKey(_ publicKey: Solana.PublicKey) -> Bool {
         do {
             return try getAccountFromSecureStore(publicKey: publicKey) != nil
         } catch {
@@ -38,7 +39,7 @@ public extension KineticStorage {
         }
     }
 
-    func getAccount(_ publicKey: PublicKey) -> Account? {
+    func getAccount(_ publicKey: Solana.PublicKey) -> Account? {
         do {
             return try getAccountFromSecureStore(publicKey: publicKey)
         } catch {
@@ -46,7 +47,7 @@ public extension KineticStorage {
         }
     }
 
-    func removeAccount(publicKey: PublicKey) async throws {
+    func removeAccount(publicKey: Solana.PublicKey) async throws {
         try await removeAccountFromSecureStore(publicKey: publicKey)
         let accountDirectory = self.directoryForAccount(publicKey)
         return try self.removeFileOrDirectory(accountDirectory)
@@ -74,7 +75,7 @@ private extension KineticStorage {
         return rootDirectory.appendingPathComponent("kin_accounts", isDirectory: true)
     }
 
-    func directoryForAccount(_ account: PublicKey) -> URL {
+    func directoryForAccount(_ account: Solana.PublicKey) -> URL {
         return directoryForAllAccounts.appendingPathComponent(account.base58EncodedString, isDirectory: true)
     }
 }
@@ -102,7 +103,7 @@ private extension KineticStorage {
         try keyStore.add(account: account.publicKey.base58EncodedString, key: accountString)
     }
 
-    func getAccountFromSecureStore(publicKey: PublicKey) throws -> Account? {
+    func getAccountFromSecureStore(publicKey: Solana.PublicKey) throws -> Account? {
         guard let accountJSON = keyStore.retrieve(account: publicKey.base58EncodedString) else {
             return nil
         }
@@ -121,7 +122,7 @@ private extension KineticStorage {
         }
     }
 
-    func removeAccountFromSecureStore(publicKey: PublicKey) async throws {
+    func removeAccountFromSecureStore(publicKey: Solana.PublicKey) async throws {
         try keyStore.delete(account: publicKey.base58EncodedString)
     }
 }
