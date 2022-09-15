@@ -12,22 +12,39 @@ import AnyCodable
 
 public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
 
+    public enum Commitment: String, Codable, CaseIterable {
+        case confirmed = "Confirmed"
+        case finalized = "Finalized"
+        case processed = "Processed"
+    }
+    public var commitment: Commitment
     public var environment: String
     public var index: Int
+    public var lastValidBlockHeight: Int
     public var mint: String
+    public var referenceId: String?
+    public var referenceType: String?
     public var tx: Data
 
-    public init(environment: String, index: Int, mint: String, tx: Data) {
+    public init(commitment: Commitment, environment: String, index: Int, lastValidBlockHeight: Int, mint: String, referenceId: String? = nil, referenceType: String? = nil, tx: Data) {
+        self.commitment = commitment
         self.environment = environment
         self.index = index
+        self.lastValidBlockHeight = lastValidBlockHeight
         self.mint = mint
+        self.referenceId = referenceId
+        self.referenceType = referenceType
         self.tx = tx
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case commitment
         case environment
         case index
+        case lastValidBlockHeight
         case mint
+        case referenceId
+        case referenceType
         case tx
     }
 
@@ -35,9 +52,13 @@ public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(commitment, forKey: .commitment)
         try container.encode(environment, forKey: .environment)
         try container.encode(index, forKey: .index)
+        try container.encode(lastValidBlockHeight, forKey: .lastValidBlockHeight)
         try container.encode(mint, forKey: .mint)
+        try container.encodeIfPresent(referenceId, forKey: .referenceId)
+        try container.encodeIfPresent(referenceType, forKey: .referenceType)
         try container.encode(tx, forKey: .tx)
     }
 }

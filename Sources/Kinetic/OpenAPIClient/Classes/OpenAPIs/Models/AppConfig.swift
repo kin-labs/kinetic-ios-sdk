@@ -13,12 +13,14 @@ import AnyCodable
 public struct AppConfig: Codable, JSONEncodable, Hashable {
 
     public var app: AppConfigApp
+    public var api: AppConfigApi
     public var environment: AppConfigEnvironment
     public var mint: AppConfigMint
     public var mints: [AppConfigMint]
 
-    public init(app: AppConfigApp, environment: AppConfigEnvironment, mint: AppConfigMint, mints: [AppConfigMint]) {
+    public init(app: AppConfigApp, api: AppConfigApi, environment: AppConfigEnvironment, mint: AppConfigMint, mints: [AppConfigMint]) {
         self.app = app
+        self.api = api
         self.environment = environment
         self.mint = mint
         self.mints = mints
@@ -26,6 +28,7 @@ public struct AppConfig: Codable, JSONEncodable, Hashable {
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case app
+        case api
         case environment
         case mint
         case mints
@@ -36,6 +39,7 @@ public struct AppConfig: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(app, forKey: .app)
+        try container.encode(api, forKey: .api)
         try container.encode(environment, forKey: .environment)
         try container.encode(mint, forKey: .mint)
         try container.encode(mints, forKey: .mints)

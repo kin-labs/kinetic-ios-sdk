@@ -26,7 +26,7 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
     public var referenceType: String?
     public var tx: Data
 
-    public init(commitment: Commitment, environment: String, index: Int, mint: String, lastValidBlockHeight: Int, referenceId: String?, referenceType: String?, tx: Data) {
+    public init(commitment: Commitment, environment: String, index: Int, mint: String, lastValidBlockHeight: Int, referenceId: String? = nil, referenceType: String? = nil, tx: Data) {
         self.commitment = commitment
         self.environment = environment
         self.index = index
@@ -57,8 +57,8 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
         try container.encode(index, forKey: .index)
         try container.encode(mint, forKey: .mint)
         try container.encode(lastValidBlockHeight, forKey: .lastValidBlockHeight)
-        try container.encode(referenceId, forKey: .referenceId)
-        try container.encode(referenceType, forKey: .referenceType)
+        try container.encodeIfPresent(referenceId, forKey: .referenceId)
+        try container.encodeIfPresent(referenceType, forKey: .referenceType)
         try container.encode(tx, forKey: .tx)
     }
 }

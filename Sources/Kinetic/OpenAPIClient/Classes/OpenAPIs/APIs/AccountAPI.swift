@@ -16,10 +16,10 @@ open class AccountAPI {
      
      
      - parameter createAccountRequest: (body)  
-     - returns: AppTransaction
+     - returns: Transaction
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createAccount(createAccountRequest: CreateAccountRequest) async throws -> AppTransaction {
+    open class func createAccount(createAccountRequest: CreateAccountRequest) async throws -> Transaction {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -47,9 +47,9 @@ open class AccountAPI {
      
      - POST /api/account/create
      - parameter createAccountRequest: (body)  
-     - returns: RequestBuilder<AppTransaction> 
+     - returns: RequestBuilder<Transaction> 
      */
-    open class func createAccountWithRequestBuilder(createAccountRequest: CreateAccountRequest) -> RequestBuilder<AppTransaction> {
+    open class func createAccountWithRequestBuilder(createAccountRequest: CreateAccountRequest) -> RequestBuilder<Transaction> {
         let localVariablePath = "/api/account/create"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createAccountRequest)
@@ -62,7 +62,7 @@ open class AccountAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<AppTransaction>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Transaction>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
     }
