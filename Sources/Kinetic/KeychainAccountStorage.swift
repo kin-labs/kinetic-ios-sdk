@@ -14,13 +14,15 @@ class KeychainAccountStorage: SolanaAccountStorage {
         case unknown
     }
 
-    private var keychain = KeyChainStorage()
+    private var kineticStorage: KineticStorage
+
+    public init(fileDirectory: URL) {
+        self.kineticStorage = KineticStorage(directory: fileDirectory)
+    }
 
     func save(_ account: Account) -> Result<Void, Error> {
         do {
-            let encodedAccount = try JSONEncoder().encode(account)
-            let accountString = String(data: encodedAccount, encoding: .utf8)!
-            try keychain.add(account: account.publicKey.base58EncodedString, key: accountString)
+            try kineticStorage.addAccount(account)
         } catch {
             return .failure(StorageError.unknown)
         }
@@ -28,29 +30,14 @@ class KeychainAccountStorage: SolanaAccountStorage {
     }
 
     func getAccount(_ publicKey: PublicKey? = nil) -> Result<Account, Error> {
-        do {
-            let accounts = try keychain.allAccounts()
-            if accounts.count == 0 {
-                return .failure(StorageError.unknown)
-            }
-            if let accountJSON = keychain.retrieve(account: publicKey?.base58EncodedString ?? accounts[0]) {
-                let accountData = accountJSON.data(using: .utf8)!
-                let decodedAccount = try JSONDecoder().decode(Account.self, from: accountData)
-                if decodedAccount.phrase.count != 48 { // TODO: Stop Solana SDK from making fake mnemonics and change this check
-                    guard let account = Account(phrase: decodedAccount.phrase, network: .mainnetBeta) else {
-                        return .failure(StorageError.unknown)
-                    }
-                    return .success(account)
-                } else {
-                    guard let account = Account(secretKey: decodedAccount.secretKey) else {
-                        return .failure(StorageError.unknown)
-                    }
-                    return .success(account)
-                }
-            } else {
-                return .failure(StorageError.unknown)
-            }
-        } catch {
+        let accounts = kineticStorage.getAllAccountIds()
+        print(accounts)
+        if accounts.count == 0 {
+            return .failure(StorageError.unknown)
+        }
+        if let account = kineticStorage.getAccount(publicKey ?? accounts[0]) {
+            return .success(account)
+        } else {
             return .failure(StorageError.unknown)
         }
     }
@@ -61,12 +48,7 @@ class KeychainAccountStorage: SolanaAccountStorage {
 
     func clear() -> Result<Void, Error> {
         do {
-            let accounts = try keychain.allAccounts()
-            accounts.forEach { (publicKey: String) in
-                do {
-                    try keychain.delete(account: publicKey)
-                } catch { }
-            }
+            try kineticStorage.clearStorage()
             return .success(())
         } catch {
             return .success(())
