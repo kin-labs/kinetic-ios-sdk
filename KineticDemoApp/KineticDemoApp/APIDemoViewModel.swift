@@ -12,6 +12,7 @@ import Kinetic
     var kinetic: Kinetic?
     var account: KineticAccount?
     var testPublicKey = PublicKey(string: "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y")!
+    
     @Published var getAppConfigResponse: String = ""
     @Published var getBalanceResponse: String = ""
     @Published var getTokenAccountsResponse: String = ""

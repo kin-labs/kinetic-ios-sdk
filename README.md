@@ -14,8 +14,10 @@ This package ships with a demo app that gives an example implementation of commo
 
 To test the demo app:
 - Clone this repository
-- Open Kinetic.xcworkspace in Xcode
-- Build target KineticDemo
+- Open KineticDemoApp/KineticDemoApp.xcodeproj in Xcode
+- Build target KineticDemoApp
+- To make changes to the UI, look at APIDemoView.swift
+- To make changes to the functionality, look at APIDemoViewModel.swift
 
 ## Updating OpenAPI generated API
 If the backend API (server-side Kinetic) changes, you will need to update the generated Swift version of it contained in this repository. This command does that:
