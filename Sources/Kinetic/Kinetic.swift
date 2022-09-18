@@ -122,10 +122,9 @@ public struct Kinetic {
         return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: publicKey.base58, mint: mint.publicKey)
     }
 
-    public mutating func getAppConfig() async throws -> AppConfig {
+    public func getAppConfig() async throws -> AppConfig {
         debugLog("Getting app config")
         let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        self.appConfig = appConfig
         return appConfig
     }
 

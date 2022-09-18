@@ -31,7 +31,8 @@ public class KineticBuilder {
 
     public func build() async throws -> Kinetic {
         var kineticInstance = Kinetic(environment: self.environment, index: self.index, endpoint: self.endpoint)
-        try await kineticInstance.getAppConfig()
+        let appConfig = try await kineticInstance.getAppConfig()
+        kineticInstance.appConfig = appConfig
         return kineticInstance
     }
 }
