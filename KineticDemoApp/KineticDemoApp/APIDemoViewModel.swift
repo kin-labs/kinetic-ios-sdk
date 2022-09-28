@@ -24,11 +24,13 @@ import Kinetic
     func setupSDK() async {
         do {
             kinetic = try await KineticBuilder()
+//                .setEndpoint("http://localhost:3000")
                 .setEndpoint("https://staging.kinetic.host")
                 .setEnvironment("devnet")
                 .setIndex(1)
                 .build()
             account = kinetic!.getLocalAccount() ?? kinetic!.createLocalAccount()
+            print(account?.publicKey.base58)
         } catch {
             print(error.localizedDescription)
         }
@@ -95,6 +97,7 @@ import Kinetic
             let airdrop = try await kinetic.getAirdrop(publicKey: account.publicKey.base58, amount: 100)
             getAirdropResponse = String(describing: airdrop)
         } catch {
+            print(error)
             getAirdropResponse = error.localizedDescription
         }
     }

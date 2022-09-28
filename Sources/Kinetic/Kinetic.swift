@@ -16,7 +16,6 @@ public struct Kinetic {
     var environment: String
     var index: Int
     var appConfig: AppConfig!
-    var logger = OSLog.init(subsystem: "org.kinetic.sdk", category: "logs")
     let KIN_MINT = SolanaPublicKey(string: "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX")
 //    let KIN_MINT = PublicKey(string: "kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6")
     let SAMPLE_WALLET = SolanaPublicKey(string: "3rad7aFPdJS3CkYPSphtDAWCNB8BYpV2yc7o5ZjFQbDb")
@@ -24,7 +23,6 @@ public struct Kinetic {
     let ASSOCIATED_TOKEN_PROGRAM_ID = SolanaPublicKey(string: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")!
 
     public init(environment: String?, index: Int, endpoint: String?, fileDirectory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("kinetic")) {
-        // TODO: add Solana RPC config here
         self.environment = environment ?? "devnet"
         self.index = index
         let rpcEndpoint = getSolanaRpcEndpoint(environment: self.environment)
@@ -103,9 +101,9 @@ public struct Kinetic {
         return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
     }
 
-    public func getAirdrop(publicKey: String, amount: Int, commitment: RequestAirdropRequest.Commitment = .confirmed, mint: AppConfigMint? = nil) async throws -> RequestAirdropResponse {
+    public func getAirdrop(publicKey: String, amount: Int? = nil, commitment: RequestAirdropRequest.Commitment = .finalized, mint: AppConfigMint? = nil) async throws -> RequestAirdropResponse {
         let mint = mint ?? appConfig.mint
-        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: String(amount), commitment: commitment, environment: environment, index: index, mint: mint.publicKey))
+        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(account: publicKey, amount: amount != nil ? String(intValue: amount!) : nil, commitment: commitment, environment: environment, index: index, mint: mint.publicKey))
     }
 
     public func getAccountBalance(publicKey: PublicKey) async throws -> BalanceResponse {
@@ -148,12 +146,15 @@ public struct Kinetic {
         let memo = try KineticKinMemo(version: 1, typeId: type.rawValue, appIdx: UInt16(index))
         let memoData = [UInt8](memo.encode().base64EncodedString().data(using: .utf8)!)
         let memoInstruction = TransactionInstruction(keys: [], programId: MEMO_V1_PROGRAM_ID!, data: memoData)
-        let sendInstruction = TokenProgram.transferInstruction(
-            tokenProgramId: tokenProgramId,
+        let sendInstruction = TokenProgram.transferCheckedInstruction(
+            programId: tokenProgramId,
             source: fromTokenAccount,
+            mint: mintKey,
             destination: toTokenAccount,
             owner: fromAccount.publicKey,
-            amount: UInt64(amount)
+            multiSigners: [],
+            amount: UInt64(amount),
+            decimals: UInt8(mint.decimals)
         )
         var transaction = SolanaTransaction(
             signatures: [SolanaTransaction.Signature(signature: nil, publicKey: fromAccount.publicKey)],
