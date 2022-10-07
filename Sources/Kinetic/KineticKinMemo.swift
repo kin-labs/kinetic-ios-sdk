@@ -55,7 +55,7 @@ public struct KineticKinMemo {
         case invalidAppIdx = "Invalid appIdx. Valid range is [0, 65,536)."
     }
 
-    public enum TransferType: Int8 {
+    public enum TransactionType: Int8 {
         /// An unclassified transfer of Kin.
         case unknown    = -1
         /// When none of the other types are appropriate for the use case.
@@ -85,7 +85,7 @@ public struct KineticKinMemo {
 
     public let magicByteIndicator: UInt8
     public let version: UInt8
-    public let typeId: TransferType
+    public let typeId: TransactionType
     public let appIdx: UInt16
     public let foreignKeyBytes: [UInt8]
 
@@ -106,7 +106,7 @@ public struct KineticKinMemo {
 
         self.version = version
 
-        guard let transferType = TransferType(rawValue: typeId), transferType != TransferType.unknown else {
+        guard let transferType = TransactionType(rawValue: typeId), transferType != TransactionType.unknown else {
             throw KineticKinMemoFormatError.invalidTypeId
         }
 

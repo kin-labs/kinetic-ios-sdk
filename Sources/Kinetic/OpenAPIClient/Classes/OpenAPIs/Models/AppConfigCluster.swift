@@ -12,18 +12,12 @@ import AnyCodable
 
 public struct AppConfigCluster: Codable, JSONEncodable, Hashable {
 
-    public enum ModelType: String, Codable, CaseIterable {
-        case custom = "Custom"
-        case solanaDevnet = "SolanaDevnet"
-        case solanaMainnet = "SolanaMainnet"
-        case solanaTestnet = "SolanaTestnet"
-    }
     public var endpoint: String
     public var id: String
     public var name: String
-    public var type: ModelType
+    public var type: ClusterType
 
-    public init(endpoint: String, id: String, name: String, type: ModelType) {
+    public init(endpoint: String, id: String, name: String, type: ClusterType) {
         self.endpoint = endpoint
         self.id = id
         self.name = name

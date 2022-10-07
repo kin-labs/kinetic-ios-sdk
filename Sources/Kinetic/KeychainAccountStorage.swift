@@ -30,13 +30,12 @@ class KeychainAccountStorage: SolanaAccountStorage {
     }
 
     func getAccount(_ publicKey: PublicKey? = nil) -> Result<Account, Error> {
-        let publicKey = publicKey?.asSolanaPublicKey
         let accounts = kineticStorage.getAllAccountIds()
         print(accounts)
         if accounts.count == 0 {
             return .failure(StorageError.unknown)
         }
-        if let account = kineticStorage.getAccount(publicKey ?? accounts[0].asSolanaPublicKey) {
+        if let account = kineticStorage.getAccount(publicKey ?? accounts[0]) {
             return .success(account)
         } else {
             return .failure(StorageError.unknown)

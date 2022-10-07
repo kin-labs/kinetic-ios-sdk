@@ -12,11 +12,6 @@ import AnyCodable
 
 public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
 
-    public enum Commitment: String, Codable, CaseIterable {
-        case confirmed = "Confirmed"
-        case finalized = "Finalized"
-        case processed = "Processed"
-    }
     public var commitment: Commitment
     public var environment: String
     public var index: Int
@@ -24,9 +19,9 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
     public var lastValidBlockHeight: Int
     public var referenceId: String?
     public var referenceType: String?
-    public var tx: Data
+    public var tx: String
 
-    public init(commitment: Commitment, environment: String, index: Int, mint: String, lastValidBlockHeight: Int, referenceId: String? = nil, referenceType: String? = nil, tx: Data) {
+    public init(commitment: Commitment, environment: String, index: Int, mint: String, lastValidBlockHeight: Int, referenceId: String? = nil, referenceType: String? = nil, tx: String) {
         self.commitment = commitment
         self.environment = environment
         self.index = index

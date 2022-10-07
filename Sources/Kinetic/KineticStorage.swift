@@ -31,7 +31,7 @@ public extension KineticStorage {
         return account
     }
 
-    func hasPrivateKey(_ publicKey: Solana.PublicKey) -> Bool {
+    internal func hasPrivateKey(_ publicKey: SolanaPublicKey) -> Bool {
         do {
             return try getAccountFromSecureStore(publicKey: publicKey) != nil
         } catch {
@@ -39,7 +39,7 @@ public extension KineticStorage {
         }
     }
 
-    func getAccount(_ publicKey: Solana.PublicKey) -> Account? {
+    internal func getAccount(_ publicKey: SolanaPublicKey) -> Account? {
         do {
             return try getAccountFromSecureStore(publicKey: publicKey)
         } catch {
@@ -47,7 +47,7 @@ public extension KineticStorage {
         }
     }
 
-    func removeAccount(publicKey: Solana.PublicKey) async throws {
+    internal func removeAccount(publicKey: SolanaPublicKey) async throws {
         try await removeAccountFromSecureStore(publicKey: publicKey)
         let accountDirectory = self.directoryForAccount(publicKey)
         return try self.removeFileOrDirectory(accountDirectory)
@@ -75,7 +75,7 @@ private extension KineticStorage {
         return rootDirectory.appendingPathComponent("kin_accounts", isDirectory: true)
     }
 
-    func directoryForAccount(_ account: Solana.PublicKey) -> URL {
+    func directoryForAccount(_ account: SolanaPublicKey) -> URL {
         return directoryForAllAccounts.appendingPathComponent(account.base58EncodedString, isDirectory: true)
     }
 }
@@ -103,11 +103,11 @@ private extension KineticStorage {
         try keyStore.add(account: account.publicKey.base58EncodedString, key: accountString)
     }
 
-    func getAccountFromSecureStore(publicKey: Solana.PublicKey) throws -> Account? {
+    func getAccountFromSecureStore(publicKey: SolanaPublicKey) throws -> Account? {
         guard let accountJSON = keyStore.retrieve(account: publicKey.base58EncodedString) else {
             return nil
         }
-        let accountData = accountJSON.data(using: .utf8)!
+        let accountData = accountJSON.data(using: String.Encoding.utf8)!
         let decodedAccount = try JSONDecoder().decode(Account.self, from: accountData)
         if decodedAccount.phrase.count != 48 { // TODO: Stop Solana SDK from making fake mnemonics and change this check
             guard let account = Account(phrase: decodedAccount.phrase, network: .mainnetBeta) else {
@@ -122,7 +122,7 @@ private extension KineticStorage {
         }
     }
 
-    func removeAccountFromSecureStore(publicKey: Solana.PublicKey) async throws {
+    func removeAccountFromSecureStore(publicKey: SolanaPublicKey) async throws {
         try keyStore.delete(account: publicKey.base58EncodedString)
     }
 }

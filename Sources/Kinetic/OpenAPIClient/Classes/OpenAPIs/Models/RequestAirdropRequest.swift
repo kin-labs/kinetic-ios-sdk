@@ -12,11 +12,6 @@ import AnyCodable
 
 public struct RequestAirdropRequest: Codable, JSONEncodable, Hashable {
 
-    public enum Commitment: String, Codable, CaseIterable {
-        case confirmed = "Confirmed"
-        case finalized = "Finalized"
-        case processed = "Processed"
-    }
     public var account: String
     public var amount: String?
     public var commitment: Commitment

@@ -8,8 +8,8 @@
 import Foundation
 import Solana
 
-public func getSolanaRpcEndpoint(environment: String) -> RPCEndpoint {
-    switch environment {
+public func getSolanaRpcEndpoint(endpoint: String) -> RPCEndpoint {
+    switch endpoint {
     case "devnet":
         return .devnetSolana
     case "testnet":
@@ -17,7 +17,7 @@ public func getSolanaRpcEndpoint(environment: String) -> RPCEndpoint {
     case "mainnet", "mainnet-beta":
         return .mainnetBetaSolana
     default:
-        let webSocketString = environment.replacingOccurrences(of: "https", with: "wss").replacingOccurrences(of: "http", with: "wss")
-        return RPCEndpoint(url: URL(string: environment)!, urlWebSocket: URL(string: webSocketString)!, network: .mainnetBeta)
+        let webSocketString = endpoint.replacingOccurrences(of: "https", with: "wss").replacingOccurrences(of: "http", with: "wss")
+        return RPCEndpoint(url: URL(string: endpoint)!, urlWebSocket: URL(string: webSocketString)!, network: .mainnetBeta)
     }
 }

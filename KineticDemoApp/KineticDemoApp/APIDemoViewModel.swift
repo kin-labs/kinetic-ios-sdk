@@ -9,9 +9,9 @@ import Foundation
 import Kinetic
 
 @MainActor final class APIDemoViewModel: ObservableObject {
-    var kinetic: Kinetic?
-    var account: KineticAccount?
-    var testPublicKey = PublicKey(string: "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y")!
+    var kinetic: KineticSdk?
+    var account: Keypair?
+    var testPublicKey = "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y"
     
     @Published var getAppConfigResponse: String = ""
     @Published var getBalanceResponse: String = ""
@@ -23,14 +23,15 @@ import Kinetic
 
     func setupSDK() async {
         do {
-            kinetic = try await KineticBuilder()
-//                .setEndpoint("http://localhost:3000")
-                .setEndpoint("https://staging.kinetic.host")
-                .setEnvironment("devnet")
-                .setIndex(1)
-                .build()
-            account = kinetic!.getLocalAccount() ?? kinetic!.createLocalAccount()
-            print(account?.publicKey.base58)
+            kinetic = try await KineticSdk.setup(
+                endpoint: "https://staging.kinetic.host",
+                environment: "devnet",
+                index: 1,
+                logger: nil,
+                solanaRpcEndpoint: nil
+            )
+//            account = AccountStorage.getLocalAccount() ?? AccountStorage.createLocalAccount()
+            account = try Keypair.random()
         } catch {
             print(error.localizedDescription)
         }
@@ -38,11 +39,11 @@ import Kinetic
 
     func getAppConfig() async {
         do {
-            guard let kinetic = kinetic else {
+            guard var kinetic = kinetic else {
                 getAppConfigResponse = "Kinetic SDK not initialized"
                 return
             }
-            let appConfig = try await kinetic.getAppConfig()
+            let appConfig = try await kinetic.initialize()
             getAppConfigResponse = String(describing: appConfig)
         } catch {
             getAppConfigResponse = error.localizedDescription
@@ -55,7 +56,7 @@ import Kinetic
                 getBalanceResponse = "Kinetic SDK not initialized"
                 return
             }
-            let balance = try await kinetic.getAccountBalance(publicKey: account.publicKey)
+            let balance = try await kinetic.getBalance(account: account.publicKey)
             getBalanceResponse = String(describing: balance)
         } catch {
             getBalanceResponse = error.localizedDescription
@@ -68,7 +69,7 @@ import Kinetic
                 getTokenAccountsResponse = "Kinetic SDK not initialized"
                 return
             }
-            let tokenAccounts = try await kinetic.getTokenAccounts(publicKey: account.publicKey)
+            let tokenAccounts = try await kinetic.getTokenAccounts(account: account.publicKey)
             getTokenAccountsResponse = String(describing: tokenAccounts)
         } catch {
             getTokenAccountsResponse = error.localizedDescription
@@ -81,7 +82,7 @@ import Kinetic
                 getAccountHistoryResponse = "Kinetic SDK not initialized"
                 return
             }
-            let accountHistory = try await kinetic.getAccountHistory(publicKey: account.publicKey)
+            let accountHistory = try await kinetic.getHistory(account: account.publicKey)
             getAccountHistoryResponse = String(describing: accountHistory)
         } catch {
             getAccountHistoryResponse = error.localizedDescription
@@ -94,7 +95,7 @@ import Kinetic
                 getAirdropResponse = "Kinetic SDK not initialized"
                 return
             }
-            let airdrop = try await kinetic.getAirdrop(publicKey: account.publicKey.base58, amount: 100)
+            let airdrop = try await kinetic.requestAirdrop(account: account.publicKey)
             getAirdropResponse = String(describing: airdrop)
         } catch {
             print(error)
@@ -108,7 +109,7 @@ import Kinetic
                 createAccountResponse = "Kinetic SDK not initialized"
                 return
             }
-            let accountTx = try await kinetic.createAccount(account: account)
+            let accountTx = try await kinetic.createAccount(owner: account)
             createAccountResponse = String(describing: accountTx)
         } catch {
             createAccountResponse = error.localizedDescription
@@ -121,7 +122,7 @@ import Kinetic
                 makeTransferResponse = "Kinetic SDK not initialized"
                 return
             }
-            let transferTx = try await kinetic.makeTransfer(fromAccount: account, toPublicKey: testPublicKey, amount: 1)
+            let transferTx = try await kinetic.makeTransfer(amount: "1", destination: testPublicKey, owner: account)
             makeTransferResponse = String(describing: transferTx)
         } catch {
             makeTransferResponse = error.localizedDescription

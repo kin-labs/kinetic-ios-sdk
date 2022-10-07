@@ -12,21 +12,13 @@ import AnyCodable
 
 public struct TransactionError: Codable, JSONEncodable, Hashable {
 
-    public enum ModelType: String, Codable, CaseIterable {
-        case badNonce = "BadNonce"
-        case invalidAccount = "InvalidAccount"
-        case someError = "SomeError"
-        case timeout = "Timeout"
-        case unknown = "Unknown"
-        case webhookFailed = "WebhookFailed"
-    }
     public var id: String
     public var logs: [String]
     public var message: String
-    public var type: ModelType
+    public var type: TransactionErrorType
     public var instruction: Int
 
-    public init(id: String, logs: [String], message: String, type: ModelType, instruction: Int) {
+    public init(id: String, logs: [String], message: String, type: TransactionErrorType, instruction: Int) {
         self.id = id
         self.logs = logs
         self.message = message

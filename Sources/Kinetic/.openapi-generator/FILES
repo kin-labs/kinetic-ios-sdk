@@ -20,6 +20,8 @@ OpenAPIClient/Classes/OpenAPIs/Models/AppConfigMint.swift
 OpenAPIClient/Classes/OpenAPIs/Models/AppHealth.swift
 OpenAPIClient/Classes/OpenAPIs/Models/BalanceResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/BalanceToken.swift
+OpenAPIClient/Classes/OpenAPIs/Models/ClusterType.swift
+OpenAPIClient/Classes/OpenAPIs/Models/Commitment.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedSignatureInfo.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedTransactionMeta.swift
 OpenAPIClient/Classes/OpenAPIs/Models/CreateAccountRequest.swift
@@ -34,7 +36,9 @@ OpenAPIClient/Classes/OpenAPIs/Models/SignatureStatus.swift
 OpenAPIClient/Classes/OpenAPIs/Models/Transaction.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TransactionData.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TransactionError.swift
+OpenAPIClient/Classes/OpenAPIs/Models/TransactionErrorType.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TransactionResponse.swift
+OpenAPIClient/Classes/OpenAPIs/Models/TransactionStatus.swift
 OpenAPIClient/Classes/OpenAPIs/OpenISO8601DateFormatter.swift
 OpenAPIClient/Classes/OpenAPIs/SynchronizedDictionary.swift
 OpenAPIClient/Classes/OpenAPIs/URLSessionImplementations.swift
