@@ -15,7 +15,7 @@ internal func generateCreateAccountTransaction(
     mintFeePayer: String,
     mintPublicKey: String,
     owner: Account
-) async throws -> SolanaTransaction {
+) throws -> SolanaTransaction {
     // Create objects from Response
     let mintKey = SolanaPublicKey(string: mintPublicKey)!
     let feePayerKey = SolanaPublicKey(string: mintFeePayer)!
@@ -30,7 +30,18 @@ internal func generateCreateAccountTransaction(
         try instructions.append(generateKinMemoInstruction(appIndex: index, type: .none))
     }
 
-    instructions.append(createAssociatedTokenAccountInstruction(feePayer: feePayerKey, ownerTokenAccount: ownerTokenAccount, ownerPublicKey: ownerPublicKey, mintKey: mintKey))
+    instructions.append(createAssociatedTokenAccountInstruction(
+        feePayer: feePayerKey,
+        ownerTokenAccount: ownerTokenAccount,
+        ownerPublicKey: ownerPublicKey,
+        mintKey: mintKey
+    ))
+
+    instructions.append(createSetCloseAuthorityInstruction(
+        account: ownerTokenAccount,
+        currentAuthority: ownerPublicKey,
+        newAuthority: feePayerKey
+    ))
 
     var transaction = SolanaTransaction(signatures: [
         SolanaTransaction.Signature(signature: nil, publicKey: owner.publicKey)

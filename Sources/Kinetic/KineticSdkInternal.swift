@@ -42,17 +42,17 @@ internal struct KineticSdkInternal {
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
 
         let accounts = try await self.getTokenAccounts(account: owner.publicKey, mint: mint.publicKey)
-        if (accounts.count > 0) {
+        if (!accounts.isEmpty) {
             throw KineticError.TokenAccountAlreadyExistsError
         }
 
         let latestBlockhashResponse = try await self.getBlockhash()
 
-        let tx = try await generateCreateAccountTransaction(addMemo: mint.addMemo, blockhash: latestBlockhashResponse.blockhash, index: index, mintFeePayer: mint.feePayer, mintPublicKey: mint.publicKey, owner: owner.solana)
+        let tx = try generateCreateAccountTransaction(addMemo: mint.addMemo, blockhash: latestBlockhashResponse.blockhash, index: index, mintFeePayer: mint.feePayer, mintPublicKey: mint.publicKey, owner: owner.solana)
 
         let serialized = try await serializeTransaction(tx)
 
-        let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: environment, index: index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: appConfig.mint.publicKey, tx: serialized)
+        let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: environment, index: index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: mint.publicKey, referenceId: referenceId, referenceType: referenceType, tx: serialized)
 
         return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
     }
@@ -106,7 +106,7 @@ internal struct KineticSdkInternal {
 
         let latestBlockhashResponse = try await self.getBlockhash()
 
-        let tx = try await generateMakeTransferTransaction(
+        let tx = try generateMakeTransferTransaction(
             addMemo: mint.addMemo,
             amount: amount,
             blockhash: latestBlockhashResponse.blockhash,
@@ -116,6 +116,7 @@ internal struct KineticSdkInternal {
             mintFeePayer: mint.feePayer,
             mintPublicKey: mint.publicKey,
             owner: owner.solana,
+            senderCreate: senderCreate,
             type: type
         )
 

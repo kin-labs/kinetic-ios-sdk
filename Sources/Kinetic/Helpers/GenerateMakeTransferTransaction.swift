@@ -20,14 +20,14 @@ internal func generateMakeTransferTransaction(
     owner: Account,
     senderCreate: Bool = false,
     type: KineticKinMemo.TransactionType
-) async throws -> SolanaTransaction {
+) throws -> SolanaTransaction {
     // Create objects from Response
     let mintKey = SolanaPublicKey(string: mintPublicKey)!
     let feePayerKey = SolanaPublicKey(string: mintFeePayer)!
     let ownerPublicKey = owner.publicKey
 
     let ownerTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: ownerPublicKey, mintKey: mintKey)
-    let destinationTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: ownerPublicKey, mintKey: mintKey)
+    let destinationTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: SolanaPublicKey(string: destination)!, mintKey: mintKey)
 
     var instructions: [TransactionInstruction] = []
 
@@ -39,7 +39,12 @@ internal func generateMakeTransferTransaction(
 
     if senderCreate {
         instructions.append(
-            createAssociatedTokenAccountInstruction(feePayer: feePayerKey, ownerTokenAccount: destinationTokenAccount, ownerPublicKey: SolanaPublicKey(string: destination)!, mintKey: mintKey)
+            createAssociatedTokenAccountInstruction(
+                feePayer: feePayerKey,
+                ownerTokenAccount: destinationTokenAccount,
+                ownerPublicKey: SolanaPublicKey(string: destination)!,
+                mintKey: mintKey
+            )
         )
     }
 
@@ -49,7 +54,7 @@ internal func generateMakeTransferTransaction(
             source: ownerTokenAccount,
             mint: mintKey,
             destination: destinationTokenAccount,
-            owner: owner.publicKey,
+            owner: ownerPublicKey,
             multiSigners: [],
             amount: UInt64(amount)!,
             decimals: UInt8(mintDecimals)
@@ -57,7 +62,7 @@ internal func generateMakeTransferTransaction(
     )
 
     var transaction = SolanaTransaction(
-        signatures: [SolanaTransaction.Signature(signature: nil, publicKey: owner.publicKey)],
+        signatures: [SolanaTransaction.Signature(signature: nil, publicKey: ownerPublicKey)],
         feePayer: feePayerKey,
         instructions: instructions,
         recentBlockhash: blockhash
