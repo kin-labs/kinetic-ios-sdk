@@ -85,9 +85,9 @@ public struct Keypair: Codable, Hashable {
         return try Keypair(secretKey: secretKey)
     }
 
-    public static func random() throws -> Keypair {
+    public static func random() -> Keypair {
         let mnemonic = self.generateMnemonic()
-        return try self.fromMnemonic(mnemonic)
+        return try! self.fromMnemonic(mnemonic)
     }
 
     public static func generateMnemonic(strength: Int = 128) -> [String] {

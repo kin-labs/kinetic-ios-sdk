@@ -4,12 +4,10 @@ import Combine
 import Foundation
 
 internal struct KineticSdkInternal {
-    public var logPublisher: AnyPublisher<(KineticLogLevel, String), Never> {
+    internal var logger: AnyPublisher<(KineticLogLevel, String), Never> {
         logSubject.eraseToAnyPublisher()
     }
     private let logSubject = PassthroughSubject<(KineticLogLevel, String), Never>()
-    var networkingRouter: NetworkingRouter?
-    var accountStorage: KeychainAccountStorage?
     var solana: Solana?
     var environment: String
     var endpoint: String
@@ -20,8 +18,7 @@ internal struct KineticSdkInternal {
         endpoint: String,
         environment: String,
         headers: Dictionary<String, String>,
-        index: Int,
-        logger: Any?
+        index: Int
     ) {
         self.endpoint = endpoint
         self.environment = environment
@@ -58,6 +55,7 @@ internal struct KineticSdkInternal {
     }
 
     mutating func getAppConfig(environment: String, index: Int) async throws -> AppConfig {
+        debugLog("Testingtesting")
         let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
         self.appConfig = appConfig
         return appConfig

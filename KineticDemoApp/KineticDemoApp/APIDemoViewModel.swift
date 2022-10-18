@@ -10,7 +10,9 @@ import Kinetic
 
 @MainActor final class APIDemoViewModel: ObservableObject {
     var kinetic: KineticSdk?
+    var storage: BasicAccountStorage?
     var account: Keypair?
+    var logsListener: Any?
     var testPublicKey = "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y"
     
     @Published var getAppConfigResponse: String = ""
@@ -26,12 +28,15 @@ import Kinetic
             kinetic = try await KineticSdk.setup(
                 endpoint: "https://staging.kinetic.host",
                 environment: "devnet",
-                index: 1,
-                logger: nil,
-                solanaRpcEndpoint: nil
+                index: 1
             )
-//            account = AccountStorage.getLocalAccount() ?? AccountStorage.createLocalAccount()
-            account = try Keypair.random()
+            logsListener = kinetic!.logger.sink { (level, log) in
+                NSLog(log)
+            }
+            var storageDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            storageDirectory.appendPathComponent("kinetic_storage")
+            storage = BasicAccountStorage(directory: storageDirectory)
+            account = storage!.getLocalKeypair() ?? storage!.createLocalKeypair()!
         } catch {
             print(error.localizedDescription)
         }

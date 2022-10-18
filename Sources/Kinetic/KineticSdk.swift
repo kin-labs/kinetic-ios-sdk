@@ -7,6 +7,7 @@
 
 import Foundation
 import Solana
+import Combine
 
 public struct KineticSdk {
     var solana: Solana?
@@ -15,7 +16,6 @@ public struct KineticSdk {
     var environment: String
     var headers: Dictionary<String, String>
     var index: Int
-    var logger: Any?
     var solanaRpcEndpoint: String?
 
     public init(
@@ -23,26 +23,27 @@ public struct KineticSdk {
         environment: String,
         headers: Dictionary<String, String> = [:],
         index: Int,
-        logger: Any?,
         solanaRpcEndpoint: String?
     ) {
         internalSdk = KineticSdkInternal(
             endpoint: endpoint,
             environment: environment,
             headers: headers,
-            index: index,
-            logger: logger
+            index: index
         )
         self.endpoint = endpoint
         self.environment = environment
         self.headers = headers
         self.index = index
-        self.logger = logger
         self.solanaRpcEndpoint = solanaRpcEndpoint
     }
 
-    var config: AppConfig? {
+    public var config: AppConfig? {
         internalSdk.appConfig
+    }
+
+    public var logger: AnyPublisher<(KineticLogLevel, String), Never> {
+        internalSdk.logger
     }
 
     public func createAccount(
@@ -120,7 +121,7 @@ public struct KineticSdk {
     }
 
     public mutating func initialize() async throws -> AppConfig {
-//            self.internalSdk.logger?
+        self.internalSdk.debugLog("Initializing")
         let config = try await internalSdk.getAppConfig(environment: environment, index: index)
         let rpcEndpoint = solanaRpcEndpoint != nil ? getSolanaRpcEndpoint(endpoint: solanaRpcEndpoint!) : getSolanaRpcEndpoint(endpoint: config.environment.cluster.endpoint)
         let networkingRouter = NetworkingRouter(endpoint: rpcEndpoint)
@@ -133,15 +134,13 @@ public struct KineticSdk {
         environment: String,
         headers: Dictionary<String, String> = [:],
         index: Int,
-        logger: Any?,
-        solanaRpcEndpoint: String?
+        solanaRpcEndpoint: String? = nil
     ) async throws -> KineticSdk {
         var sdk = KineticSdk(
             endpoint: endpoint,
             environment: environment,
             headers: headers,
             index: index,
-            logger: logger,
             solanaRpcEndpoint: solanaRpcEndpoint
         )
         try await sdk.initialize()

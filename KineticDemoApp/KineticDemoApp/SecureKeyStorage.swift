@@ -15,27 +15,27 @@ internal enum KeyStoreError: Error {
 internal protocol SecureKeyStorage {
     /// Adds a pair of account and key data to secure storage, updates the old key if the account exists.
     /// - Parameters:
-    ///   - account: A string that uniquely identifies the account, e.g. account id.
-    ///   - key: A piece of data. Caller is responsible for determining what data needs to be stored securely and the encoding/decoding of this key.
+    ///   - publicKey: A string that uniquely identifies the account.
+    ///   - secret: A piece of data. Caller is responsible for determining what data needs to be stored securely and the encoding/decoding of this key.
     /// - Throws: `KeyStoreError` with `OSStatus`
-    func add(account: String, key: String) throws
+    func add(publicKey: String, secret: String) throws
 
     /// Retrieves key data from secure storage base on account.
-    /// - Parameter account: The string identifier that was used when adding key.
+    /// - Parameter publicKey: The string identifier that was used when adding key.
     /// - Returns: The stored key data with the account if exists.
-    func retrieve(account: String) -> String?
+    func retrieve(publicKey: String) -> String?
 
     /// Returns all account identifiers in the storage.
     /// - Returns: A string array of all account identifiers stored.
     /// - Throws: `KeyStoreError` with `OSStatus`
-    func allAccounts() throws -> [String]
+    func allKeys() throws -> [String]
 
     /// Deletes an account from storage. This action is **irreversible**. Make sure the account has been backed up beforehand.
-    /// - Parameter account: The string identifier that was used when adding key.
+    /// - Parameter publicKey: The string identifier that was used when adding key.
     /// - Warning: This action is **irreversible**. Calling this action would remove your key(e.g. private key). Make sure the account has been backed up
     ///             beforehand.
     /// - Throws: `KeyStoreError` with `OSStatus`
-    func delete(account: String) throws
+    func delete(publicKey: String) throws
 
     /// Clears the entire storage. This action is **irreversible** . Make sure the accounts have been backed up beforehand.
     /// - Warning: This action is **irreversible**. Calling this action would remove all keys(e.g. private key). Make sure the accounts have been backed
@@ -48,16 +48,16 @@ internal protocol SecureKeyStorage {
 /// is unlocked.
 class KeyChainStorage: SecureKeyStorage {
 
-    func add(account: String, key: String) throws {
-        if retrieve(account: account) != nil {
-            try? update(account: account, key: key)
+    func add(publicKey: String, secret: String) throws {
+        if retrieve(publicKey: publicKey) != nil {
+            try? update(publicKey: publicKey, secret: secret)
             return
         }
 
         let addquery: [String: Any] = [
             String(kSecClass):          kSecClassGenericPassword,
-            String(kSecAttrAccount):    account,
-            String(kSecValueData):      key.data(using: .utf8)!
+            String(kSecAttrAccount):    publicKey,
+            String(kSecValueData):      secret.data(using: .utf8)!
         ]
         let status = SecItemAdd(addquery as CFDictionary, nil)
         if status != errSecSuccess {
@@ -65,10 +65,10 @@ class KeyChainStorage: SecureKeyStorage {
         }
     }
 
-    func retrieve(account: String) -> String? {
+    func retrieve(publicKey: String) -> String? {
         let query: [String: Any] = [
             String(kSecClass):        kSecClassGenericPassword,
-            String(kSecAttrAccount):  account,
+            String(kSecAttrAccount):  publicKey,
             String(kSecReturnData):   true,
             String(kSecMatchLimit):   kSecMatchLimitOne
         ]
@@ -80,7 +80,7 @@ class KeyChainStorage: SecureKeyStorage {
         return String(decoding: data, as: UTF8.self)
     }
 
-    func allAccounts() throws -> [String] {
+    func allKeys() throws -> [String] {
         let query: [String: Any] = [
             String(kSecClass):              kSecClassGenericPassword,
             String(kSecReturnAttributes):   true,
@@ -103,10 +103,10 @@ class KeyChainStorage: SecureKeyStorage {
         return accounts
     }
 
-    func delete(account: String) throws {
+    func delete(publicKey: String) throws {
         let query: [String: Any] = [
             String(kSecClass):        kSecClassGenericPassword,
-            String(kSecAttrAccount):  account
+            String(kSecAttrAccount):  publicKey
         ]
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess && status != errSecItemNotFound {
@@ -124,14 +124,14 @@ class KeyChainStorage: SecureKeyStorage {
         }
     }
 
-    private func update(account: String, key: String) throws {
+    private func update(publicKey: String, secret: String) throws {
         let query: [String: Any] = [
             String(kSecClass):          kSecClassGenericPassword,
-            String(kSecAttrAccount):    account
+            String(kSecAttrAccount):    publicKey
         ]
 
         let attrToUpdate: [String: Any] = [
-            String(kSecValueData):      key
+            String(kSecValueData):      secret
         ]
 
         let status = SecItemUpdate(query as CFDictionary,
