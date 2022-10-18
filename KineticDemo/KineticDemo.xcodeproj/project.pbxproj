@@ -20,8 +20,9 @@
 /* Begin PBXFileReference section */
 		7E16A47428FEF8E50049FFE8 /* BasicAccountStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicAccountStorage.swift; sourceTree = "<group>"; };
 		7E16A47628FEF8EB0049FFE8 /* SecureKeyStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureKeyStorage.swift; sourceTree = "<group>"; };
+		7E16A47A28FF6E800049FFE8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		7E229DFB28D6542700BBC283 /* APIDemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDemoViewModel.swift; sourceTree = "<group>"; };
-		7EE4B79928D3D555005FDCA0 /* KineticDemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KineticDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE4B79928D3D555005FDCA0 /* KineticDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KineticDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE4B79C28D3D555005FDCA0 /* KineticDemoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KineticDemoAppApp.swift; sourceTree = "<group>"; };
 		7EE4B79E28D3D555005FDCA0 /* APIDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDemoView.swift; sourceTree = "<group>"; };
 		7EE4B7A028D3D556005FDCA0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -44,7 +45,7 @@
 		7EE4B79028D3D555005FDCA0 = {
 			isa = PBXGroup;
 			children = (
-				7EE4B79B28D3D555005FDCA0 /* KineticDemoApp */,
+				7EE4B79B28D3D555005FDCA0 /* KineticDemo */,
 				7EE4B79A28D3D555005FDCA0 /* Products */,
 				7EE4B7AB28D3D650005FDCA0 /* Frameworks */,
 			);
@@ -53,12 +54,12 @@
 		7EE4B79A28D3D555005FDCA0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7EE4B79928D3D555005FDCA0 /* KineticDemoApp.app */,
+				7EE4B79928D3D555005FDCA0 /* KineticDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7EE4B79B28D3D555005FDCA0 /* KineticDemoApp */ = {
+		7EE4B79B28D3D555005FDCA0 /* KineticDemo */ = {
 			isa = PBXGroup;
 			children = (
 				7EE4B7AA28D3D62E005FDCA0 /* Kinetic */,
@@ -70,7 +71,7 @@
 				7EE4B7A228D3D556005FDCA0 /* Preview Content */,
 				7E229DFB28D6542700BBC283 /* APIDemoViewModel.swift */,
 			);
-			path = KineticDemoApp;
+			path = KineticDemo;
 			sourceTree = "<group>";
 		};
 		7EE4B7A228D3D556005FDCA0 /* Preview Content */ = {
@@ -84,6 +85,7 @@
 		7EE4B7AB28D3D650005FDCA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E16A47A28FF6E800049FFE8 /* Package.swift */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -91,9 +93,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7EE4B79828D3D555005FDCA0 /* KineticDemoApp */ = {
+		7EE4B79828D3D555005FDCA0 /* KineticDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7EE4B7A728D3D556005FDCA0 /* Build configuration list for PBXNativeTarget "KineticDemoApp" */;
+			buildConfigurationList = 7EE4B7A728D3D556005FDCA0 /* Build configuration list for PBXNativeTarget "KineticDemo" */;
 			buildPhases = (
 				7EE4B79528D3D555005FDCA0 /* Sources */,
 				7EE4B79628D3D555005FDCA0 /* Frameworks */,
@@ -103,12 +105,12 @@
 			);
 			dependencies = (
 			);
-			name = KineticDemoApp;
+			name = KineticDemo;
 			packageProductDependencies = (
 				7EE4B7AC28D3D650005FDCA0 /* Kinetic */,
 			);
 			productName = KineticDemoApp;
-			productReference = 7EE4B79928D3D555005FDCA0 /* KineticDemoApp.app */;
+			productReference = 7EE4B79928D3D555005FDCA0 /* KineticDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -126,7 +128,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7EE4B79428D3D555005FDCA0 /* Build configuration list for PBXProject "KineticDemoApp" */;
+			buildConfigurationList = 7EE4B79428D3D555005FDCA0 /* Build configuration list for PBXProject "KineticDemo" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -139,7 +141,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7EE4B79828D3D555005FDCA0 /* KineticDemoApp */,
+				7EE4B79828D3D555005FDCA0 /* KineticDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -293,7 +295,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"KineticDemoApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"KineticDemo/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -306,7 +308,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.KineticDemoApp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.kin.KineticDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -321,7 +323,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"KineticDemoApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"KineticDemo/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -334,7 +336,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kinlabs.KineticDemoApp;
+				PRODUCT_BUNDLE_IDENTIFIER = org.kin.KineticDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -345,7 +347,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7EE4B79428D3D555005FDCA0 /* Build configuration list for PBXProject "KineticDemoApp" */ = {
+		7EE4B79428D3D555005FDCA0 /* Build configuration list for PBXProject "KineticDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7EE4B7A528D3D556005FDCA0 /* Debug */,
@@ -354,7 +356,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7EE4B7A728D3D556005FDCA0 /* Build configuration list for PBXNativeTarget "KineticDemoApp" */ = {
+		7EE4B7A728D3D556005FDCA0 /* Build configuration list for PBXNativeTarget "KineticDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7EE4B7A828D3D556005FDCA0 /* Debug */,
