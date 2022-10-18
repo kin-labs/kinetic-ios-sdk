@@ -42,8 +42,8 @@ public struct KineticSdk {
         internalSdk.appConfig
     }
 
-    public var logger: AnyPublisher<(KineticLogLevel, String), Never> {
-        internalSdk.logger
+    public static var logger: AnyPublisher<(KineticLogLevel, String), Never> {
+        KineticSdkInternal.logger
     }
 
     public func createAccount(
@@ -121,11 +121,14 @@ public struct KineticSdk {
     }
 
     public mutating func initialize() async throws -> AppConfig {
-        self.internalSdk.debugLog("Initializing")
         let config = try await internalSdk.getAppConfig(environment: environment, index: index)
         let rpcEndpoint = solanaRpcEndpoint != nil ? getSolanaRpcEndpoint(endpoint: solanaRpcEndpoint!) : getSolanaRpcEndpoint(endpoint: config.environment.cluster.endpoint)
         let networkingRouter = NetworkingRouter(endpoint: rpcEndpoint)
         solana = Solana(router: networkingRouter)
+
+        KineticSdkInternal.debugLog("Initializing \(NAME)@\(VERSION)")
+        KineticSdkInternal.debugLog("endpoint: \(self.endpoint), environment: \(self.environment), index: \(self.index)")
+
         return config
     }
 

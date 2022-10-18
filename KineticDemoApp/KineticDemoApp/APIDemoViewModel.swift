@@ -25,14 +25,14 @@ import Kinetic
 
     func setupSDK() async {
         do {
+            logsListener = KineticSdk.logger.sink { (level, log) in
+                NSLog(log)
+            }
             kinetic = try await KineticSdk.setup(
                 endpoint: "https://staging.kinetic.host",
                 environment: "devnet",
                 index: 1
             )
-            logsListener = kinetic!.logger.sink { (level, log) in
-                NSLog(log)
-            }
             var storageDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             storageDirectory.appendPathComponent("kinetic_storage")
             storage = BasicAccountStorage(directory: storageDirectory)

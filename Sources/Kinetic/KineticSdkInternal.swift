@@ -4,10 +4,10 @@ import Combine
 import Foundation
 
 internal struct KineticSdkInternal {
-    internal var logger: AnyPublisher<(KineticLogLevel, String), Never> {
+    internal static var logger: AnyPublisher<(KineticLogLevel, String), Never> {
         logSubject.eraseToAnyPublisher()
     }
-    private let logSubject = PassthroughSubject<(KineticLogLevel, String), Never>()
+    private static let logSubject = PassthroughSubject<(KineticLogLevel, String), Never>()
     var solana: Solana?
     var environment: String
     var endpoint: String
@@ -55,7 +55,6 @@ internal struct KineticSdkInternal {
     }
 
     mutating func getAppConfig(environment: String, index: Int) async throws -> AppConfig {
-        debugLog("Testingtesting")
         let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
         self.appConfig = appConfig
         return appConfig
@@ -189,19 +188,19 @@ internal struct KineticSdkInternal {
         }
     }
 
-    internal func debugLog(_ msg: String) {
+    internal static func debugLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Debug, "KINETIC::D::" + msg))
     }
 
-    internal func infoLog(_ msg: String) {
+    internal static func infoLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Info, "KINETIC::I::" + msg))
     }
 
-    internal func warningLog(_ msg: String) {
+    internal static func warningLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Warning, "KINETIC::W::" + msg))
     }
 
-    internal func errorLog(_ msg: String) {
+    internal static func errorLog(_ msg: String) {
         logSubject.send((KineticLogLevel.Error, "KINETIC::E::" + msg))
     }
 }
