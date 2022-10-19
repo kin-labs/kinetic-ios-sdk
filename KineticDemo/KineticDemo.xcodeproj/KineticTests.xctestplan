@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "6BAA7937-329E-495C-90B2-DC028BDD8DFE",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "KineticTests",
+        "name" : "KineticTests"
+      }
+    }
+  ],
+  "version" : 1
+}
