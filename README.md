@@ -5,7 +5,7 @@
 
 ### Using Swift Package Manager
 - In Xcode: File > Add Packages...
-- Search "https://github.com/kin-labs/kinetic-ios"
+- Search "https://github.com/kin-labs/kinetic-ios-sdk"
 - Choose appropriate Dependency Rule for your needs
 - Add Package
 
