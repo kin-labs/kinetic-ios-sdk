@@ -15,12 +15,11 @@ let package = Package(
             targets: ["Kinetic"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ajamaica/Solana.swift", revision: "f487b25"),
+        .package(url: "https://github.com/metaplex-foundation/Solana.swift", from: "2.0.1"),
         .package(
                 url: "https://github.com/Flight-School/AnyCodable",
                 from: "0.6.0"
             ),
-//        .package(name: "OpenAPIClient", path: "../Kinetic/Sources/OpenAPIClient"),
     ],
     targets: [
         .target(
@@ -28,7 +27,6 @@ let package = Package(
             dependencies: [
                 .product(name: "Solana", package: "Solana.swift"),
                 .product(name: "AnyCodable", package: "AnyCodable")
-//                .product(name: "OpenAPIClient", package: "OpenAPIClient")
             ]),
         .testTarget(
             name: "KineticTests",

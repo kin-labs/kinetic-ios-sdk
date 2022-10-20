@@ -14,8 +14,8 @@ internal func createSetCloseAuthorityInstruction(
     newAuthority: SolanaPublicKey
 ) -> TransactionInstruction {
     let keys = [
-        Account.Meta(publicKey: account, isSigner: false, isWritable: true),
-        Account.Meta(publicKey: currentAuthority, isSigner: true, isWritable: false)
+        AccountMeta(publicKey: account, isSigner: false, isWritable: true),
+        AccountMeta(publicKey: currentAuthority, isSigner: true, isWritable: false)
     ]
     let SET_AUTHORITY_INSTRUCTION: UInt8 = 6
     let AUTHORITY_TYPE: UInt8 = 3

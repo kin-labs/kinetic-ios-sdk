@@ -11,21 +11,30 @@
         }
       },
       {
+        "package": "Beet",
+        "repositoryURL": "https://github.com/metaplex-foundation/beet-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "315ce190ec192fabfee83fc38dcb82ca3600d374",
+          "version": "1.0.1"
+        }
+      },
+      {
         "package": "secp256k1",
         "repositoryURL": "https://github.com/Boilertalk/secp256k1.swift.git",
         "state": {
           "branch": null,
-          "revision": "45e458ec3be46cf0a6eb68bc947f797852dc65d8",
-          "version": "0.1.6"
+          "revision": "cd187c632fb812fd93711a9f7e644adb7e5f97f0",
+          "version": "0.1.7"
         }
       },
       {
         "package": "Solana",
-        "repositoryURL": "https://github.com/ajamaica/Solana.swift",
+        "repositoryURL": "https://github.com/metaplex-foundation/Solana.swift",
         "state": {
-          "branch": "f487b25",
-          "revision": "f487b256658634d7bdc178c6e6e7abf7fd905580",
-          "version": null
+          "branch": null,
+          "revision": "ec39cf85ee103c78fa46451c21c4bb341aac87bc",
+          "version": "2.0.1"
         }
       },
       {
