@@ -93,6 +93,7 @@ internal struct KineticSdkInternal {
     ) async throws -> Transaction {
         let appConfig = try ensureAppConfig()
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
+        let amount = try addDecimals(amount: amount, decimals: mint.decimals).description
 
         try self.validateDestination(appConfig: appConfig, destination: destination)
 
@@ -138,6 +139,11 @@ internal struct KineticSdkInternal {
     ) async throws -> RequestAirdropResponse {
         let appConfig = try ensureAppConfig()
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
+        var amount = amount
+        if amount != nil {
+            amount = try addDecimals(amount: amount!, decimals: mint.decimals).description
+        }
+
         return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(
             account: account,
             amount: amount,
@@ -214,6 +220,7 @@ enum KineticError: Error {
     case MintNotFoundError
     case AttemptedTransferToMintError
     case DestinationAccountDoesNotExistError
+    case InvalidAmountError
     case UnknownError
 }
 
