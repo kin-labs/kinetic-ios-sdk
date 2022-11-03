@@ -36,6 +36,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
     public var source: String?
     public var status: TransactionStatus?
     public var totalDuration: Double?
+    public var tx: String?
     public var ua: String?
     public var webhookEventStart: Date?
     public var webhookEventEnd: Date?
@@ -44,7 +45,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
     public var webhookVerifyEnd: Date?
     public var webhookVerifyDuration: Double?
 
-    public init(id: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, amount: String? = nil, decimals: Double? = nil, destination: String? = nil, errors: [TransactionError]? = nil, explorerUrl: String? = nil, feePayer: String? = nil, ip: String? = nil, mint: String? = nil, processingDuration: Double? = nil, referenceId: String? = nil, referenceType: String? = nil, signature: String? = nil, solanaCommitted: Date? = nil, solanaCommittedDuration: Double? = nil, solanaFinalized: Date? = nil, solanaFinalizedDuration: Double? = nil, solanaStart: Date? = nil, solanaTransaction: AnyCodable? = nil, source: String? = nil, status: TransactionStatus? = nil, totalDuration: Double? = nil, ua: String? = nil, webhookEventStart: Date? = nil, webhookEventEnd: Date? = nil, webhookEventDuration: Double? = nil, webhookVerifyStart: Date? = nil, webhookVerifyEnd: Date? = nil, webhookVerifyDuration: Double? = nil) {
+    public init(id: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, amount: String? = nil, decimals: Double? = nil, destination: String? = nil, errors: [TransactionError]? = nil, explorerUrl: String? = nil, feePayer: String? = nil, ip: String? = nil, mint: String? = nil, processingDuration: Double? = nil, referenceId: String? = nil, referenceType: String? = nil, signature: String? = nil, solanaCommitted: Date? = nil, solanaCommittedDuration: Double? = nil, solanaFinalized: Date? = nil, solanaFinalizedDuration: Double? = nil, solanaStart: Date? = nil, solanaTransaction: AnyCodable? = nil, source: String? = nil, status: TransactionStatus? = nil, totalDuration: Double? = nil, tx: String? = nil, ua: String? = nil, webhookEventStart: Date? = nil, webhookEventEnd: Date? = nil, webhookEventDuration: Double? = nil, webhookVerifyStart: Date? = nil, webhookVerifyEnd: Date? = nil, webhookVerifyDuration: Double? = nil) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -69,6 +70,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
         self.source = source
         self.status = status
         self.totalDuration = totalDuration
+        self.tx = tx
         self.ua = ua
         self.webhookEventStart = webhookEventStart
         self.webhookEventEnd = webhookEventEnd
@@ -103,6 +105,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
         case source
         case status
         case totalDuration
+        case tx
         case ua
         case webhookEventStart
         case webhookEventEnd
@@ -140,6 +143,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
         try container.encodeIfPresent(source, forKey: .source)
         try container.encodeIfPresent(status, forKey: .status)
         try container.encodeIfPresent(totalDuration, forKey: .totalDuration)
+        try container.encodeIfPresent(tx, forKey: .tx)
         try container.encodeIfPresent(ua, forKey: .ua)
         try container.encodeIfPresent(webhookEventStart, forKey: .webhookEventStart)
         try container.encodeIfPresent(webhookEventEnd, forKey: .webhookEventEnd)
