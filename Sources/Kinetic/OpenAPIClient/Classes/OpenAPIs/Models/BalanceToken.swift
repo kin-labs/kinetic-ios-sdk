@@ -14,17 +14,20 @@ public struct BalanceToken: Codable, JSONEncodable, Hashable {
 
     public var account: String
     public var balance: String
+    public var decimals: Int
     public var mint: String
 
-    public init(account: String, balance: String, mint: String) {
+    public init(account: String, balance: String, decimals: Int, mint: String) {
         self.account = account
         self.balance = balance
+        self.decimals = decimals
         self.mint = mint
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case account
         case balance
+        case decimals
         case mint
     }
 
@@ -34,6 +37,7 @@ public struct BalanceToken: Codable, JSONEncodable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(account, forKey: .account)
         try container.encode(balance, forKey: .balance)
+        try container.encode(decimals, forKey: .decimals)
         try container.encode(mint, forKey: .mint)
     }
 }
