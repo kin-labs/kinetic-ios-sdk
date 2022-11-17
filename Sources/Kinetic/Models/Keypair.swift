@@ -71,7 +71,7 @@ public struct Keypair: Codable, Hashable {
 
     public static func derive(seed: [UInt8], walletIndex: Int) throws -> Keypair {
         let mnemonic = Mnemonic(entropy: seed)!
-        let solanaKeypair = HotAccount(phrase: mnemonic.phrase, network: .devnet, derivablePath: DerivablePath(type: .bip44Change, walletIndex: walletIndex))!
+        let solanaKeypair = HotAccount(phrase: mnemonic.phrase, derivablePath: DerivablePath(type: .bip44Change, walletIndex: walletIndex))!
         var kp = try Keypair(secretKey: Base58.encode(solanaKeypair.secretKey.bytes))
         kp.mnemonic = mnemonic.phrase
         return kp
