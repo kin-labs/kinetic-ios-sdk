@@ -29,7 +29,7 @@ import Kinetic
                 NSLog(log)
             }
             kinetic = try await KineticSdk.setup(
-                endpoint: "https://staging.kinetic.host",
+                endpoint: "https://sandbox.kinetic.host",
                 environment: "devnet",
                 index: 1
             )

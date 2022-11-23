@@ -23,6 +23,7 @@
 		7E16A47A28FF6E800049FFE8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		7E16A47B28FF740C0049FFE8 /* KineticTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = KineticTests.xctestplan; path = KineticDemo.xcodeproj/KineticTests.xctestplan; sourceTree = "<group>"; };
 		7E229DFB28D6542700BBC283 /* APIDemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDemoViewModel.swift; sourceTree = "<group>"; };
+		7EDDE1E2292DA5000012CDEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7EE4B79928D3D555005FDCA0 /* KineticDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KineticDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE4B79C28D3D555005FDCA0 /* KineticDemoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KineticDemoAppApp.swift; sourceTree = "<group>"; };
 		7EE4B79E28D3D555005FDCA0 /* APIDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIDemoView.swift; sourceTree = "<group>"; };
@@ -64,6 +65,7 @@
 		7EE4B79B28D3D555005FDCA0 /* KineticDemo */ = {
 			isa = PBXGroup;
 			children = (
+				7EDDE1E2292DA5000012CDEE /* Info.plist */,
 				7EE4B7AA28D3D62E005FDCA0 /* Kinetic */,
 				7EE4B79C28D3D555005FDCA0 /* KineticDemoAppApp.swift */,
 				7E16A47628FEF8EB0049FFE8 /* SecureKeyStorage.swift */,
@@ -300,6 +302,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"KineticDemo/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KineticDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -328,6 +331,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"KineticDemo/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KineticDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
