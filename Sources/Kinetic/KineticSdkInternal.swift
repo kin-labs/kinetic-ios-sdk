@@ -51,33 +51,57 @@ internal struct KineticSdkInternal {
 
         let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: environment, index: index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: mint.publicKey, referenceId: referenceId, referenceType: referenceType, tx: serialized)
 
-        return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
+        do {
+            return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     mutating func getAppConfig(environment: String, index: Int) async throws -> AppConfig {
-        let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
-        self.appConfig = appConfig
-        return appConfig
+        do {
+            let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
+            self.appConfig = appConfig
+            return appConfig
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     func getBalance(account: String) async throws -> BalanceResponse {
-        return try await AccountAPI.getBalance(environment: environment, index: index, accountId: account)
+        do {
+            return try await AccountAPI.getBalance(environment: environment, index: index, accountId: account)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     func getHistory(account: String, mint: String?) async throws -> [HistoryResponse] {
         let appConfig = try ensureAppConfig()
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
-        return try await AccountAPI.getHistory(environment: environment, index: index, accountId: account, mint: mint.publicKey)
+        do {
+            return try await AccountAPI.getHistory(environment: environment, index: index, accountId: account, mint: mint.publicKey)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     func getTokenAccounts(account: String, mint: String?) async throws -> [String] {
         let appConfig = try ensureAppConfig()
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
-        return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: account, mint: mint.publicKey)
+        do {
+            return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: account, mint: mint.publicKey)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     func getTransaction(signature: String) async throws -> GetTransactionResponse {
-        return try await TransactionAPI.getTransaction(environment: environment, index: index, signature: signature)
+        do {
+            return try await TransactionAPI.getTransaction(environment: environment, index: index, signature: signature)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     func makeTransfer(
@@ -128,7 +152,12 @@ internal struct KineticSdkInternal {
             referenceType: referenceType,
             tx: await serializeTransaction(tx)
         )
-        return try await TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest)
+
+        do {
+            return try await TransactionAPI.makeTransfer(makeTransferRequest: makeTransferRequest)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     func requestAirdrop(
@@ -144,14 +173,18 @@ internal struct KineticSdkInternal {
             amount = try addDecimals(amount: amount!, decimals: mint.decimals).description
         }
 
-        return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(
-            account: account,
-            amount: amount,
-            commitment: commitment,
-            environment: environment,
-            index: index,
-            mint: mint.publicKey
-        ))
+        do {
+            return try await AirdropAPI.requestAirdrop(requestAirdropRequest: RequestAirdropRequest(
+                account: account,
+                amount: amount,
+                commitment: commitment,
+                environment: environment,
+                index: index,
+                mint: mint.publicKey
+            ))
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     private func apiBaseOptions(headers: Dictionary<String, String>) -> Dictionary<String, String> {
@@ -183,7 +216,11 @@ internal struct KineticSdkInternal {
     }
 
     private func getBlockhash() async throws -> LatestBlockhashResponse {
-       return try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
+        do {
+            return try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
+        } catch {
+            throw readServerError(error: error)
+        }
     }
 
     private func validateDestination(appConfig: AppConfig, destination: String) throws {
@@ -192,6 +229,19 @@ internal struct KineticSdkInternal {
         })) {
             throw KineticError.AttemptedTransferToMintError
         }
+    }
+
+    internal func readServerError(error: Error) -> Error {
+        switch error as? Kinetic.ErrorResponse {
+        case .error(_, let data, _, _):
+            if let data = data {
+                let realError = String(decoding: data, as: UTF8.self)
+                return KineticError.ServerError(realError)
+            }
+        default:
+            return error
+        }
+        return error
     }
 
     internal static func debugLog(_ msg: String) {
@@ -221,6 +271,7 @@ enum KineticError: Error {
     case AttemptedTransferToMintError
     case DestinationAccountDoesNotExistError
     case InvalidAmountError
+    case ServerError(String)
     case UnknownError
 }
 
