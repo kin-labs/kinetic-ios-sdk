@@ -8,4 +8,4 @@
 import Foundation
 
 let NAME = "@kin-kinetic/sdk"
-let VERSION = "1.0.0-rc.3"
+let VERSION = "1.0.0-rc.8"

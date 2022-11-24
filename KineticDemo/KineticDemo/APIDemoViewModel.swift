@@ -38,7 +38,7 @@ import Kinetic
             storage = BasicAccountStorage(directory: storageDirectory)
             account = storage!.getLocalKeypair() ?? storage!.createLocalKeypair()!
         } catch {
-            print(error.localizedDescription)
+            print(error)
         }
     }
 
@@ -51,7 +51,7 @@ import Kinetic
             let appConfig = try await kinetic.initialize()
             getAppConfigResponse = String(describing: appConfig)
         } catch {
-            getAppConfigResponse = error.localizedDescription
+            getAppConfigResponse = String(describing: error)
         }
     }
 
@@ -64,7 +64,7 @@ import Kinetic
             let balance = try await kinetic.getBalance(account: account.publicKey)
             getBalanceResponse = String(describing: balance)
         } catch {
-            getBalanceResponse = error.localizedDescription
+            getBalanceResponse = String(describing: error)
         }
     }
 
@@ -77,7 +77,7 @@ import Kinetic
             let tokenAccounts = try await kinetic.getTokenAccounts(account: account.publicKey)
             getTokenAccountsResponse = String(describing: tokenAccounts)
         } catch {
-            getTokenAccountsResponse = error.localizedDescription
+            getTokenAccountsResponse = String(describing: error)
         }
     }
 
@@ -90,7 +90,7 @@ import Kinetic
             let accountHistory = try await kinetic.getHistory(account: account.publicKey)
             getAccountHistoryResponse = String(describing: accountHistory)
         } catch {
-            getAccountHistoryResponse = error.localizedDescription
+            getAccountHistoryResponse = String(describing: error)
         }
     }
 
@@ -104,7 +104,7 @@ import Kinetic
             getAirdropResponse = String(describing: airdrop)
         } catch {
             print(error)
-            getAirdropResponse = error.localizedDescription
+            getAirdropResponse = String(describing: error)
         }
     }
 
@@ -117,7 +117,7 @@ import Kinetic
             let accountTx = try await kinetic.createAccount(owner: account)
             createAccountResponse = String(describing: accountTx)
         } catch {
-            createAccountResponse = error.localizedDescription
+            createAccountResponse = String(describing: error)
         }
     }
 
@@ -130,7 +130,7 @@ import Kinetic
             let transferTx = try await kinetic.makeTransfer(amount: "1", destination: testPublicKey, owner: account)
             makeTransferResponse = String(describing: transferTx)
         } catch {
-            makeTransferResponse = error.localizedDescription
+            makeTransferResponse = String(describing: error)
         }
     }
 }
