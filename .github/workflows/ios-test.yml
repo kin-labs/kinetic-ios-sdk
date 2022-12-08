@@ -9,7 +9,7 @@ on:
 
 jobs:
   main:
-    runs-on: macos-12
+    runs-on: ubuntu-20.04
     services:
       postgres:
         image: postgres:12
@@ -42,6 +42,8 @@ jobs:
           SOLANA_LOCAL_MINT_USDC_AIRDROP_SECRET: 'UvfuF3FPqLyvS8xGjSu4AUfdsY5QvLdnin8SKBLAi3UqgbmEWCDshPY3UcxvBgRAqHLzh5Ni1eypLVZArsis6FF'
           SOLANA_LOCAL_RPC_ENDPOINT: 'http://solana:8899'
           WEB_URL: 'http://localhost:3000'
+  build:
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Build
