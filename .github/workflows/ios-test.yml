@@ -9,7 +9,7 @@ on:
 
 jobs:
   main:
-    runs-on: ubuntu-20.04
+    runs-on: macos-12
     services:
       postgres:
         image: postgres:12
