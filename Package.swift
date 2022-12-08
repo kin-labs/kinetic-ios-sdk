@@ -7,7 +7,7 @@ let package = Package(
     name: "Kinetic",
     platforms: [
         .iOS(.v13),
-        .macOS(.v10_13)
+        .macOS(.v11)
     ],
     products: [
         .library(
