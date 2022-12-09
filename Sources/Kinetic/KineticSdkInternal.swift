@@ -9,23 +9,15 @@ internal struct KineticSdkInternal {
     }
     private static let logSubject = PassthroughSubject<(KineticLogLevel, String), Never>()
     var solana: Solana?
-    var environment: String
-    var endpoint: String
-    var index: Int
     var appConfig: AppConfig?
+    var sdkConfig: KineticSdkConfig
 
     internal init(
-        endpoint: String,
-        environment: String,
-        headers: Dictionary<String, String>,
-        index: Int
+        _ sdkConfig: KineticSdkConfig
     ) {
-        self.endpoint = endpoint
-        self.environment = environment
-        self.index = index
-
-        OpenAPIClientAPI.basePath = endpoint
-        OpenAPIClientAPI.customHeaders = apiBaseOptions(headers: headers)
+        self.sdkConfig = sdkConfig
+        OpenAPIClientAPI.basePath = sdkConfig.endpoint
+        OpenAPIClientAPI.customHeaders = apiBaseOptions(headers: sdkConfig.headers)
     }
 
     func createAccount(
@@ -45,11 +37,11 @@ internal struct KineticSdkInternal {
 
         let latestBlockhashResponse = try await self.getBlockhash()
 
-        let tx = try generateCreateAccountTransaction(addMemo: mint.addMemo, blockhash: latestBlockhashResponse.blockhash, index: index, mintFeePayer: mint.feePayer, mintPublicKey: mint.publicKey, owner: owner.solana)
+        let tx = try generateCreateAccountTransaction(addMemo: mint.addMemo, blockhash: latestBlockhashResponse.blockhash, index: sdkConfig.index, mintFeePayer: mint.feePayer, mintPublicKey: mint.publicKey, owner: owner.solana)
 
         let serialized = try await serializeTransaction(tx)
 
-        let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: environment, index: index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: mint.publicKey, referenceId: referenceId, referenceType: referenceType, tx: serialized)
+        let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: sdkConfig.environment, index: sdkConfig.index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: mint.publicKey, referenceId: referenceId, referenceType: referenceType, tx: serialized)
 
         do {
             return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
@@ -70,7 +62,7 @@ internal struct KineticSdkInternal {
 
     func getBalance(account: String) async throws -> BalanceResponse {
         do {
-            return try await AccountAPI.getBalance(environment: environment, index: index, accountId: account)
+            return try await AccountAPI.getBalance(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account)
         } catch {
             throw readServerError(error: error)
         }
@@ -80,7 +72,7 @@ internal struct KineticSdkInternal {
         let appConfig = try ensureAppConfig()
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         do {
-            return try await AccountAPI.getHistory(environment: environment, index: index, accountId: account, mint: mint.publicKey)
+            return try await AccountAPI.getHistory(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, mint: mint.publicKey)
         } catch {
             throw readServerError(error: error)
         }
@@ -90,7 +82,7 @@ internal struct KineticSdkInternal {
         let appConfig = try ensureAppConfig()
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         do {
-            return try await AccountAPI.getTokenAccounts(environment: environment, index: index, accountId: account, mint: mint.publicKey)
+            return try await AccountAPI.getTokenAccounts(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, mint: mint.publicKey)
         } catch {
             throw readServerError(error: error)
         }
@@ -98,7 +90,7 @@ internal struct KineticSdkInternal {
 
     func getTransaction(signature: String) async throws -> GetTransactionResponse {
         do {
-            return try await TransactionAPI.getTransaction(environment: environment, index: index, signature: signature)
+            return try await TransactionAPI.getTransaction(environment: sdkConfig.environment, index: sdkConfig.index, signature: signature)
         } catch {
             throw readServerError(error: error)
         }
@@ -133,7 +125,7 @@ internal struct KineticSdkInternal {
             amount: amount,
             blockhash: latestBlockhashResponse.blockhash,
             destination: destination,
-            index: index,
+            index: sdkConfig.index,
             mintDecimals: mint.decimals,
             mintFeePayer: mint.feePayer,
             mintPublicKey: mint.publicKey,
@@ -144,8 +136,8 @@ internal struct KineticSdkInternal {
 
         let makeTransferRequest = try MakeTransferRequest(
             commitment: commitment,
-            environment: environment,
-            index: index,
+            environment: sdkConfig.environment,
+            index: sdkConfig.index,
             mint: mint.publicKey,
             lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight,
             referenceId: referenceId,
@@ -178,8 +170,8 @@ internal struct KineticSdkInternal {
                 account: account,
                 amount: amount,
                 commitment: commitment,
-                environment: environment,
-                index: index,
+                environment: sdkConfig.environment,
+                index: sdkConfig.index,
                 mint: mint.publicKey
             ))
         } catch {
@@ -189,8 +181,8 @@ internal struct KineticSdkInternal {
 
     private func apiBaseOptions(headers: Dictionary<String, String>) -> Dictionary<String, String> {
         return headers.merging([
-            "kinetic-environment": environment,
-            "kinetic-index": "\(index)",
+            "kinetic-environment": sdkConfig.environment,
+            "kinetic-index": "\(sdkConfig.index)",
             "kinetic-user-agent": "\(NAME)@\(VERSION)"
         ], uniquingKeysWith: { current, _ in
             current
@@ -217,7 +209,7 @@ internal struct KineticSdkInternal {
 
     private func getBlockhash() async throws -> LatestBlockhashResponse {
         do {
-            return try await TransactionAPI.getLatestBlockhash(environment: environment, index: index)
+            return try await TransactionAPI.getLatestBlockhash(environment: sdkConfig.environment, index: sdkConfig.index)
         } catch {
             throw readServerError(error: error)
         }

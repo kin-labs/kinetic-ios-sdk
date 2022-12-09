@@ -29,9 +29,11 @@ import Kinetic
                 NSLog(log)
             }
             kinetic = try await KineticSdk.setup(
-                endpoint: "https://sandbox.kinetic.host",
-                environment: "devnet",
-                index: 1
+                KineticSdkConfig(
+                    endpoint: "https://sandbox.kinetic.host",
+                    environment: "devnet",
+                    index: 1
+                )
             )
             var storageDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             storageDirectory.appendPathComponent("kinetic_storage")
