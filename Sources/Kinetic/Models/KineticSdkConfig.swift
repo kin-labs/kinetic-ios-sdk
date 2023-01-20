@@ -10,15 +10,24 @@ import Foundation
 public struct KineticSdkConfig {
     let endpoint: String
     let environment: String
-    let headers: Dictionary<String, String>
     let index: Int
+    let headers: Dictionary<String, String>
+    let commitment: Commitment?
     let solanaRpcEndpoint: String?
 
-    public init(endpoint: String, environment: String, headers: Dictionary<String, String> = [:], index: Int, solanaRpcEndpoint: String? = nil) {
+    public init(
+        endpoint: String,
+        environment: String,
+        index: Int,
+        headers: Dictionary<String, String> = [:],
+        commitment: Commitment? = nil,
+        solanaRpcEndpoint: String? = nil
+    ) {
         self.endpoint = endpoint
         self.environment = environment
-        self.headers = headers
         self.index = index
+        self.headers = headers
+        self.commitment = commitment
         self.solanaRpcEndpoint = solanaRpcEndpoint
     }
 }

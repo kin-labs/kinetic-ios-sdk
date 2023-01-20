@@ -21,16 +21,17 @@ internal struct KineticSdkInternal {
     }
 
     func createAccount(
-        commitment: Commitment,
+        commitment: Commitment?,
         mint: String?,
         owner: Keypair,
         referenceId: String?,
         referenceType: String?
     ) async throws -> Transaction {
         let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
 
-        let accounts = try await self.getTokenAccounts(account: owner.publicKey, mint: mint.publicKey)
+        let accounts = try await self.getTokenAccounts(account: owner.publicKey, commitment: commitment, mint: mint.publicKey)
         if (!accounts.isEmpty) {
             throw KineticError.TokenAccountAlreadyExistsError
         }
@@ -60,37 +61,41 @@ internal struct KineticSdkInternal {
         }
     }
 
-    func getBalance(account: String) async throws -> BalanceResponse {
+    func getBalance(account: String, commitment: Commitment?) async throws -> BalanceResponse {
+        let commitment = getCommitment(commitment: commitment)
         do {
-            return try await AccountAPI.getBalance(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account)
+            return try await AccountAPI.getBalance(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, commitment: commitment)
         } catch {
             throw readServerError(error: error)
         }
     }
 
-    func getHistory(account: String, mint: String?) async throws -> [HistoryResponse] {
+    func getHistory(account: String, commitment: Commitment?, mint: String?) async throws -> [HistoryResponse] {
         let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         do {
-            return try await AccountAPI.getHistory(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, mint: mint.publicKey)
+            return try await AccountAPI.getHistory(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, mint: mint.publicKey, commitment: commitment)
         } catch {
             throw readServerError(error: error)
         }
     }
 
-    func getTokenAccounts(account: String, mint: String?) async throws -> [String] {
+    func getTokenAccounts(account: String, commitment: Commitment?, mint: String?) async throws -> [String] {
         let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         do {
-            return try await AccountAPI.getTokenAccounts(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, mint: mint.publicKey)
+            return try await AccountAPI.getTokenAccounts(environment: sdkConfig.environment, index: sdkConfig.index, accountId: account, mint: mint.publicKey, commitment: commitment)
         } catch {
             throw readServerError(error: error)
         }
     }
 
-    func getTransaction(signature: String) async throws -> GetTransactionResponse {
+    func getTransaction(signature: String, commitment: Commitment?) async throws -> GetTransactionResponse {
+        let commitment = getCommitment(commitment: commitment)
         do {
-            return try await TransactionAPI.getTransaction(environment: sdkConfig.environment, index: sdkConfig.index, signature: signature)
+            return try await TransactionAPI.getTransaction(environment: sdkConfig.environment, index: sdkConfig.index, signature: signature, commitment: commitment)
         } catch {
             throw readServerError(error: error)
         }
@@ -98,7 +103,7 @@ internal struct KineticSdkInternal {
 
     func makeTransfer(
         amount: String,
-        commitment: Commitment,
+        commitment: Commitment?,
         destination: String,
         mint: String?,
         owner: Keypair,
@@ -108,12 +113,13 @@ internal struct KineticSdkInternal {
         type: KineticKinMemo.TransactionType
     ) async throws -> Transaction {
         let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         let amount = try addDecimals(amount: amount, decimals: mint.decimals).description
 
         try self.validateDestination(appConfig: appConfig, destination: destination)
 
-        let accounts = try await self.getTokenAccounts(account: destination, mint: mint.publicKey)
+        let accounts = try await self.getTokenAccounts(account: destination, commitment: commitment, mint: mint.publicKey)
         if accounts.isEmpty && !senderCreate {
             throw KineticError.DestinationAccountDoesNotExistError
         }
@@ -155,10 +161,11 @@ internal struct KineticSdkInternal {
     func requestAirdrop(
         account: String,
         amount: String?,
-        commitment: Commitment,
+        commitment: Commitment?,
         mint: String?
     ) async throws -> RequestAirdropResponse {
         let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         var amount = amount
         if amount != nil {
@@ -215,6 +222,10 @@ internal struct KineticSdkInternal {
         }
     }
 
+    private func getCommitment(commitment: Commitment?) -> Commitment {
+        return commitment ?? sdkConfig.commitment ?? Commitment.confirmed
+    }
+
     private func validateDestination(appConfig: AppConfig, destination: String) throws {
         if (appConfig.mints.contains(where: { mint in
             mint.publicKey == destination
@@ -263,6 +274,7 @@ enum KineticError: Error {
     case AttemptedTransferToMintError
     case DestinationAccountDoesNotExistError
     case InvalidAmountError
+    case InvalidEndpointError
     case ServerError(String)
     case UnknownError
 }
