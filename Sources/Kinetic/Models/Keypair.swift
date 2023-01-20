@@ -66,7 +66,7 @@ public struct Keypair: Codable, Hashable {
         var keys: [Keypair] = []
 
         for i in from..<to {
-            var kp = try Keypair.derive(seed: mnemonic.seed, walletIndex: i)
+            var kp = try Keypair.derive(mnemonic: mnemonic.phrase, walletIndex: i)
             kp.mnemonic = mnemonic.phrase
             keys.append(kp)
         }
@@ -74,17 +74,19 @@ public struct Keypair: Codable, Hashable {
         return keys
     }
 
-    public static func derive(seed: [UInt8], walletIndex: Int) throws -> Keypair {
-        let mnemonic = Mnemonic(entropy: seed)!
-        let solanaKeypair = HotAccount(phrase: mnemonic.phrase, network: .devnet, derivablePath: DerivablePath(type: .bip44Change, walletIndex: walletIndex))!
+    public static func derive(mnemonic: [String], walletIndex: Int) throws -> Keypair {
+        guard let solanaKeypair = HotAccount(phrase: mnemonic, network: .mainnetBeta, derivablePath: DerivablePath(type: .bip44Change, walletIndex: walletIndex)) else {
+            throw KineticError.InvalidMnemonicError
+        }
         var kp = try Keypair(secretKey: Base58.encode(solanaKeypair.secretKey.bytes))
-        kp.mnemonic = mnemonic.phrase
+        kp.mnemonic = mnemonic
         return kp
     }
 
-    public static func fromSeed(seed: [UInt8]) throws -> Keypair {
-        return try Keypair.derive(seed: seed, walletIndex: 0)
-    }
+//    public static func fromSeed(seed: [UInt8]) throws -> Keypair {
+    // TODO: Not implemented, Solana SDK does not yet support creating directly from seed
+//        return try Keypair.derive(seed: seed, walletIndex: 0)
+//    }
 
     public static func fromSecretKey(_ secretKey: String) throws -> Keypair {
         return try Keypair(secretKey: secretKey)
