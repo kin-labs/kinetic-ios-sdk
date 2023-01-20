@@ -71,9 +71,9 @@
 				7E16A47628FEF8EB0049FFE8 /* SecureKeyStorage.swift */,
 				7E16A47428FEF8E50049FFE8 /* BasicAccountStorage.swift */,
 				7EE4B79E28D3D555005FDCA0 /* APIDemoView.swift */,
+				7E229DFB28D6542700BBC283 /* APIDemoViewModel.swift */,
 				7EE4B7A028D3D556005FDCA0 /* Assets.xcassets */,
 				7EE4B7A228D3D556005FDCA0 /* Preview Content */,
-				7E229DFB28D6542700BBC283 /* APIDemoViewModel.swift */,
 			);
 			path = KineticDemo;
 			sourceTree = "<group>";

@@ -17,6 +17,80 @@ open class TransactionAPI {
      
      - parameter environment: (path)  
      - parameter index: (path)  
+     - parameter referenceId: (query)  
+     - parameter referenceType: (query)  
+     - parameter signature: (query)  
+     - returns: [Transaction]
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getKineticTransaction(environment: String, index: Int, referenceId: String, referenceType: String, signature: String) async throws -> [Transaction] {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = getKineticTransactionWithRequestBuilder(environment: environment, index: index, referenceId: referenceId, referenceType: referenceType, signature: signature).execute { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
+        }
+    }
+
+    /**
+     
+     - GET /api/transaction/kinetic-transaction/{environment}/{index}
+     - parameter environment: (path)  
+     - parameter index: (path)  
+     - parameter referenceId: (query)  
+     - parameter referenceType: (query)  
+     - parameter signature: (query)  
+     - returns: RequestBuilder<[Transaction]> 
+     */
+    open class func getKineticTransactionWithRequestBuilder(environment: String, index: Int, referenceId: String, referenceType: String, signature: String) -> RequestBuilder<[Transaction]> {
+        var localVariablePath = "/api/transaction/kinetic-transaction/{environment}/{index}"
+        let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
+        let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
+        let indexPreEscape = "\(APIHelper.mapValueToPathItem(index))"
+        let indexPostEscape = indexPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{index}", with: indexPostEscape, options: .literal, range: nil)
+        let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
+
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "referenceId": referenceId.encodeToJSON(),
+            "referenceType": referenceType.encodeToJSON(),
+            "signature": signature.encodeToJSON(),
+        ])
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<[Transaction]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+    }
+
+    /**
+     
+     
+     - parameter environment: (path)  
+     - parameter index: (path)  
      - returns: LatestBlockhashResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -149,10 +223,11 @@ open class TransactionAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter signature: (path)  
+     - parameter commitment: (query)  
      - returns: GetTransactionResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getTransaction(environment: String, index: Int, signature: String) async throws -> GetTransactionResponse {
+    open class func getTransaction(environment: String, index: Int, signature: String, commitment: Commitment) async throws -> GetTransactionResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -162,7 +237,7 @@ open class TransactionAPI {
                   return
                 }
 
-                requestTask = getTransactionWithRequestBuilder(environment: environment, index: index, signature: signature).execute { result in
+                requestTask = getTransactionWithRequestBuilder(environment: environment, index: index, signature: signature, commitment: commitment).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -182,9 +257,10 @@ open class TransactionAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter signature: (path)  
+     - parameter commitment: (query)  
      - returns: RequestBuilder<GetTransactionResponse> 
      */
-    open class func getTransactionWithRequestBuilder(environment: String, index: Int, signature: String) -> RequestBuilder<GetTransactionResponse> {
+    open class func getTransactionWithRequestBuilder(environment: String, index: Int, signature: String, commitment: Commitment) -> RequestBuilder<GetTransactionResponse> {
         var localVariablePath = "/api/transaction/transaction/{environment}/{index}/{signature}"
         let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
         let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -198,7 +274,10 @@ open class TransactionAPI {
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
-        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "commitment": commitment.encodeToJSON(),
+        ])
 
         let localVariableNillableHeaders: [String: Any?] = [
             :

@@ -16,36 +16,36 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
     public var createdAt: Date?
     public var updatedAt: Date?
     public var amount: String?
-    public var decimals: Double?
+    public var decimals: Int?
     public var destination: String?
     public var errors: [TransactionError]?
     public var explorerUrl: String?
     public var feePayer: String?
     public var ip: String?
     public var mint: String?
-    public var processingDuration: Double?
+    public var processingDuration: Int?
     public var referenceId: String?
     public var referenceType: String?
     public var signature: String?
     public var solanaCommitted: Date?
-    public var solanaCommittedDuration: Double?
+    public var solanaCommittedDuration: Int?
     public var solanaFinalized: Date?
-    public var solanaFinalizedDuration: Double?
+    public var solanaFinalizedDuration: Int?
     public var solanaStart: Date?
     public var solanaTransaction: AnyCodable?
     public var source: String?
     public var status: TransactionStatus?
-    public var totalDuration: Double?
+    public var totalDuration: Int?
     public var tx: String?
     public var ua: String?
     public var webhookEventStart: Date?
     public var webhookEventEnd: Date?
-    public var webhookEventDuration: Double?
+    public var webhookEventDuration: Int?
     public var webhookVerifyStart: Date?
     public var webhookVerifyEnd: Date?
-    public var webhookVerifyDuration: Double?
+    public var webhookVerifyDuration: Int?
 
-    public init(id: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, amount: String? = nil, decimals: Double? = nil, destination: String? = nil, errors: [TransactionError]? = nil, explorerUrl: String? = nil, feePayer: String? = nil, ip: String? = nil, mint: String? = nil, processingDuration: Double? = nil, referenceId: String? = nil, referenceType: String? = nil, signature: String? = nil, solanaCommitted: Date? = nil, solanaCommittedDuration: Double? = nil, solanaFinalized: Date? = nil, solanaFinalizedDuration: Double? = nil, solanaStart: Date? = nil, solanaTransaction: AnyCodable? = nil, source: String? = nil, status: TransactionStatus? = nil, totalDuration: Double? = nil, tx: String? = nil, ua: String? = nil, webhookEventStart: Date? = nil, webhookEventEnd: Date? = nil, webhookEventDuration: Double? = nil, webhookVerifyStart: Date? = nil, webhookVerifyEnd: Date? = nil, webhookVerifyDuration: Double? = nil) {
+    public init(id: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, amount: String? = nil, decimals: Int? = nil, destination: String? = nil, errors: [TransactionError]? = nil, explorerUrl: String? = nil, feePayer: String? = nil, ip: String? = nil, mint: String? = nil, processingDuration: Int? = nil, referenceId: String? = nil, referenceType: String? = nil, signature: String? = nil, solanaCommitted: Date? = nil, solanaCommittedDuration: Int? = nil, solanaFinalized: Date? = nil, solanaFinalizedDuration: Int? = nil, solanaStart: Date? = nil, solanaTransaction: AnyCodable? = nil, source: String? = nil, status: TransactionStatus? = nil, totalDuration: Int? = nil, tx: String? = nil, ua: String? = nil, webhookEventStart: Date? = nil, webhookEventEnd: Date? = nil, webhookEventDuration: Int? = nil, webhookVerifyStart: Date? = nil, webhookVerifyEnd: Date? = nil, webhookVerifyDuration: Int? = nil) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt

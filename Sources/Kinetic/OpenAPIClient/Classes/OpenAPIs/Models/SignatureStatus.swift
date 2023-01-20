@@ -12,17 +12,12 @@ import AnyCodable
 
 public struct SignatureStatus: Codable, JSONEncodable, Hashable {
 
-    public enum ConfirmationStatus: String, Codable, CaseIterable {
-        case processed = "processed"
-        case confirmed = "confirmed"
-        case finalized = "finalized"
-    }
-    public var slot: Double?
-    public var confirmations: Double?
+    public var slot: Int?
+    public var confirmations: Int?
     public var err: AnyCodable?
     public var confirmationStatus: ConfirmationStatus?
 
-    public init(slot: Double? = nil, confirmations: Double? = nil, err: AnyCodable? = nil, confirmationStatus: ConfirmationStatus? = nil) {
+    public init(slot: Int? = nil, confirmations: Int? = nil, err: AnyCodable? = nil, confirmationStatus: ConfirmationStatus? = nil) {
         self.slot = slot
         self.confirmations = confirmations
         self.err = err

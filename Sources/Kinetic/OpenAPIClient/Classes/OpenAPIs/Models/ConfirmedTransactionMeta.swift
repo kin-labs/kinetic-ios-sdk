@@ -12,16 +12,16 @@ import AnyCodable
 
 public struct ConfirmedTransactionMeta: Codable, JSONEncodable, Hashable {
 
-    public var fee: Double?
-    public var innerInstructions: [String]?
+    public var fee: Int?
+    public var innerInstructions: [CompiledInnerInstruction]?
     public var preBalances: [Int]?
     public var postBalances: [Int]
     public var logMessages: [String]?
-    public var preTokenBalances: [String]?
-    public var postTokenBalances: [String]?
+    public var preTokenBalances: [TokenBalance]?
+    public var postTokenBalances: [TokenBalance]?
     public var err: AnyCodable?
 
-    public init(fee: Double? = nil, innerInstructions: [String]? = nil, preBalances: [Int]? = nil, postBalances: [Int], logMessages: [String]? = nil, preTokenBalances: [String]? = nil, postTokenBalances: [String]? = nil, err: AnyCodable? = nil) {
+    public init(fee: Int? = nil, innerInstructions: [CompiledInnerInstruction]? = nil, preBalances: [Int]? = nil, postBalances: [Int], logMessages: [String]? = nil, preTokenBalances: [TokenBalance]? = nil, postTokenBalances: [TokenBalance]? = nil, err: AnyCodable? = nil) {
         self.fee = fee
         self.innerInstructions = innerInstructions
         self.preBalances = preBalances
