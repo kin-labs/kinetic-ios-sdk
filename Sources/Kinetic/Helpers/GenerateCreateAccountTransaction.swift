@@ -17,8 +17,12 @@ internal func generateCreateAccountTransaction(
     owner: Account
 ) throws -> SolanaTransaction {
     // Create objects from Response
-    let mintKey = SolanaPublicKey(string: mintPublicKey)!
-    let feePayerKey = SolanaPublicKey(string: mintFeePayer)!
+    guard let mintKey = SolanaPublicKey(string: mintPublicKey) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
+    guard let feePayerKey = SolanaPublicKey(string: mintFeePayer) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
     let ownerPublicKey = owner.publicKey
 
     // Get AssociatedTokenAccount

@@ -275,6 +275,10 @@ enum KineticError: Error {
     case DestinationAccountDoesNotExistError
     case InvalidAmountError
     case InvalidEndpointError
+    case InvalidKeyError
+    case InvalidMemoError
+    case InvalidMnemonicError
+    case InvalidPublicKeyStringError
     case ServerError(String)
     case UnknownError
 }

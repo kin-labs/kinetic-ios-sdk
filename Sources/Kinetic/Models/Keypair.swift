@@ -16,7 +16,10 @@ public struct Keypair: Codable, Hashable {
     public let secretKey: String?
 
     public init(secretKey: String) throws {
-        self.solanaKeypair = HotAccount(secretKey: Data(Base58.decode(secretKey)))!
+        guard let solanaKeypair = HotAccount(secretKey: Data(Base58.decode(secretKey))) else {
+            throw KineticError.InvalidKeyError
+        }
+        self.solanaKeypair = solanaKeypair
         self.publicKey = solanaKeypair.publicKey.base58EncodedString
         self.secretKey = Base58.encode(solanaKeypair.secretKey.bytes)
     }
@@ -57,7 +60,9 @@ public struct Keypair: Codable, Hashable {
         // Always generate at least 1
         let to = to <= from ? from + 1 : to
 
-        let mnemonic = Mnemonic(phrase: mnemonic)!
+        guard let mnemonic = Mnemonic(phrase: mnemonic) else {
+            throw KineticError.InvalidMnemonicError
+        }
         var keys: [Keypair] = []
 
         for i in from..<to {
