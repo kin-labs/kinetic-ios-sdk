@@ -15,6 +15,61 @@ open class AccountAPI {
     /**
      
      
+     - parameter closeAccountRequest: (body)  
+     - returns: Transaction
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func closeAccount(closeAccountRequest: CloseAccountRequest) async throws -> Transaction {
+        var requestTask: RequestTask?
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                guard !Task.isCancelled else {
+                  continuation.resume(throwing: CancellationError())
+                  return
+                }
+
+                requestTask = closeAccountWithRequestBuilder(closeAccountRequest: closeAccountRequest).execute { result in
+                    switch result {
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        } onCancel: { [requestTask] in
+            requestTask?.cancel()
+        }
+    }
+
+    /**
+     
+     - POST /api/account/close
+     - parameter closeAccountRequest: (body)  
+     - returns: RequestBuilder<Transaction> 
+     */
+    open class func closeAccountWithRequestBuilder(closeAccountRequest: CloseAccountRequest) -> RequestBuilder<Transaction> {
+        let localVariablePath = "/api/account/close"
+        let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: closeAccountRequest)
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<Transaction>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+    }
+
+    /**
+     
+     
      - parameter createAccountRequest: (body)  
      - returns: Transaction
      */
@@ -73,10 +128,12 @@ open class AccountAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
-     - returns: Void
+     - parameter mint: (path)  
+     - parameter commitment: (query)  
+     - returns: AccountInfo
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getAccountInfo(environment: String, index: Int, accountId: String) async throws {
+    open class func getAccountInfo(environment: String, index: Int, accountId: String, mint: String, commitment: Commitment) async throws -> AccountInfo {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -86,10 +143,10 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getAccountInfoWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute { result in
+                requestTask = getAccountInfoWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint, commitment: commitment).execute { result in
                     switch result {
-                    case .success:
-                        continuation.resume(returning: ())
+                    case let .success(response):
+                        continuation.resume(returning: response.body)
                     case let .failure(error):
                         continuation.resume(throwing: error)
                     }
@@ -102,14 +159,16 @@ open class AccountAPI {
 
     /**
      
-     - GET /api/account/info/{environment}/{index}/{accountId}
+     - GET /api/account/info/{environment}/{index}/{accountId}/{mint}
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
-     - returns: RequestBuilder<Void> 
+     - parameter mint: (path)  
+     - parameter commitment: (query)  
+     - returns: RequestBuilder<AccountInfo> 
      */
-    open class func getAccountInfoWithRequestBuilder(environment: String, index: Int, accountId: String) -> RequestBuilder<Void> {
-        var localVariablePath = "/api/account/info/{environment}/{index}/{accountId}"
+    open class func getAccountInfoWithRequestBuilder(environment: String, index: Int, accountId: String, mint: String, commitment: Commitment) -> RequestBuilder<AccountInfo> {
+        var localVariablePath = "/api/account/info/{environment}/{index}/{accountId}/{mint}"
         let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
         let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{environment}", with: environmentPostEscape, options: .literal, range: nil)
@@ -119,10 +178,16 @@ open class AccountAPI {
         let accountIdPreEscape = "\(APIHelper.mapValueToPathItem(accountId))"
         let accountIdPostEscape = accountIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{accountId}", with: accountIdPostEscape, options: .literal, range: nil)
+        let mintPreEscape = "\(APIHelper.mapValueToPathItem(mint))"
+        let mintPostEscape = mintPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{mint}", with: mintPostEscape, options: .literal, range: nil)
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
-        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "commitment": commitment.encodeToJSON(),
+        ])
 
         let localVariableNillableHeaders: [String: Any?] = [
             :
@@ -130,7 +195,7 @@ open class AccountAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = OpenAPIClientAPI.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<AccountInfo>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
     }
@@ -141,10 +206,11 @@ open class AccountAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
+     - parameter commitment: (query)  
      - returns: BalanceResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getBalance(environment: String, index: Int, accountId: String) async throws -> BalanceResponse {
+    open class func getBalance(environment: String, index: Int, accountId: String, commitment: Commitment) async throws -> BalanceResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -154,7 +220,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getBalanceWithRequestBuilder(environment: environment, index: index, accountId: accountId).execute { result in
+                requestTask = getBalanceWithRequestBuilder(environment: environment, index: index, accountId: accountId, commitment: commitment).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -174,9 +240,10 @@ open class AccountAPI {
      - parameter environment: (path)  
      - parameter index: (path)  
      - parameter accountId: (path)  
+     - parameter commitment: (query)  
      - returns: RequestBuilder<BalanceResponse> 
      */
-    open class func getBalanceWithRequestBuilder(environment: String, index: Int, accountId: String) -> RequestBuilder<BalanceResponse> {
+    open class func getBalanceWithRequestBuilder(environment: String, index: Int, accountId: String, commitment: Commitment) -> RequestBuilder<BalanceResponse> {
         var localVariablePath = "/api/account/balance/{environment}/{index}/{accountId}"
         let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
         let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -190,7 +257,10 @@ open class AccountAPI {
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
-        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "commitment": commitment.encodeToJSON(),
+        ])
 
         let localVariableNillableHeaders: [String: Any?] = [
             :
@@ -210,10 +280,11 @@ open class AccountAPI {
      - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter mint: (path)  
+     - parameter commitment: (query)  
      - returns: [HistoryResponse]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getHistory(environment: String, index: Int, accountId: String, mint: String) async throws -> [HistoryResponse] {
+    open class func getHistory(environment: String, index: Int, accountId: String, mint: String, commitment: Commitment) async throws -> [HistoryResponse] {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -223,7 +294,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getHistoryWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint).execute { result in
+                requestTask = getHistoryWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint, commitment: commitment).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -244,9 +315,10 @@ open class AccountAPI {
      - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter mint: (path)  
+     - parameter commitment: (query)  
      - returns: RequestBuilder<[HistoryResponse]> 
      */
-    open class func getHistoryWithRequestBuilder(environment: String, index: Int, accountId: String, mint: String) -> RequestBuilder<[HistoryResponse]> {
+    open class func getHistoryWithRequestBuilder(environment: String, index: Int, accountId: String, mint: String, commitment: Commitment) -> RequestBuilder<[HistoryResponse]> {
         var localVariablePath = "/api/account/history/{environment}/{index}/{accountId}/{mint}"
         let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
         let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -263,7 +335,10 @@ open class AccountAPI {
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
-        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "commitment": commitment.encodeToJSON(),
+        ])
 
         let localVariableNillableHeaders: [String: Any?] = [
             :
@@ -283,10 +358,11 @@ open class AccountAPI {
      - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter mint: (path)  
+     - parameter commitment: (query)  
      - returns: [String]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getTokenAccounts(environment: String, index: Int, accountId: String, mint: String) async throws -> [String] {
+    open class func getTokenAccounts(environment: String, index: Int, accountId: String, mint: String, commitment: Commitment) async throws -> [String] {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -296,7 +372,7 @@ open class AccountAPI {
                   return
                 }
 
-                requestTask = getTokenAccountsWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint).execute { result in
+                requestTask = getTokenAccountsWithRequestBuilder(environment: environment, index: index, accountId: accountId, mint: mint, commitment: commitment).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -317,9 +393,10 @@ open class AccountAPI {
      - parameter index: (path)  
      - parameter accountId: (path)  
      - parameter mint: (path)  
+     - parameter commitment: (query)  
      - returns: RequestBuilder<[String]> 
      */
-    open class func getTokenAccountsWithRequestBuilder(environment: String, index: Int, accountId: String, mint: String) -> RequestBuilder<[String]> {
+    open class func getTokenAccountsWithRequestBuilder(environment: String, index: Int, accountId: String, mint: String, commitment: Commitment) -> RequestBuilder<[String]> {
         var localVariablePath = "/api/account/token-accounts/{environment}/{index}/{accountId}/{mint}"
         let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
         let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -336,7 +413,10 @@ open class AccountAPI {
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
-        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        var localVariableUrlComponents = URLComponents(string: localVariableURLString)
+        localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "commitment": commitment.encodeToJSON(),
+        ])
 
         let localVariableNillableHeaders: [String: Any?] = [
             :

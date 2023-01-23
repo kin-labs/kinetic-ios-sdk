@@ -13,10 +13,10 @@ import AnyCodable
 public struct GetTransactionResponse: Codable, JSONEncodable, Hashable {
 
     public var signature: String
-    public var status: SignatureStatus
+    public var status: RpcResponseAndContext
     public var transaction: TransactionResponse
 
-    public init(signature: String, status: SignatureStatus, transaction: TransactionResponse) {
+    public init(signature: String, status: RpcResponseAndContext, transaction: TransactionResponse) {
         self.signature = signature
         self.status = status
         self.transaction = transaction

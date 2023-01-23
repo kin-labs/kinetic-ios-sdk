@@ -11,6 +11,7 @@ OpenAPIClient/Classes/OpenAPIs/Extensions.swift
 OpenAPIClient/Classes/OpenAPIs/JSONDataEncoding.swift
 OpenAPIClient/Classes/OpenAPIs/JSONEncodingHelper.swift
 OpenAPIClient/Classes/OpenAPIs/Models.swift
+OpenAPIClient/Classes/OpenAPIs/Models/AccountInfo.swift
 OpenAPIClient/Classes/OpenAPIs/Models/AppConfig.swift
 OpenAPIClient/Classes/OpenAPIs/Models/AppConfigApi.swift
 OpenAPIClient/Classes/OpenAPIs/Models/AppConfigApp.swift
@@ -20,10 +21,15 @@ OpenAPIClient/Classes/OpenAPIs/Models/AppConfigMint.swift
 OpenAPIClient/Classes/OpenAPIs/Models/AppHealth.swift
 OpenAPIClient/Classes/OpenAPIs/Models/BalanceResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/BalanceToken.swift
+OpenAPIClient/Classes/OpenAPIs/Models/CloseAccountRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ClusterType.swift
 OpenAPIClient/Classes/OpenAPIs/Models/Commitment.swift
+OpenAPIClient/Classes/OpenAPIs/Models/CompiledInnerInstruction.swift
+OpenAPIClient/Classes/OpenAPIs/Models/CompiledInstruction.swift
+OpenAPIClient/Classes/OpenAPIs/Models/ConfirmationStatus.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedSignatureInfo.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedTransactionMeta.swift
+OpenAPIClient/Classes/OpenAPIs/Models/Context.swift
 OpenAPIClient/Classes/OpenAPIs/Models/CreateAccountRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/GetTransactionResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/HistoryResponse.swift
@@ -32,7 +38,11 @@ OpenAPIClient/Classes/OpenAPIs/Models/MakeTransferRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/MinimumRentExemptionBalanceResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/RequestAirdropRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/RequestAirdropResponse.swift
+OpenAPIClient/Classes/OpenAPIs/Models/RpcResponseAndContext.swift
 OpenAPIClient/Classes/OpenAPIs/Models/SignatureStatus.swift
+OpenAPIClient/Classes/OpenAPIs/Models/TokenAmount.swift
+OpenAPIClient/Classes/OpenAPIs/Models/TokenBalance.swift
+OpenAPIClient/Classes/OpenAPIs/Models/TokenInfo.swift
 OpenAPIClient/Classes/OpenAPIs/Models/Transaction.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TransactionData.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TransactionError.swift

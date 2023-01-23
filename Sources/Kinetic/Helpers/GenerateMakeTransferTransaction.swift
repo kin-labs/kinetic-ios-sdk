@@ -22,12 +22,19 @@ internal func generateMakeTransferTransaction(
     type: KineticKinMemo.TransactionType
 ) throws -> SolanaTransaction {
     // Create objects from Response
-    let mintKey = SolanaPublicKey(string: mintPublicKey)!
-    let feePayerKey = SolanaPublicKey(string: mintFeePayer)!
+    guard let mintKey = SolanaPublicKey(string: mintPublicKey) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
+    guard let feePayerKey = SolanaPublicKey(string: mintFeePayer) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
     let ownerPublicKey = owner.publicKey
+    guard let destinationPublicKey = SolanaPublicKey(string: destination) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
 
     let ownerTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: ownerPublicKey, mintKey: mintKey)
-    let destinationTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: SolanaPublicKey(string: destination)!, mintKey: mintKey)
+    let destinationTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: destinationPublicKey, mintKey: mintKey)
 
     var instructions: [TransactionInstruction] = []
 
@@ -42,10 +49,14 @@ internal func generateMakeTransferTransaction(
             createAssociatedTokenAccountInstruction(
                 feePayer: feePayerKey,
                 ownerTokenAccount: destinationTokenAccount,
-                ownerPublicKey: SolanaPublicKey(string: destination)!,
+                ownerPublicKey: destinationPublicKey,
                 mintKey: mintKey
             )
         )
+    }
+
+    guard let amountNum = UInt64(amount) else {
+        throw KineticError.InvalidAmountError
     }
 
     instructions.append(
@@ -56,7 +67,7 @@ internal func generateMakeTransferTransaction(
             destination: destinationTokenAccount,
             owner: ownerPublicKey,
             multiSigners: [],
-            amount: UInt64(amount)!,
+            amount: amountNum,
             decimals: UInt8(mintDecimals)
         )
     )

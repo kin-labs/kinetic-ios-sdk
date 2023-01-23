@@ -12,12 +12,12 @@ import AnyCodable
 
 public struct TransactionResponse: Codable, JSONEncodable, Hashable {
 
-    public var slot: Double?
+    public var slot: Int?
     public var transaction: TransactionData
     public var meta: ConfirmedTransactionMeta
-    public var blockTime: Double?
+    public var blockTime: Int?
 
-    public init(slot: Double? = nil, transaction: TransactionData, meta: ConfirmedTransactionMeta, blockTime: Double? = nil) {
+    public init(slot: Int? = nil, transaction: TransactionData, meta: ConfirmedTransactionMeta, blockTime: Int? = nil) {
         self.slot = slot
         self.transaction = transaction
         self.meta = meta

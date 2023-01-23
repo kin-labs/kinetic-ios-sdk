@@ -13,12 +13,12 @@ import AnyCodable
 public struct ConfirmedSignatureInfo: Codable, JSONEncodable, Hashable {
 
     public var signature: String
-    public var slot: Double?
+    public var slot: Int?
     public var err: String?
     public var memo: String?
-    public var blockTime: Double?
+    public var blockTime: Int?
 
-    public init(signature: String, slot: Double? = nil, err: String? = nil, memo: String? = nil, blockTime: Double? = nil) {
+    public init(signature: String, slot: Int? = nil, err: String? = nil, memo: String? = nil, blockTime: Int? = nil) {
         self.signature = signature
         self.slot = slot
         self.err = err

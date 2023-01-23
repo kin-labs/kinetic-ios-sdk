@@ -38,7 +38,7 @@ public struct KineticSdk {
     }
 
     public func createAccount(
-        commitment: Commitment = .confirmed,
+        commitment: Commitment? = nil,
         mint: String? = nil,
         owner: Keypair,
         referenceId: String? = nil,
@@ -53,29 +53,33 @@ public struct KineticSdk {
         )
     }
 
-    public func getBalance(account: String) async throws -> BalanceResponse {
-        return try await internalSdk.getBalance(account: account)
+    public func getBalance(account: String, commitment: Commitment? = nil) async throws -> BalanceResponse {
+        return try await internalSdk.getBalance(account: account, commitment: commitment)
     }
 
     public func getExplorerUrl(path: String) -> String? {
         return internalSdk.appConfig?.environment.explorer.replacingOccurrences(of: "{path}", with: path)
     }
 
-    public func getHistory(account: String, mint: String? = nil) async throws -> [HistoryResponse] {
-        return try await internalSdk.getHistory(account: account, mint: mint)
+    public func getHistory(
+        account: String,
+        commitment: Commitment? = nil,
+        mint: String? = nil
+    ) async throws -> [HistoryResponse] {
+        return try await internalSdk.getHistory(account: account, commitment: commitment, mint: mint)
     }
 
-    public func getTokenAccounts(account: String, mint: String? = nil) async throws -> [String] {
-        return try await internalSdk.getTokenAccounts(account: account, mint: mint)
+    public func getTokenAccounts(account: String, commitment: Commitment? = nil, mint: String? = nil) async throws -> [String] {
+        return try await internalSdk.getTokenAccounts(account: account, commitment: commitment, mint: mint)
     }
 
-    public func getTransaction(signature: String) async throws -> GetTransactionResponse {
-        return try await internalSdk.getTransaction(signature: signature)
+    public func getTransaction(signature: String, commitment: Commitment? = nil) async throws -> GetTransactionResponse {
+        return try await internalSdk.getTransaction(signature: signature, commitment: commitment)
     }
 
     public func makeTransfer(
         amount: String,
-        commitment: Commitment = .confirmed,
+        commitment: Commitment? = nil,
         destination: String,
         mint: String? = nil,
         owner: Keypair,
@@ -100,7 +104,7 @@ public struct KineticSdk {
     public func requestAirdrop(
         account: String,
         amount: String? = nil,
-        commitment: Commitment = .finalized,
+        commitment: Commitment? = nil,
         mint: String? = nil
     ) async throws -> RequestAirdropResponse {
         return try await internalSdk.requestAirdrop(
@@ -126,7 +130,9 @@ public struct KineticSdk {
     public static func setup(
         _ sdkConfig: KineticSdkConfig
     ) async throws -> KineticSdk {
-        var sdk = KineticSdk(sdkConfig)
+        var sdk = KineticSdk(
+            try validateKineticSdkConfig(sdkConfig: sdkConfig)
+        )
         try await sdk.initialize()
         return sdk
     }
