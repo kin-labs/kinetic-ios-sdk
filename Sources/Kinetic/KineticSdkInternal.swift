@@ -24,8 +24,7 @@ internal struct KineticSdkInternal {
         commitment: Commitment?,
         mint: String?,
         owner: Keypair,
-        referenceId: String?,
-        referenceType: String?
+        reference: String?
     ) async throws -> Transaction {
         let appConfig = try ensureAppConfig()
         let commitment = getCommitment(commitment: commitment)
@@ -42,7 +41,7 @@ internal struct KineticSdkInternal {
 
         let serialized = try await serializeTransaction(tx)
 
-        let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: sdkConfig.environment, index: sdkConfig.index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: mint.publicKey, referenceId: referenceId, referenceType: referenceType, tx: serialized)
+        let createAccountRequest = CreateAccountRequest(commitment: commitment, environment: sdkConfig.environment, index: sdkConfig.index, lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight, mint: mint.publicKey, reference: reference, tx: serialized)
 
         do {
             return try await AccountAPI.createAccount(createAccountRequest: createAccountRequest)
@@ -107,8 +106,7 @@ internal struct KineticSdkInternal {
         destination: String,
         mint: String?,
         owner: Keypair,
-        referenceId: String?,
-        referenceType: String?,
+        reference: String?,
         senderCreate: Bool,
         type: KineticKinMemo.TransactionType
     ) async throws -> Transaction {
@@ -146,8 +144,7 @@ internal struct KineticSdkInternal {
             index: sdkConfig.index,
             mint: mint.publicKey,
             lastValidBlockHeight: latestBlockhashResponse.lastValidBlockHeight,
-            referenceId: referenceId,
-            referenceType: referenceType,
+            reference: reference,
             tx: await serializeTransaction(tx)
         )
 

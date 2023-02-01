@@ -41,15 +41,13 @@ public struct KineticSdk {
         commitment: Commitment? = nil,
         mint: String? = nil,
         owner: Keypair,
-        referenceId: String? = nil,
-        referenceType: String? = nil
+        reference: String? = nil
     ) async throws -> Transaction {
         return try await internalSdk.createAccount(
             commitment: commitment,
             mint: mint,
             owner: owner,
-            referenceId: referenceId,
-            referenceType: referenceType
+            reference: reference
         )
     }
 
@@ -83,8 +81,7 @@ public struct KineticSdk {
         destination: String,
         mint: String? = nil,
         owner: Keypair,
-        referenceId: String? = nil,
-        referenceType: String? = nil,
+        reference: String? = nil,
         senderCreate: Bool = false,
         type: KineticKinMemo.TransactionType = .none
     ) async throws -> Transaction {
@@ -94,8 +91,7 @@ public struct KineticSdk {
             destination: destination,
             mint: mint,
             owner: owner,
-            referenceId: referenceId,
-            referenceType: referenceType,
+            reference: reference,
             senderCreate: senderCreate,
             type: type
         )
