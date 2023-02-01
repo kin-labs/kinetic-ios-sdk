@@ -76,6 +76,28 @@ internal struct KineticSdkInternal {
         }
     }
 
+    func getAccountInfo(
+        account: String,
+        commitment: Commitment?,
+        mint: String?
+    ) async throws -> AccountInfo {
+        let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
+        let mint = try getAppMint(appConfig: appConfig, mint: mint)
+
+        do {
+            return try await AccountAPI.getAccountInfo(
+                environment: sdkConfig.environment,
+                index: sdkConfig.index,
+                accountId: account,
+                mint: mint.publicKey,
+                commitment: commitment
+            )
+        } catch {
+            throw readServerError(error: error)
+        }
+    }
+
     mutating func getAppConfig(environment: String, index: Int) async throws -> AppConfig {
         do {
             let appConfig = try await AppAPI.getAppConfig(environment: environment, index: index)
@@ -141,10 +163,21 @@ internal struct KineticSdkInternal {
         let mint = try getAppMint(appConfig: appConfig, mint: mint)
         let amount = try addDecimals(amount: amount, decimals: mint.decimals).description
 
-        try self.validateDestination(appConfig: appConfig, destination: destination)
+        guard let ownerTokenAccount = try? await findTokenAccount(account: owner.publicKey, commitment: commitment, mint: mint.publicKey) else {
+            throw KineticError.RuntimeError("Owner account doesn't exist for mint \(mint.publicKey)")
+        }
+        let destinationTokenAccount = try? await findTokenAccount(account: destination, commitment: commitment, mint: mint.publicKey)
 
-        let accounts = try await self.getTokenAccounts(account: destination, commitment: commitment, mint: mint.publicKey)
-        if accounts.isEmpty && !senderCreate {
+        if destinationTokenAccount == nil && !senderCreate {
+            throw KineticError.RuntimeError("Destination account doesn't exist for mint \(mint.publicKey)")
+        }
+
+        var senderCreateTokenAccount: String? = nil
+        if destinationTokenAccount == nil && senderCreate {
+            senderCreateTokenAccount = getTokenAddress(ownerPublicKey: destination, mintKey: mint.publicKey)
+        }
+
+        if destinationTokenAccount == nil && senderCreateTokenAccount == nil {
             throw KineticError.DestinationAccountDoesNotExistError
         }
 
@@ -155,12 +188,14 @@ internal struct KineticSdkInternal {
             amount: amount,
             blockhash: latestBlockhashResponse.blockhash,
             destination: destination,
+            destinationTokenAccount: destinationTokenAccount ?? senderCreateTokenAccount!,
             index: sdkConfig.index,
             mintDecimals: mint.decimals,
             mintFeePayer: mint.feePayer,
             mintPublicKey: mint.publicKey,
             owner: owner.solana,
-            senderCreate: senderCreate,
+            ownerTokenAccount: ownerTokenAccount,
+            senderCreate: senderCreate && senderCreateTokenAccount != nil,
             type: type
         )
 
@@ -226,6 +261,20 @@ internal struct KineticSdkInternal {
         return appConfig
     }
 
+    private func findTokenAccount(
+        account: String,
+        commitment: Commitment,
+        mint: String
+    ) async throws -> String? {
+        let accountInfo = try await getAccountInfo(account: account, commitment: commitment, mint: mint)
+
+        if accountInfo.isMint {
+            throw KineticError.AttemptedTransferToMintError
+        }
+
+        return accountInfo.tokens?.first(where: { $0.mint == mint })?.account
+    }
+
     private func getAppMint(appConfig: AppConfig, mint: String?) throws -> AppConfigMint {
         let mint = mint ?? appConfig.mint.publicKey
         let found = appConfig.mints.firstIndex { item in
@@ -247,14 +296,6 @@ internal struct KineticSdkInternal {
 
     private func getCommitment(commitment: Commitment?) -> Commitment {
         return commitment ?? sdkConfig.commitment ?? Commitment.confirmed
-    }
-
-    private func validateDestination(appConfig: AppConfig, destination: String) throws {
-        if (appConfig.mints.contains(where: { mint in
-            mint.publicKey == destination
-        })) {
-            throw KineticError.AttemptedTransferToMintError
-        }
     }
 
     internal func readServerError(error: Error) -> Error {
@@ -302,6 +343,7 @@ enum KineticError: Error {
     case InvalidMemoError
     case InvalidMnemonicError
     case InvalidPublicKeyStringError
+    case RuntimeError(String)
     case ServerError(String)
     case UnknownError
 }

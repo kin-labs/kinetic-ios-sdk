@@ -65,6 +65,14 @@ public struct KineticSdk {
         )
     }
 
+    public func getAccountInfo(
+        account: String,
+        commitment: Commitment? = nil,
+        mint: String? = nil
+    ) async throws -> AccountInfo {
+        return try await internalSdk.getAccountInfo(account: account, commitment: commitment, mint: mint)
+    }
+
     public func getBalance(account: String, commitment: Commitment? = nil) async throws -> BalanceResponse {
         return try await internalSdk.getBalance(account: account, commitment: commitment)
     }

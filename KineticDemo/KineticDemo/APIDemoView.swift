@@ -53,6 +53,15 @@ struct APIDemoView: View {
                     .font(.system(size: 8))
             }
             HStack {
+                Button("GetAccountInfo") {
+                    Task {
+                        await viewModel.getAccountInfo()
+                    }
+                }
+                Text(viewModel.getAccountInfoResponse)
+                    .font(.system(size: 8))
+            }
+            HStack {
                 Button("GetAirdrop") {
                     Task {
                         await viewModel.getAirdrop()

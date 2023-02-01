@@ -26,7 +26,12 @@ internal func generateCreateAccountTransaction(
     let ownerPublicKey = owner.publicKey
 
     // Get AssociatedTokenAccount
-    let ownerTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: ownerPublicKey, mintKey: mintKey)
+    guard let ownerTokenAccount = getTokenAddress(ownerPublicKey: ownerPublicKey.base58EncodedString, mintKey: mintPublicKey) else {
+        throw KineticError.GenerateTokenAccountError
+    }
+    guard let ownerTokenAccountPublicKey = SolanaPublicKey(string: ownerTokenAccount) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
 
     var instructions: [TransactionInstruction] = []
 
@@ -36,13 +41,13 @@ internal func generateCreateAccountTransaction(
 
     instructions.append(createAssociatedTokenAccountInstruction(
         feePayer: feePayerKey,
-        ownerTokenAccount: ownerTokenAccount,
+        ownerTokenAccount: ownerTokenAccountPublicKey,
         ownerPublicKey: ownerPublicKey,
         mintKey: mintKey
     ))
 
     instructions.append(createSetCloseAuthorityInstruction(
-        account: ownerTokenAccount,
+        account: ownerTokenAccountPublicKey,
         currentAuthority: ownerPublicKey,
         newAuthority: feePayerKey
     ))

@@ -19,6 +19,7 @@ import Kinetic
     @Published var getBalanceResponse: String = ""
     @Published var getTokenAccountsResponse: String = ""
     @Published var getAccountHistoryResponse: String = ""
+    @Published var getAccountInfoResponse: String = ""
     @Published var getAirdropResponse: String = ""
     @Published var createAccountResponse: String = ""
     @Published var makeTransferResponse: String = ""
@@ -97,6 +98,19 @@ import Kinetic
         }
     }
 
+    func getAccountInfo() async {
+        do {
+            guard let kinetic = kinetic, let account = account else {
+                getAccountInfoResponse = "Kinetic SDK not initialized"
+                return
+            }
+            let accountInfo = try await kinetic.getAccountInfo(account: account.publicKey)
+            getAccountInfoResponse = String(describing: accountInfo)
+        } catch {
+            getAccountInfoResponse = String(describing: error)
+        }
+    }
+
     func getAirdrop() async {
         do {
             guard let kinetic = kinetic, let account = account else {
@@ -140,7 +154,7 @@ import Kinetic
     func closeAccount() async {
         do {
             guard let kinetic = kinetic, let account = account else {
-                makeTransferResponse = "Kinetic SDK not initialized"
+                closeAccountResponse = "Kinetic SDK not initialized"
                 return
             }
             let closeAccountTx = try await kinetic.closeAccount(account: account.publicKey)
