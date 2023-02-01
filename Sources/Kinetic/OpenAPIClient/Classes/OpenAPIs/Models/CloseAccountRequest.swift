@@ -17,15 +17,19 @@ public struct CloseAccountRequest: Codable, JSONEncodable, Hashable {
     public var environment: String
     public var index: Int
     public var mint: String
+    public var reference: String?
+    @available(*, deprecated, message: "This property is deprecated.")
     public var referenceId: String?
+    @available(*, deprecated, message: "This property is deprecated.")
     public var referenceType: String?
 
-    public init(commitment: Commitment, account: String, environment: String, index: Int, mint: String, referenceId: String? = nil, referenceType: String? = nil) {
+    public init(commitment: Commitment, account: String, environment: String, index: Int, mint: String, reference: String? = nil, referenceId: String? = nil, referenceType: String? = nil) {
         self.commitment = commitment
         self.account = account
         self.environment = environment
         self.index = index
         self.mint = mint
+        self.reference = reference
         self.referenceId = referenceId
         self.referenceType = referenceType
     }
@@ -36,6 +40,7 @@ public struct CloseAccountRequest: Codable, JSONEncodable, Hashable {
         case environment
         case index
         case mint
+        case reference
         case referenceId
         case referenceType
     }
@@ -49,6 +54,7 @@ public struct CloseAccountRequest: Codable, JSONEncodable, Hashable {
         try container.encode(environment, forKey: .environment)
         try container.encode(index, forKey: .index)
         try container.encode(mint, forKey: .mint)
+        try container.encodeIfPresent(reference, forKey: .reference)
         try container.encodeIfPresent(referenceId, forKey: .referenceId)
         try container.encodeIfPresent(referenceType, forKey: .referenceType)
     }

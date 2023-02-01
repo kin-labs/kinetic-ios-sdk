@@ -17,16 +17,20 @@ public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
     public var index: Int
     public var lastValidBlockHeight: Int
     public var mint: String
+    public var reference: String?
+    @available(*, deprecated, message: "This property is deprecated.")
     public var referenceId: String?
+    @available(*, deprecated, message: "This property is deprecated.")
     public var referenceType: String?
     public var tx: String
 
-    public init(commitment: Commitment, environment: String, index: Int, lastValidBlockHeight: Int, mint: String, referenceId: String? = nil, referenceType: String? = nil, tx: String) {
+    public init(commitment: Commitment, environment: String, index: Int, lastValidBlockHeight: Int, mint: String, reference: String? = nil, referenceId: String? = nil, referenceType: String? = nil, tx: String) {
         self.commitment = commitment
         self.environment = environment
         self.index = index
         self.lastValidBlockHeight = lastValidBlockHeight
         self.mint = mint
+        self.reference = reference
         self.referenceId = referenceId
         self.referenceType = referenceType
         self.tx = tx
@@ -38,6 +42,7 @@ public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
         case index
         case lastValidBlockHeight
         case mint
+        case reference
         case referenceId
         case referenceType
         case tx
@@ -52,6 +57,7 @@ public struct CreateAccountRequest: Codable, JSONEncodable, Hashable {
         try container.encode(index, forKey: .index)
         try container.encode(lastValidBlockHeight, forKey: .lastValidBlockHeight)
         try container.encode(mint, forKey: .mint)
+        try container.encodeIfPresent(reference, forKey: .reference)
         try container.encodeIfPresent(referenceId, forKey: .referenceId)
         try container.encodeIfPresent(referenceType, forKey: .referenceType)
         try container.encode(tx, forKey: .tx)
