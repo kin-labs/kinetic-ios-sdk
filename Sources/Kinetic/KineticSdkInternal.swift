@@ -20,6 +20,32 @@ internal struct KineticSdkInternal {
         OpenAPIClientAPI.customHeaders = apiBaseOptions(headers: sdkConfig.headers)
     }
 
+    func closeAccount(
+        account: String,
+        commitment: Commitment?,
+        mint: String?,
+        reference: String?
+    ) async throws -> Transaction {
+        let appConfig = try ensureAppConfig()
+        let commitment = getCommitment(commitment: commitment)
+        let mint = try getAppMint(appConfig: appConfig, mint: mint)
+
+        let closeAccountRequest = CloseAccountRequest(
+            commitment: commitment,
+            account: account,
+            environment: sdkConfig.environment,
+            index: sdkConfig.index,
+            mint: mint.publicKey,
+            reference: reference
+        )
+
+        do {
+            return try await AccountAPI.closeAccount(closeAccountRequest: closeAccountRequest)
+        } catch {
+            throw readServerError(error: error)
+        }
+    }
+
     func createAccount(
         commitment: Commitment?,
         mint: String?,

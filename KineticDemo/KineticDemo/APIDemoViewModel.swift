@@ -22,6 +22,7 @@ import Kinetic
     @Published var getAirdropResponse: String = ""
     @Published var createAccountResponse: String = ""
     @Published var makeTransferResponse: String = ""
+    @Published var closeAccountResponse: String = ""
 
     func setupSDK() async {
         do {
@@ -133,6 +134,19 @@ import Kinetic
             makeTransferResponse = String(describing: transferTx)
         } catch {
             makeTransferResponse = String(describing: error)
+        }
+    }
+
+    func closeAccount() async {
+        do {
+            guard let kinetic = kinetic, let account = account else {
+                makeTransferResponse = "Kinetic SDK not initialized"
+                return
+            }
+            let closeAccountTx = try await kinetic.closeAccount(account: account.publicKey)
+            closeAccountResponse = String(describing: closeAccountTx)
+        } catch {
+            closeAccountResponse = String(describing: error)
         }
     }
 }

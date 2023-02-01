@@ -79,6 +79,15 @@ struct APIDemoView: View {
                 Text(viewModel.makeTransferResponse)
                     .font(.system(size: 8))
             }
+            HStack {
+                Button("CloseAccount") {
+                    Task {
+                        await viewModel.closeAccount()
+                    }
+                }
+                Text(viewModel.closeAccountResponse)
+                    .font(.system(size: 8))
+            }
         }
         .task {
             await viewModel.setupSDK()

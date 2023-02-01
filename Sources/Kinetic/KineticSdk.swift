@@ -37,6 +37,20 @@ public struct KineticSdk {
         KineticSdkInternal.logger
     }
 
+    public func closeAccount(
+        account: String,
+        commitment: Commitment? = nil,
+        mint: String? = nil,
+        reference: String? = nil
+    ) async throws -> Transaction {
+        return try await internalSdk.closeAccount(
+            account: account,
+            commitment: commitment,
+            mint: mint,
+            reference: reference
+        )
+    }
+
     public func createAccount(
         commitment: Commitment? = nil,
         mint: String? = nil,
