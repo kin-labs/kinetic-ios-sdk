@@ -17,16 +17,20 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
     public var index: Int
     public var mint: String
     public var lastValidBlockHeight: Int
+    public var reference: String?
+    @available(*, deprecated, message: "This property is deprecated.")
     public var referenceId: String?
+    @available(*, deprecated, message: "This property is deprecated.")
     public var referenceType: String?
     public var tx: String
 
-    public init(commitment: Commitment, environment: String, index: Int, mint: String, lastValidBlockHeight: Int, referenceId: String? = nil, referenceType: String? = nil, tx: String) {
+    public init(commitment: Commitment, environment: String, index: Int, mint: String, lastValidBlockHeight: Int, reference: String? = nil, referenceId: String? = nil, referenceType: String? = nil, tx: String) {
         self.commitment = commitment
         self.environment = environment
         self.index = index
         self.mint = mint
         self.lastValidBlockHeight = lastValidBlockHeight
+        self.reference = reference
         self.referenceId = referenceId
         self.referenceType = referenceType
         self.tx = tx
@@ -38,6 +42,7 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
         case index
         case mint
         case lastValidBlockHeight
+        case reference
         case referenceId
         case referenceType
         case tx
@@ -52,6 +57,7 @@ public struct MakeTransferRequest: Codable, JSONEncodable, Hashable {
         try container.encode(index, forKey: .index)
         try container.encode(mint, forKey: .mint)
         try container.encode(lastValidBlockHeight, forKey: .lastValidBlockHeight)
+        try container.encodeIfPresent(reference, forKey: .reference)
         try container.encodeIfPresent(referenceId, forKey: .referenceId)
         try container.encodeIfPresent(referenceType, forKey: .referenceType)
         try container.encode(tx, forKey: .tx)

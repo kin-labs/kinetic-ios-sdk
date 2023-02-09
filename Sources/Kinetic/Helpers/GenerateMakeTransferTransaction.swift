@@ -13,28 +13,33 @@ internal func generateMakeTransferTransaction(
     amount: String,
     blockhash: String,
     destination: String,
+    destinationTokenAccount: String,
     index: Int,
     mintDecimals: Int,
     mintFeePayer: String,
     mintPublicKey: String,
     owner: Account,
+    ownerTokenAccount: String,
     senderCreate: Bool = false,
     type: KineticKinMemo.TransactionType
 ) throws -> SolanaTransaction {
     // Create objects from Response
-    guard let mintKey = SolanaPublicKey(string: mintPublicKey) else {
+    guard let destinationPublicKey = SolanaPublicKey(string: destination) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
+    guard let destinationTokenAccountPublicKey = SolanaPublicKey(string: destinationTokenAccount) else {
         throw KineticError.InvalidPublicKeyStringError
     }
     guard let feePayerKey = SolanaPublicKey(string: mintFeePayer) else {
         throw KineticError.InvalidPublicKeyStringError
     }
-    let ownerPublicKey = owner.publicKey
-    guard let destinationPublicKey = SolanaPublicKey(string: destination) else {
+    guard let mintKey = SolanaPublicKey(string: mintPublicKey) else {
         throw KineticError.InvalidPublicKeyStringError
     }
-
-    let ownerTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: ownerPublicKey, mintKey: mintKey)
-    let destinationTokenAccount = try getAssociatedTokenAddress(ownerPublicKey: destinationPublicKey, mintKey: mintKey)
+    let ownerPublicKey = owner.publicKey
+    guard let ownerTokenAccountPublicKey = SolanaPublicKey(string: ownerTokenAccount) else {
+        throw KineticError.InvalidPublicKeyStringError
+    }
 
     var instructions: [TransactionInstruction] = []
 
@@ -48,7 +53,7 @@ internal func generateMakeTransferTransaction(
         instructions.append(
             createAssociatedTokenAccountInstruction(
                 feePayer: feePayerKey,
-                ownerTokenAccount: destinationTokenAccount,
+                ownerTokenAccount: destinationTokenAccountPublicKey,
                 ownerPublicKey: destinationPublicKey,
                 mintKey: mintKey
             )
@@ -62,9 +67,9 @@ internal func generateMakeTransferTransaction(
     instructions.append(
         TokenProgram.transferCheckedInstruction(
             programId: SolanaPublicKey.tokenProgramId,
-            source: ownerTokenAccount,
+            source: ownerTokenAccountPublicKey,
             mint: mintKey,
-            destination: destinationTokenAccount,
+            destination: destinationTokenAccountPublicKey,
             owner: ownerPublicKey,
             multiSigners: [],
             amount: amountNum,

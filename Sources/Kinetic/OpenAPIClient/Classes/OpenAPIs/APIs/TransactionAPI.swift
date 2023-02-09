@@ -17,13 +17,12 @@ open class TransactionAPI {
      
      - parameter environment: (path)  
      - parameter index: (path)  
-     - parameter referenceId: (query)  
-     - parameter referenceType: (query)  
+     - parameter reference: (query)  
      - parameter signature: (query)  
      - returns: [Transaction]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getKineticTransaction(environment: String, index: Int, referenceId: String, referenceType: String, signature: String) async throws -> [Transaction] {
+    open class func getKineticTransaction(environment: String, index: Int, reference: String, signature: String) async throws -> [Transaction] {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -33,7 +32,7 @@ open class TransactionAPI {
                   return
                 }
 
-                requestTask = getKineticTransactionWithRequestBuilder(environment: environment, index: index, referenceId: referenceId, referenceType: referenceType, signature: signature).execute { result in
+                requestTask = getKineticTransactionWithRequestBuilder(environment: environment, index: index, reference: reference, signature: signature).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -52,12 +51,11 @@ open class TransactionAPI {
      - GET /api/transaction/kinetic-transaction/{environment}/{index}
      - parameter environment: (path)  
      - parameter index: (path)  
-     - parameter referenceId: (query)  
-     - parameter referenceType: (query)  
+     - parameter reference: (query)  
      - parameter signature: (query)  
      - returns: RequestBuilder<[Transaction]> 
      */
-    open class func getKineticTransactionWithRequestBuilder(environment: String, index: Int, referenceId: String, referenceType: String, signature: String) -> RequestBuilder<[Transaction]> {
+    open class func getKineticTransactionWithRequestBuilder(environment: String, index: Int, reference: String, signature: String) -> RequestBuilder<[Transaction]> {
         var localVariablePath = "/api/transaction/kinetic-transaction/{environment}/{index}"
         let environmentPreEscape = "\(APIHelper.mapValueToPathItem(environment))"
         let environmentPostEscape = environmentPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -70,8 +68,7 @@ open class TransactionAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "referenceId": referenceId.encodeToJSON(),
-            "referenceType": referenceType.encodeToJSON(),
+            "reference": reference.encodeToJSON(),
             "signature": signature.encodeToJSON(),
         ])
 

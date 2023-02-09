@@ -24,8 +24,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
     public var ip: String?
     public var mint: String?
     public var processingDuration: Int?
-    public var referenceId: String?
-    public var referenceType: String?
+    public var reference: String?
     public var signature: String?
     public var solanaCommitted: Date?
     public var solanaCommittedDuration: Int?
@@ -45,7 +44,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
     public var webhookVerifyEnd: Date?
     public var webhookVerifyDuration: Int?
 
-    public init(id: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, amount: String? = nil, decimals: Int? = nil, destination: String? = nil, errors: [TransactionError]? = nil, explorerUrl: String? = nil, feePayer: String? = nil, ip: String? = nil, mint: String? = nil, processingDuration: Int? = nil, referenceId: String? = nil, referenceType: String? = nil, signature: String? = nil, solanaCommitted: Date? = nil, solanaCommittedDuration: Int? = nil, solanaFinalized: Date? = nil, solanaFinalizedDuration: Int? = nil, solanaStart: Date? = nil, solanaTransaction: AnyCodable? = nil, source: String? = nil, status: TransactionStatus? = nil, totalDuration: Int? = nil, tx: String? = nil, ua: String? = nil, webhookEventStart: Date? = nil, webhookEventEnd: Date? = nil, webhookEventDuration: Int? = nil, webhookVerifyStart: Date? = nil, webhookVerifyEnd: Date? = nil, webhookVerifyDuration: Int? = nil) {
+    public init(id: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil, amount: String? = nil, decimals: Int? = nil, destination: String? = nil, errors: [TransactionError]? = nil, explorerUrl: String? = nil, feePayer: String? = nil, ip: String? = nil, mint: String? = nil, processingDuration: Int? = nil, reference: String? = nil, signature: String? = nil, solanaCommitted: Date? = nil, solanaCommittedDuration: Int? = nil, solanaFinalized: Date? = nil, solanaFinalizedDuration: Int? = nil, solanaStart: Date? = nil, solanaTransaction: AnyCodable? = nil, source: String? = nil, status: TransactionStatus? = nil, totalDuration: Int? = nil, tx: String? = nil, ua: String? = nil, webhookEventStart: Date? = nil, webhookEventEnd: Date? = nil, webhookEventDuration: Int? = nil, webhookVerifyStart: Date? = nil, webhookVerifyEnd: Date? = nil, webhookVerifyDuration: Int? = nil) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -58,8 +57,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
         self.ip = ip
         self.mint = mint
         self.processingDuration = processingDuration
-        self.referenceId = referenceId
-        self.referenceType = referenceType
+        self.reference = reference
         self.signature = signature
         self.solanaCommitted = solanaCommitted
         self.solanaCommittedDuration = solanaCommittedDuration
@@ -93,8 +91,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
         case ip
         case mint
         case processingDuration
-        case referenceId
-        case referenceType
+        case reference
         case signature
         case solanaCommitted
         case solanaCommittedDuration
@@ -131,8 +128,7 @@ public struct Transaction: Codable, JSONEncodable, Hashable {
         try container.encodeIfPresent(ip, forKey: .ip)
         try container.encodeIfPresent(mint, forKey: .mint)
         try container.encodeIfPresent(processingDuration, forKey: .processingDuration)
-        try container.encodeIfPresent(referenceId, forKey: .referenceId)
-        try container.encodeIfPresent(referenceType, forKey: .referenceType)
+        try container.encodeIfPresent(reference, forKey: .reference)
         try container.encodeIfPresent(signature, forKey: .signature)
         try container.encodeIfPresent(solanaCommitted, forKey: .solanaCommitted)
         try container.encodeIfPresent(solanaCommittedDuration, forKey: .solanaCommittedDuration)

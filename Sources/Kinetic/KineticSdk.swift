@@ -37,20 +37,40 @@ public struct KineticSdk {
         KineticSdkInternal.logger
     }
 
+    public func closeAccount(
+        account: String,
+        commitment: Commitment? = nil,
+        mint: String? = nil,
+        reference: String? = nil
+    ) async throws -> Transaction {
+        return try await internalSdk.closeAccount(
+            account: account,
+            commitment: commitment,
+            mint: mint,
+            reference: reference
+        )
+    }
+
     public func createAccount(
         commitment: Commitment? = nil,
         mint: String? = nil,
         owner: Keypair,
-        referenceId: String? = nil,
-        referenceType: String? = nil
+        reference: String? = nil
     ) async throws -> Transaction {
         return try await internalSdk.createAccount(
             commitment: commitment,
             mint: mint,
             owner: owner,
-            referenceId: referenceId,
-            referenceType: referenceType
+            reference: reference
         )
+    }
+
+    public func getAccountInfo(
+        account: String,
+        commitment: Commitment? = nil,
+        mint: String? = nil
+    ) async throws -> AccountInfo {
+        return try await internalSdk.getAccountInfo(account: account, commitment: commitment, mint: mint)
     }
 
     public func getBalance(account: String, commitment: Commitment? = nil) async throws -> BalanceResponse {
@@ -83,8 +103,7 @@ public struct KineticSdk {
         destination: String,
         mint: String? = nil,
         owner: Keypair,
-        referenceId: String? = nil,
-        referenceType: String? = nil,
+        reference: String? = nil,
         senderCreate: Bool = false,
         type: KineticKinMemo.TransactionType = .none
     ) async throws -> Transaction {
@@ -94,8 +113,7 @@ public struct KineticSdk {
             destination: destination,
             mint: mint,
             owner: owner,
-            referenceId: referenceId,
-            referenceType: referenceType,
+            reference: reference,
             senderCreate: senderCreate,
             type: type
         )

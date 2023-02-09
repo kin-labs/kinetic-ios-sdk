@@ -29,7 +29,6 @@ OpenAPIClient/Classes/OpenAPIs/Models/CompiledInstruction.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmationStatus.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedSignatureInfo.swift
 OpenAPIClient/Classes/OpenAPIs/Models/ConfirmedTransactionMeta.swift
-OpenAPIClient/Classes/OpenAPIs/Models/Context.swift
 OpenAPIClient/Classes/OpenAPIs/Models/CreateAccountRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/GetTransactionResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/HistoryResponse.swift
@@ -38,7 +37,6 @@ OpenAPIClient/Classes/OpenAPIs/Models/MakeTransferRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/MinimumRentExemptionBalanceResponse.swift
 OpenAPIClient/Classes/OpenAPIs/Models/RequestAirdropRequest.swift
 OpenAPIClient/Classes/OpenAPIs/Models/RequestAirdropResponse.swift
-OpenAPIClient/Classes/OpenAPIs/Models/RpcResponseAndContext.swift
 OpenAPIClient/Classes/OpenAPIs/Models/SignatureStatus.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TokenAmount.swift
 OpenAPIClient/Classes/OpenAPIs/Models/TokenBalance.swift
